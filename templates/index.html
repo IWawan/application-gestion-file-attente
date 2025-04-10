@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion file d'attente</title>
+    <link rel="stylesheet" href="/static/css/style_index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="/static/js/script_index.js"></script>
+</head>
+
+<body>
+    <div id="menu" class="menu">
+        <button onclick="document.getElementById('fileInput').click()">Charger</button>
+        <button onclick="resetAll(), chargerListeUsagers()">Afficher</button>
+        <button onclick="resetAll(), effacerListeUsagers(), effacerAffichage()">Effacer</button>
+        <button onclick="ouvrirPopupBandeau()">Bandeau</button>
+    </div>
+
+    <div id="usagers_list_container" class="usagers_list_container">
+        <!-- Liste des usagers dynamique -->
+    </div>
+
+    <div id="display_section" class="display_section" style="display:none;">
+        <h2 id="usager_display"></h2>
+        <button class="clear_button" id="clear_button" onclick="effacerAffichage()" style="margin-left: 20px;">&times;</button>
+    </div>
+
+    <div id="popup_bandeau" class="popup_bandeau">
+        <div class="popup_content">
+            <h3>Message pour le bandeau</h3>
+            <input type="text" id="bandeau_input" placeholder="Entrez un message">
+            <div class="popup_buttons">
+                <button onclick="envoyerMessageBandeau()">Envoyer</button>
+                <button onclick="fermerPopupBandeau()">Annuler</button>
+            </div>
+        </div>
+    </div>  
+    
+    <div id="popup_bureau" class="popup_bureau" style="display: none;">
+        <div class="popup_content">
+            <h3>Sélectionner un bureau</h3>
+            <button onclick="envoyerUsager('BUREAU 1')">Bureau 1</button>
+            <button onclick="envoyerUsager('BUREAU 2')">Bureau 2</button>
+            <button onclick="envoyerUsager('BUREAU CNI')">Bureau CNI</button>
+            <button id="popup_content_cancel_button" onclick="fermerPopupBureau()">Annuler</button>
+        </div>
+    </div>    
+
+    <input type="file" id="fileInput" style="display: none;" accept=".xlsx" onchange="selectXLSX(event)">
+
+</body>
+
+</html>

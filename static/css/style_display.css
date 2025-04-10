@@ -1,0 +1,66 @@
+body
+{
+    font-family: Verdana, Tahoma, sans-serif;
+    text-align: center;
+    background-color: #ffffff;
+}
+
+#meteo_iframe
+{
+    width: 726px;
+    height: 145px;
+}
+
+.image
+{
+    background-color: #ffffff;
+    min-height: 110px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.display_section
+{
+    border-radius: 20px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.8);
+    border:2px solid black;
+    background-color: #ececec;
+}
+
+#usager_display
+{
+    color: #962030;
+    font-size: 280%;
+    min-height: 60px;
+}
+
+#bureau_display
+{
+    color: #5f5f5f; 
+    font-size: 230%;
+    min-height: 60px;
+}
+
+.meteo
+{
+    border-radius: 20px;
+    border:2px solid black;
+    background-color: #962030;
+    color: #FFFFFF;
+    margin-top: 3%;
+}
+
+.bandeau
+{
+    border-radius: 20px;
+    border:2px solid black;
+    background-color: #ececec;
+    color: black;
+    margin-top: 2%;
+    font-size: 300%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+}

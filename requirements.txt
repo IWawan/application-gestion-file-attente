@@ -1,0 +1,5 @@
+flask : pip install flask
+flask-session : pip install Flask-Session
+flask-socketio : pip install flask-socketio
+openpyxl : pip install openpyxl
+redis : pip install redis
