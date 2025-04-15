@@ -3,9 +3,12 @@
     --color-primary-2: #7a1a28;
     --color-secondary: #6b6b6b;
     --color-secondary-2: #3f3f3f;
-    --color-tertiary: #e27a02;
-    --color-tertiary-2: #aa5b00;
-    --color-clear-button: #ff0000;
+    --color-select: #e27a02;
+    --color-select-2: #aa5b00;
+    --color-display: #147e26;
+    --color-display-2: #085716;
+    --color-clear: #ff0000;
+    --color-clear-2: #da0000;
     --color-light: #dfdfdf;
     --color-white: #f5f5f5;
     --color-black: #000000;
@@ -36,6 +39,9 @@ body {
 }
 
 /* === MENU === */
+button:hover{
+    transform: scale(1.05);
+}
 #menu {
     display: flex;
     flex-wrap: wrap;
@@ -59,7 +65,6 @@ body {
 
 #menu button:hover {
     background-color: var(--color-primary-2);
-    transform: scale(1.05);
 }
 
 /* === USAGERS LISTE === */
@@ -112,19 +117,19 @@ body {
 }
 
 .usager_button.selected {
-    background-color: var(--color-tertiary);
+    background-color: var(--color-select);
 }
 
 .usager_button.selected:hover {
-    background-color: var(--color-tertiary-2);
+    background-color: var(--color-select-2);
 }
 
 .usager_button.displayed {
-    background-color: var(--color-secondary);
+    background-color: var(--color-display);
 }
 
 .usager_button.displayed:hover {
-    background-color: var(--color-secondary-2);
+    background-color: var(--color-display-2);
 }
 
 /* === BOUTONS ACTIONS === */
@@ -138,7 +143,6 @@ body {
     justify-content: center;
     align-items: center;
     background-color: var(--color-light);
-    color: var(--color-tertiary);
     cursor: pointer;
     transition: var(--transition);
     white-space: nowrap;
@@ -148,11 +152,12 @@ body {
 
 .usager_select_button {
     margin-left: 40px;
+    background-color: var(--color-select);
+    color: var(--color-white);
 }
 
 .usager_select_button:hover {
-    background-color: var(--color-tertiary);
-    color: var(--color-white);
+    background-color: var(--color-select-2);
 }
 
 .usager_select_button.prêt {
@@ -164,12 +169,12 @@ body {
 }
 
 .clear_button {
-    color: var(--color-clear-button);
+    background-color: var(--color-clear);
+    color: var(--color-white);
 }
 
 .clear_button:hover {
-    background-color: var(--color-clear-button);
-    color: var(--color-white);
+    background-color: var(--color-clear-2);
 }
 
 /* === AFFICHAGE USAGER === */
@@ -189,11 +194,10 @@ body {
 #usager_display {
     font-size: 2rem;
     font-weight: bold;
-    color: var(--color-primary);
+    color: var(--color-display-2);
 }
 
 /* === POPUP === */
-.popup_bureau,
 #popup_bandeau {
     position: fixed;
     top: 0; left: 0;

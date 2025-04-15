@@ -15,7 +15,7 @@ app.config['SESSION_REDIS'] = redis.StrictRedis(host='localhost', port=6379, db=
 Session(app)
 socketio = SocketIO(app, manage_session=False)
 
-IP = "255.255.255.255" # A modifier
+IP = "192.168.80.117" # A modifier
 PORT = 8080
 
 # Liste des usagers stockée en mémoire
@@ -25,7 +25,7 @@ current_bureau = ""
 displayed_usagers = set()
 selected_usagers = set()
 
-# Configuration du dossier de téléchargement
+# Configuration du dossier d'upload
 RESOURCES_FOLDER = 'resources'
 FILE_NAME = 'Agenda - RDV360.xlsx'
 app.config['ALLOWED_EXTENSIONS'] = {'xlsx'}

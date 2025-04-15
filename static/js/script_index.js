@@ -89,7 +89,7 @@ function mettreAJourListe(usagers)
             usagerButton.classList.add('default');
         }
 
-        usagerButton.onclick = function() { ouvrirPopupBureau(usager); };
+        usagerButton.onclick = function() { envoyerUsager(usager, "Bureau A"); };
 
         // Boutons selectionner un usager
         var usagerSelectButton = document.createElement('button');
@@ -99,7 +99,7 @@ function mettreAJourListe(usagers)
         if (selected_usagers.has(usager))
         {
             usagerSelectButton.classList.add('prêt');
-            usagerSelectButton.innerHTML = 'PRÊT';
+            usagerSelectButton.innerHTML = 'EN ATTENTE';
         }
         else
         {
@@ -180,31 +180,13 @@ socket.on('update_selected_usagers', function(data)
     selected_usagers = new Set(data.selected_usagers);
 });
 
-// Bureau
-function ouvrirPopupBureau(usager)
+function envoyerUsager(usager, bureau)
 {
-    usagerEnCours = usager;
-    document.getElementById("popup_bureau").style.display = "flex";
-}
-
-function fermerPopupBureau()
-{
-    document.getElementById("popup_bureau").style.display = "none";
-    usagerEnCours = "";
-}
-
-function envoyerUsager(bureau)
-{
-    if (usagerEnCours !== "")
+    socket.emit('display_usager',
     {
-        socket.emit('display_usager',
-        {
-            usager: usagerEnCours,
-            bureau: bureau
-        });
-
-        fermerPopupBureau();
-    }
+        usager: usager,
+        bureau: bureau
+    });
 }
 
 // Bandeau
