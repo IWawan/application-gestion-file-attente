@@ -7,8 +7,21 @@ const colorSelect = rootStyles.getPropertyValue('--color-select-button').trim();
 var displayed_usagers = new Set()
 var selected_usagers = new Set()
 var current_usager = "";
+var current_bureau;
 
 // -- FONCTIONS --
+
+// Ouvrir/Fermer menu paramètres
+function toggleMenu()
+{
+    var menu = document.getElementById("menu-settings-bureaux");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+function closeMenu()
+{
+    document.getElementById("menu-settings-bureaux").style.display = "none";
+}
 
 // Fonction pour séléctionner un fichier .xlsx à charger
 function selectXLSX(event)
@@ -89,7 +102,7 @@ function mettreAJourListe(usagers)
             usagerButton.classList.add('default');
         }
 
-        usagerButton.onclick = function() { envoyerUsager(usager, "Bureau A"); };
+        usagerButton.onclick = function() { envoyerUsager(usager); };
 
         // Boutons selectionner un usager
         var usagerSelectButton = document.createElement('button');
@@ -129,15 +142,25 @@ function mettreAJourListe(usagers)
     });
 }
 
+// Fonction pour envoyer un usager, si un bureau est sélectionné
+function envoyerUsager(usager)
+{
+    if (current_bureau)
+    {
+        socket.emit('display_usager', { usager: usager });
+    }
+    else
+    {
+        alert("Veuillez sélectionner un bureau avant d'afficher un usager !");
+    }
+}
+
 // Fonction pour afficher un usager sur l'interface
 function mettreAJourAffichage(usager, bureau)
 {
     var usagerDisplay = document.getElementById('usager_display');
-    // var bureauDisplay = document.getElementById('bureau_display');
 
     usagerDisplay.textContent = usager.substring(usager.indexOf("|") + 1).toUpperCase();
-    // bureauDisplay.textContent = bureau.substring(bureau.indexOf("|") + 1).toUpperCase();
-    
 
     // Affiche le bouton "clear_button" si un usager est affiché
     if (usager != "") { document.getElementById('display_section').style.display = 'flex'; }
@@ -154,12 +177,91 @@ function effacerAffichage()
     document.getElementById('display_section').style.display = 'none';
 }
 
+// Fonction pour séléctionner un bureau
+function selectionnerBureau(bureauBtn)
+{
+    const bureau = bureauBtn.innerText.trim();
+
+    console.log("Bouton " + bureau + " cliqué !");
+    socket.emit('select_bureau', { bureau: bureau });
+    console.log(current_bureau + " sélectionné");
+}
+
+// Fonction pour changer l'état du bureau sélectionné
+function changeEtat()
+{
+    // Met à jour l'état visuel des boutons
+    document.querySelectorAll('#bureaux_buttons button').forEach(btn =>
+    {
+        btn.classList.remove('selected');
+    });
+
+    if (current_bureau === document.getElementById('btn_bureau_1').innerText.trim())
+    {
+        document.getElementById('btn_bureau_1').classList.add('selected');
+    }
+    else if (current_bureau === document.getElementById('btn_bureau_2').innerText.trim())
+    {
+        document.getElementById('btn_bureau_2').classList.add('selected');
+    }
+    else if (current_bureau === document.getElementById('btn_bureau_3').innerText.trim())
+    {
+        document.getElementById('btn_bureau_3').classList.add('selected');
+    }
+}
+
+// Fonction pour modifier les noms des bureaux 
+function saveBureauNames()
+{
+    var bureau1 = document.getElementById("bureau1").value.trim();
+    var bureau2 = document.getElementById("bureau2").value.trim();
+    var bureau3 = document.getElementById("bureau3").value.trim();
+
+    if (bureau1 && bureau2 && bureau3)
+    {
+        // Envoie les nouveaux noms au serveur via Socket.IO
+        socket.emit('save_bureau_names', { bureau1, bureau2, bureau3 });
+
+        // Fermer le menu après la sauvegarde
+        closeMenu();
+    }
+    else
+    {
+        alert("Veuillez remplir tous les champs !");
+    }
+}
+
+// Bandeau
+function ouvrirPopupBandeau() { document.getElementById("popup_bandeau").style.display = "flex"; }
+
+function fermerPopupBandeau() { document.getElementById("popup_bandeau").style.display = "none"; }
+
+function envoyerMessageBandeau()
+{
+    var message = document.getElementById("bandeau_input").value;
+    if (message.trim() !== "") { socket.emit("bandeau_message", { message: message });}
+    fermerPopupBandeau();
+} 
+
+// Reinitialise les variables
+function resetAll() { socket.emit('reset_all'); } 
+
 // -- REQUÊTES SERVEUR --
 
 // Mise à jour de la liste d'usagers
 socket.on('update_usagers', function(data)
 {
     mettreAJourListe(data.usagers);
+});
+
+// Mise à jour du bureau sélectionné
+socket.on('update_current_bureau', function(data)
+{
+    current_bureau = data.current_bureau;
+
+    console.log(current_bureau);
+    
+    changeEtat(); // Met à jour l'état visuel des boutons de bureau
 });
 
 // Mise à jour de l'affichage
@@ -180,26 +282,10 @@ socket.on('update_selected_usagers', function(data)
     selected_usagers = new Set(data.selected_usagers);
 });
 
-function envoyerUsager(usager, bureau)
+// Mettre à jour les noms des bureaux sur tous les clients
+socket.on('update_bureau_names', function(data)
 {
-    socket.emit('display_usager',
-    {
-        usager: usager,
-        bureau: bureau
-    });
-}
-
-// Bandeau
-function ouvrirPopupBandeau() { document.getElementById("popup_bandeau").style.display = "flex"; }
-
-function fermerPopupBandeau() { document.getElementById("popup_bandeau").style.display = "none"; }
-
-function envoyerMessageBandeau()
-{
-    var message = document.getElementById("bandeau_input").value;
-    if (message.trim() !== "") { socket.emit("bandeau_message", { message: message });}
-    fermerPopupBandeau();
-} 
-
-// Reinitialise les variables
-function resetAll() { socket.emit('reset_all'); } 
+    document.getElementById("btn_bureau_1").textContent = data.bureau1;
+    document.getElementById("btn_bureau_2").textContent = data.bureau2;
+    document.getElementById("btn_bureau_3").textContent = data.bureau3;
+});

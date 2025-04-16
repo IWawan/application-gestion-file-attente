@@ -24,6 +24,11 @@ current_usager = ""
 current_bureau = ""
 displayed_usagers = set()
 selected_usagers = set()
+bureau_names = {
+    'bureau1': 'Bureau 1',
+    'bureau2': 'Bureau 2',
+    'bureau3': 'Bureau 3'
+}
 
 # Configuration du dossier d'upload
 RESOURCES_FOLDER = 'resources'
@@ -88,19 +93,16 @@ def handle_delete_usager(data):
         usagers_list.remove(usager)
         socketio.emit('update_usagers', {'usagers': usagers_list})
 
-# Sélectionne un usager et un bureau et envoi à tous les écrans
+# Sélectionne un usager et l'envoi à tous les écrans avec le bureau sélectionné
 @socketio.on('display_usager')
-def handle_display_usager_with_bureau(data):
+def handle_display_usager(data):
     global current_usager
-    global current_bureau
     usager = data.get('usager')
-    bureau = data.get('bureau')
 
-    if usager and bureau:
+    if usager :
         displayed_usagers.add(usager)
         selected_usagers.discard(usager)
         current_usager = usager
-        current_bureau = bureau
 
         # Envoie la liste des usagers mis à jour
         socketio.emit('update_displayed_usagers', {'displayed_usagers': list(displayed_usagers)})
@@ -108,7 +110,7 @@ def handle_display_usager_with_bureau(data):
         socketio.emit('update_display',
             {
                 'usager': usager,
-                'bureau': bureau
+                'bureau': current_bureau
             })
         socketio.emit('update_usagers', {'usagers': usagers_list})
 
@@ -136,6 +138,18 @@ def handle_select_usager(data):
         socketio.emit('update_displayed_usagers', {'displayed_usagers': list(displayed_usagers)})
         socketio.emit('update_selected_usagers', {'selected_usagers': list(selected_usagers)})
         socketio.emit('update_usagers', {'usagers': usagers_list})
+
+# Sélectionne un bureau
+@socketio.on('select_bureau')
+def handle_select_bureau(data):
+    global current_bureau
+    bureau = data.get('bureau')
+
+    if bureau:
+        current_bureau = bureau
+
+        # Envoie le bureau sélectionné à tous les clients
+        socketio.emit('update_current_bureau', {'current_bureau': current_bureau})
         
 # Efface la liste des usagers
 @socketio.on('clear_usagers')
@@ -156,6 +170,7 @@ def handle_clear_display():
             'usager': current_usager,
             'bureau': current_bureau
         })
+    socketio.emit('update_current_bureau', {'current_bureau': current_bureau})
 
 # Envoie les usagers affichés
 @socketio.on('get_displayed_usagers')
@@ -169,15 +184,47 @@ def handle_get_selected_usagers():
     for usager in selected_usagers:
         socketio.emit('update_selected_usager', {'usager': usager})
 
+# Sauvegarde les noms des bureaux
+@socketio.on('save_bureau_names')
+def handle_save_bureau_names(data):
+    bureau1 = data.get('bureau1')
+    bureau2 = data.get('bureau2')
+    bureau3 = data.get('bureau3')
+
+    # Mettre à jour les boutons des bureaux avec les nouveaux noms
+    socketio.emit('update_bureau_names', {'bureau1': bureau1, 'bureau2': bureau2, 'bureau3': bureau3})
+
+    # Sauvegarder ces noms dans un fichier ou une base de données si nécessaire (exemple simple)
+    with open("data/bureaux.txt", "w") as file:
+        file.write(f"{bureau1}\n{bureau2}\n{bureau3}")
+
+# Charge les noms des bureaux
+def load_bureau_names():
+    global bureau_names
+    try:
+        with open("data/bureaux.txt", "r") as file:
+            lines = file.readlines()
+            if len(lines) >= 3:
+                bureau_names['bureau1'] = lines[0].strip()
+                bureau_names['bureau2'] = lines[1].strip()
+                bureau_names['bureau3'] = lines[2].strip()
+
+                socketio.emit('update_bureau_names', bureau_names)
+    except FileNotFoundError:
+        print("bureaux.txt introuvable, noms par défaut utilisés.")
+
 # Initialisation à la connexion
 @socketio.on('connect')
 def handle_on_connect():
+    load_bureau_names()
+    socketio.emit('update_bureau_names', bureau_names)
     socketio.emit('update_usagers', {'usagers': usagers_list})
     socketio.emit('update_display',
         {
             'usager': current_usager,
             'bureau': current_bureau
         })
+    socketio.emit('update_current_bureau', {'current_bureau': current_bureau})
     socketio.emit('update_displayed_usagers', {'displayed_usagers': list(displayed_usagers)})
     socketio.emit('update_selected_usagers', {'selected_usagers': list(selected_usagers)})
     socketio.emit('update_usagers', {'usagers': usagers_list})
@@ -202,4 +249,5 @@ def handle_reset_all():
     socketio.emit('update_selected_usagers', {'selected_usagers': list(selected_usagers)})
 
 if __name__ == '__main__':
+    load_bureau_names()
     socketio.run(app, debug=True, host=IP, port=PORT)

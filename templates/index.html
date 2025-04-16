@@ -7,15 +7,40 @@
     <title>Gestion file d'attente</title>
     <link rel="stylesheet" href="/static/css/style_index.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-    <script src="/static/js/script_index.js"></script>
 </head>
 
 <body>
+    <div id="bureaux_buttons" class="bureaux_buttons">
+        <button onclick="selectionnerBureau(this)" id="btn_bureau_1">Bureau 1</button>
+        <button onclick="selectionnerBureau(this)" id="btn_bureau_2">Bureau 2</button>
+        <button onclick="selectionnerBureau(this)" id="btn_bureau_3">Bureau 3</button>
+    </div>
+
     <div id="menu" class="menu">
         <button onclick="document.getElementById('fileInput').click()">Charger</button>
         <button onclick="resetAll(), chargerListeUsagers()">Afficher</button>
         <button onclick="resetAll(), effacerListeUsagers(), effacerAffichage()">Effacer</button>
         <button onclick="ouvrirPopupBandeau()">Bandeau</button>
+    </div>
+
+    <div id="hamburger-menu" class="hamburger-menu">
+        <button id="hamburger-btn" onclick="toggleMenu()">☰</button>
+    </div>
+
+    <!-- Menu de modification des bureaux -->
+    <div class="menu-settings" id="menu-settings-bureaux">
+        <h3>Modifier les bureaux</h3>
+        <label for="bureau1">Bureau 1 :</label>
+        <input type="text" id="bureau1" value="Bureau 1">
+        <br>
+        <label for="bureau2">Bureau 2 :</label>
+        <input type="text" id="bureau2" value="Bureau 2">
+        <br>
+        <label for="bureau3">Bureau 3 :</label>
+        <input type="text" id="bureau3" value="Bureau 3">
+        <br>
+        <button onclick="saveBureauNames()">Sauvegarder</button>
+        <button onclick="closeMenu()">Annuler</button>
     </div>
 
     <div id="usagers_list_container" class="usagers_list_container">
@@ -24,7 +49,7 @@
 
     <div id="display_section" class="display_section" style="display:none;">
         <h2 id="usager_display"></h2>
-        <button class="clear_button" id="clear_button" onclick="effacerAffichage()" style="margin-left: 20px;">&times;</button>
+        <button class="clear_button" id="clear_button" onclick="effacerAffichage()" style="margin-left: 20px;">RDV TERMINÉ</button>
     </div>
 
     <div id="popup_bandeau" class="popup_bandeau">
@@ -39,6 +64,8 @@
     </div>    
 
     <input type="file" id="fileInput" style="display: none;" accept=".xlsx" onchange="selectXLSX(event)">
+
+    <script src="/static/js/script_index.js"></script>
 </body>
 
 </html>

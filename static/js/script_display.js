@@ -28,7 +28,7 @@ socket.on('update_display', function(data)
         if (bureau)
         {
             usagerDisplay.textContent = newUsager;
-            bureauDisplay.textContent = "EST ATTENDU(E) AU " + bureau;
+            bureauDisplay.textContent = "EST ATTENDU(E) AU " + bureau.toUpperCase();
             display_section.style.display = 'block';
         }
     }
