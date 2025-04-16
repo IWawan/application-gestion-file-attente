@@ -40,10 +40,17 @@ body {
     min-height: 90vh;
 }
 
-/* === MENU === */
-button:hover{
+button {
+    transition: var(--transition);
+}
+
+button:hover {
+    transition: var(--transition);
     transform: scale(1.05);
 }
+
+/* === MENU === */
+
 #menu {
     display: flex;
     flex-wrap: wrap;
@@ -118,7 +125,6 @@ button:hover{
 .menu-settings h3 {
     margin-top: 0;
     color: var(--color-primary);
-    font-weight: bold;
     font-size: 1.4rem;
     margin-bottom: 15px;
 }
@@ -141,6 +147,12 @@ button:hover{
     transition: var(--transition);
 }
 
+.menu-settings input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background-color: #ffffff;
+}
+
 .menu-settings button {
     margin-top: 20px;
     padding: 12px;
@@ -152,7 +164,6 @@ button:hover{
     width: 100%;
     font-size: 1rem;
     font-weight: bold;
-    transition: var(--transition);
 }
 
 .menu-settings button:hover {
@@ -178,7 +189,6 @@ button:hover{
     background-color: var(--color-btn-menu);
     color: white;
     cursor: pointer;
-    transition: background-color 0.3s;
     white-space: normal;
     word-wrap: break-word;
     text-align: center;
@@ -186,14 +196,7 @@ button:hover{
 }
 
 .bureaux_buttons button:hover {
-    padding: 15px 30px;
-    font-size: 1.2em;
-    border: none;
-    border-radius: 8px;
     background-color: var(--color-btn-menu-2);
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 .bureaux_buttons button.selected {
@@ -417,71 +420,148 @@ button:hover{
     border: 1px solid #ccc;
 }
 
-/* === RESPONSIVE === */
-@media screen and (max-width: 768px) {
+/* === RESPONSIVE DESIGN === */
+
+@media (max-width: 900px)
+{
+    body {
+        padding: 50px 10px;
+        font-size: 1rem;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #menu {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    #menu button {
+        font-size: 1.1rem;
+        padding: 14px 20px;
+        background-color: var(--color-primary);
+        width: auto;
+        min-width: 120px;
+    }
+
+    #menu button:hover {
+        background-color: var(--color-primary-2);
+    }
+
+    .hamburger-menu {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1001;
+    }
+
+    #hamburger-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+
+    .menu-settings {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+    }
+
+    .bureaux_buttons {
+        position: static;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .bureaux_buttons button {
+        font-size: 1rem;
+        padding: 12px;
+        width: 100%;
+    }
+
+    #usagers_list_container {
+        max-height: 60vh;
+        max-width: 100%;
+    }
+
     .usager_button {
-        font-size: 0.85rem;
+        font-size: 1rem;
+        padding: 10px;
+        text-align: center;
+    }
+
+    #display_section {
+        flex-direction: column;
+        gap: 8px;
+        max-width: 100%;
+    }
+
+    #usager_display {
+        font-size: 1.6rem;
+        text-align: center;
     }
 
     .usager_select_button,
     .clear_button {
-        width: 48px;
-        height: 48px;
-        font-size: 0.8rem;
-        margin-left: 13px;
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
     }
 
     .usager_select_button.prêt {
-        padding: 4px 12px;
-        font-size: 0.9rem;
-    }
-
-    #usager_display {
-        font-size: 1rem;
-    }
-
-    #menu {
-        font-size: 0.5rem;
-        gap: 20px;
-        margin-bottom: 10px;
-        width: 100%;
-    }
-
-    #display_section {
-        margin-bottom: 0px;
-    }
-
-    #usagers_list_container {
-        max-height: 65vh;
-    }
-}
-
-@media screen and (max-width: 768px) and (orientation: landscape) {
-    #usagers_list_container {
-        gap: 7px;
-    }
-
-    .usager_button {
-        font-size: 1.1rem;
-    }
-
-    #usager_display {
-        font-size: 1.5rem;
-    }
-}
-
-
-@media screen and (max-width: 480px) {
-    #menu button {
-        padding: 10px 14px;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
+        padding: 6px 12px;
     }
 
     .popup_content {
-        padding: 20px;
+        padding: 15px;
+        font-size: 1rem;
     }
 
-    .popup_buttons button {
-        font-size: 0.85rem;
+    .popup_buttons button,
+    .popup_content button {
+        font-size: 1rem;
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px)
+{
+    .bureaux_buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bureaux_buttons button:nth-child(3) {
+        grid-column: 1 / 3;
+        justify-self: center;
+        width: 60%;
+    }
+
+    .clear_button
+    {
+        font-size: 80%;
+    }
+
+    .usager_select_button
+    {
+        font-size: 80%;
+    }
+
+    .usager_select_button.prêt {
+        font-size: 80%;
+        width: 30%;
+        white-space: normal;
+        word-wrap: break-word;
+        text-align: center;
+        line-height: 1.3;
     }
 }
