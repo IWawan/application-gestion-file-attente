@@ -1,6 +1,6 @@
-from flask import Flask, render_template, jsonify, request, session
+from flask import Flask, render_template, jsonify, request
 from flask_session import Session
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 from extract_xlsx import extract_xlsx
 import socket
 import os
