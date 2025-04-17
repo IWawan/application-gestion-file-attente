@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, request, session
 from flask_session import Session
 from flask_socketio import SocketIO, emit
 from extract_xlsx import extract_xlsx
+import socket
 import os
 import redis
 
@@ -15,7 +16,19 @@ app.config['SESSION_REDIS'] = redis.StrictRedis(host='localhost', port=6379, db=
 Session(app)
 socketio = SocketIO(app, manage_session=False)
 
-IP = "192.168.80.117" # A modifier
+def get_ip_address():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.settimeout(0)
+    try:
+        s.connect(('10.254.254.254', 1))  # N'importe quelle adresse IP
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = '127.0.0.1'  # Par défaut, l'adresse localhost
+    finally:
+        s.close()
+    return ip
+
+IP = get_ip_address()
 PORT = 8080
 
 # Liste des usagers stockée en mémoire
@@ -228,7 +241,6 @@ def handle_on_connect():
     socketio.emit('update_displayed_usagers', {'displayed_usagers': list(displayed_usagers)})
     socketio.emit('update_selected_usagers', {'selected_usagers': list(selected_usagers)})
     socketio.emit('update_usagers', {'usagers': usagers_list})
-    
 
 @socketio.on('reset_all')
 def handle_reset_all():
@@ -250,4 +262,5 @@ def handle_reset_all():
 
 if __name__ == '__main__':
     load_bureau_names()
+    print(f"Serveur lancé sur http://{IP}:{PORT}")
     socketio.run(app, debug=True, host=IP, port=PORT)
