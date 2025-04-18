@@ -1,143 +1,111 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, request, jsonify
 from flask_session import Session
 from flask_socketio import SocketIO
-from extract_xlsx import extract_xlsx
 import socket
 import os
 import redis
 
+# --- Configuration ---
 app = Flask(__name__)
-app.config['SESSION_TYPE'] = 'redis'
-app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_USE_SIGNER'] = True
-app.config['SESSION_KEY_PREFIX'] = 'session:'
-app.config['SESSION_REDIS'] = redis.StrictRedis(host='localhost', port=6379, db=0)
-
+app.config.update(
+    SESSION_TYPE='redis',
+    SESSION_PERMANENT=False,
+    SESSION_USE_SIGNER=True,
+    SESSION_KEY_PREFIX='session:',
+    SESSION_REDIS=redis.StrictRedis(host=os.getenv('REDIS_HOST', 'localhost'), port=int(os.getenv('REDIS_PORT', 6379)), db=0),
+    UPLOAD_FOLDER=os.getenv('RESOURCES_FOLDER', 'resources'),
+    ALLOWED_EXTENSIONS={'xlsx'},
+)
 Session(app)
 socketio = SocketIO(app, manage_session=False)
 
-def get_ip_address():
+# --- Helper Functions ---
+def get_ip_address() -> str:
+    """Détermine l'adresse IP locale de la machine."""
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.settimeout(0)
     try:
-        s.connect(('10.254.254.254', 1))  # N'importe quelle adresse IP
-        ip = s.getsockname()[0]
+        s.connect(('10.254.254.254', 1))
+        return s.getsockname()[0]
     except Exception:
-        ip = '127.0.0.1'  # Par défaut, l'adresse localhost
+        return '127.0.0.1'
     finally:
         s.close()
-    return ip
 
+
+def allowed_file(filename: str) -> bool:
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+# --- Global State ---
 IP = get_ip_address()
-PORT = 8080
+PORT = int(os.getenv('PORT', 8080))
 
-# Liste des usagers stockée en mémoire
 usagers_list = []
-current_usager = ""
-current_bureau = ""
+current_usager = ''
+current_bureau = ''
 displayed_usagers = set()
 selected_usagers = set()
-bureau_names = {
-    'bureau1': 'Bureau 1',
-    'bureau2': 'Bureau 2',
-    'bureau3': 'Bureau 3'
-}
+bureau_names = { 'bureau1': 'Bureau 1', 'bureau2': 'Bureau 2', 'bureau3': 'Bureau 3' }
 
-# Configuration du dossier d'upload
-RESOURCES_FOLDER = 'resources'
-FILE_NAME = 'Agenda - RDV360.xlsx'
-app.config['ALLOWED_EXTENSIONS'] = {'xlsx'}
-app.config['UPLOAD_FOLDER'] = RESOURCES_FOLDER
-
+# --- Routes HTTP ---
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Récupère le fichier xlsx "FILE_NAME" et le sauvegarde dans le dossier "RESOURCES_FOLDER"
+
 @app.route('/upload_xlsx', methods=['POST'])
 def upload_xlsx():
-    if 'file' not in request.files:
+    file = request.files.get('file')
+    if not file or file.filename == '':
         return jsonify({'error': 'Aucun fichier sélectionné'}), 400
 
-    file = request.files['file']
-
-    if file.filename == '':
-        return jsonify({'error': 'Nom de fichier vide'}), 400
-
-    if file and allowed_file(file.filename):
-        filename = FILE_NAME
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
+    if allowed_file(file.filename):
+        save_path = os.path.join(app.config['UPLOAD_FOLDER'], 'Agenda - RDV360.xlsx')
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        file.save(save_path)
         return jsonify({'message': 'Fichier chargé avec succès'}), 200
-    else:
-        return jsonify({'error': 'Format de fichier non autorisé'}), 400
-    
-# Extrait les données du fichier, et les envoie aux clients
+    return jsonify({'error': 'Format de fichier non autorisé'}), 400
+
+
 @app.route('/load_usagers')
 def load_usagers():
-    global usagers_list
-    file_path = RESOURCES_FOLDER + '/' + FILE_NAME
+    from extract_xlsx import extract_xlsx
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], 'Agenda - RDV360.xlsx')
     extractor = extract_xlsx(file_path)
+    global usagers_list
     usagers_list = extractor.to_array()
-
     socketio.emit('update_usagers', {'usagers': usagers_list})
-    return jsonify({"usagers": usagers_list})
+    return jsonify({'usagers': usagers_list})
+
 
 @app.route('/display')
 def display():
     return render_template('display.html')
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+# --- Socket.IO Events ---
+@socketio.on('connect')
+def on_connect():
+    load_saved_bureaux()
+    _sync_all()
 
-# Met à jour la liste des usagers
+
 @socketio.on('update_usagers')
-def handle_update_usagers(data):
+def on_update_usagers(data):
     global usagers_list
     usagers_list = data.get('usagers', [])
     socketio.emit('update_usagers', {'usagers': usagers_list})
 
-# Efface un usager de la liste
+
 @socketio.on('remove_usager')
-def handle_delete_usager(data):
-    global usagers_list
+def on_remove_usager(data):
     usager = data.get('usager')
     if usager in usagers_list:
         usagers_list.remove(usager)
-        socketio.emit('update_usagers', {'usagers': usagers_list})
+    socketio.emit('update_usagers', {'usagers': usagers_list})
 
-# Sélectionne un usager et l'envoi à tous les écrans avec le bureau sélectionné
-@socketio.on('display_usager')
-def handle_display_usager(data):
-    global current_usager
-    usager = data.get('usager')
 
-    if usager :
-        displayed_usagers.add(usager)
-        selected_usagers.discard(usager)
-        current_usager = usager
-
-        # Envoie la liste des usagers mis à jour
-        socketio.emit('update_displayed_usagers', {'displayed_usagers': list(displayed_usagers)})
-        socketio.emit('update_selected_usagers', {'selected_usagers': list(selected_usagers)})
-        socketio.emit('update_display',
-            {
-                'usager': usager,
-                'bureau': current_bureau
-            })
-        socketio.emit('update_usagers', {'usagers': usagers_list})
-
-# Affiche un message sur le bandeau
-@socketio.on('bandeau_message')
-def handle_bandeau_message(data):
-    bandeau_message = data.get('message')
-    if bandeau_message:
-        print(bandeau_message)
-        socketio.emit('update_bandeau', {'bandeau_message': bandeau_message})
-        
-# Sélectionne un usager de la liste
 @socketio.on('select_usager')
-def handle_select_usager(data):
+def on_select_usager(data):
     usager = data.get('usager')
     if usager:
         if usager in selected_usagers:
@@ -146,121 +114,98 @@ def handle_select_usager(data):
         else:
             selected_usagers.add(usager)
             displayed_usagers.discard(usager)
+        _sync_usager_states()
 
-        # Envoie la liste des usagers mis à jour
-        socketio.emit('update_displayed_usagers', {'displayed_usagers': list(displayed_usagers)})
-        socketio.emit('update_selected_usagers', {'selected_usagers': list(selected_usagers)})
-        socketio.emit('update_usagers', {'usagers': usagers_list})
 
-# Sélectionne un bureau
-@socketio.on('select_bureau')
-def handle_select_bureau(data):
-    global current_bureau
-    bureau = data.get('bureau')
-
-    if bureau:
-        current_bureau = bureau
-
-        # Envoie le bureau sélectionné à tous les clients
-        socketio.emit('update_current_bureau', {'current_bureau': current_bureau})
-        
-# Efface la liste des usagers
-@socketio.on('clear_usagers')
-def handle_clear_usagers():
-    global usagers_list
-    usagers_list = []  # Vide la liste
-    socketio.emit('update_usagers', {'usagers': []})
-
-# Efface l'affichage de l'usager
-@socketio.on('clear_display')
-def handle_clear_display():
+@socketio.on('display_usager')
+def on_display_usager(data):
     global current_usager
+    usager = data.get('usager')
+    if usager:
+        displayed_usagers.add(usager)
+        selected_usagers.discard(usager)
+        current_usager = usager
+        socketio.emit('update_display', {'usager': usager, 'bureau': current_bureau})
+        _sync_usager_states()
+
+
+@socketio.on('select_bureau')
+def on_select_bureau(data):
     global current_bureau
-    current_usager = ""  # Efface l'usager affiché
-    current_bureau = ""  # Efface le bureau affiché
-    socketio.emit('update_display',
-        {
-            'usager': current_usager,
-            'bureau': current_bureau
-        })
+    current_bureau = data.get('bureau', '')
     socketio.emit('update_current_bureau', {'current_bureau': current_bureau})
 
-# Envoie les usagers affichés
-@socketio.on('get_displayed_usagers')
-def handle_get_displayed_usagers():
-    for usager in displayed_usagers:
-        socketio.emit('update_displayed_usager', {'usager': usager})
 
-# Envoie les usagers sélectionnés
-@socketio.on('get_selected_usagers')
-def handle_get_selected_usagers():
-    for usager in selected_usagers:
-        socketio.emit('update_selected_usager', {'usager': usager})
+@socketio.on('bandeau_message')
+def on_bandeau_message(data):
+    msg = data.get('message', '')
+    if msg:
+        socketio.emit('update_bandeau', {'bandeau_message': msg})
 
-# Sauvegarde les noms des bureaux
-@socketio.on('save_bureau_names')
-def handle_save_bureau_names(data):
-    bureau1 = data.get('bureau1')
-    bureau2 = data.get('bureau2')
-    bureau3 = data.get('bureau3')
 
-    # Mettre à jour les boutons des bureaux avec les nouveaux noms
-    socketio.emit('update_bureau_names', {'bureau1': bureau1, 'bureau2': bureau2, 'bureau3': bureau3})
+@socketio.on('clear_usagers')
+def on_clear_usagers():
+    usagers_list.clear()
+    _sync_usagers_list()
 
-    # Sauvegarder ces noms dans un fichier ou une base de données si nécessaire (exemple simple)
-    with open("data/bureaux.txt", "w") as file:
-        file.write(f"{bureau1}\n{bureau2}\n{bureau3}")
 
-# Charge les noms des bureaux
-def load_bureau_names():
-    global bureau_names
-    try:
-        with open("data/bureaux.txt", "r") as file:
-            lines = file.readlines()
-            if len(lines) >= 3:
-                bureau_names['bureau1'] = lines[0].strip()
-                bureau_names['bureau2'] = lines[1].strip()
-                bureau_names['bureau3'] = lines[2].strip()
+@socketio.on('clear_display')
+def on_clear_display():
+    global current_usager, current_bureau
+    current_usager = ''
+    current_bureau = ''
+    _sync_display()
 
-                socketio.emit('update_bureau_names', bureau_names)
-    except FileNotFoundError:
-        print("bureaux.txt introuvable, noms par défaut utilisés.")
-
-# Initialisation à la connexion
-@socketio.on('connect')
-def handle_on_connect():
-    load_bureau_names()
-    socketio.emit('update_bureau_names', bureau_names)
-    socketio.emit('update_usagers', {'usagers': usagers_list})
-    socketio.emit('update_display',
-        {
-            'usager': current_usager,
-            'bureau': current_bureau
-        })
-    socketio.emit('update_current_bureau', {'current_bureau': current_bureau})
-    socketio.emit('update_displayed_usagers', {'displayed_usagers': list(displayed_usagers)})
-    socketio.emit('update_selected_usagers', {'selected_usagers': list(selected_usagers)})
-    socketio.emit('update_usagers', {'usagers': usagers_list})
 
 @socketio.on('reset_all')
-def handle_reset_all():
-    global usagers_list, current_usager, current_bureau, displayed_usagers, selected_usagers
-    usagers_list = []
-    current_usager = ""
-    current_bureau = ""
-    displayed_usagers = set()
-    selected_usagers = set()
+def on_reset_all():
+    usagers_list.clear()
+    displayed_usagers.clear()
+    selected_usagers.clear()
+    global current_usager, current_bureau
+    current_usager = current_bureau = ''
+    _sync_all()
 
-    socketio.emit('update_usagers', {'usagers': []})
-    socketio.emit('update_display',
-        {
-            'usager': current_usager,
-            'bureau': current_bureau
-        })
+
+@socketio.on('save_bureau_names')
+def on_save_bureau_names(data):
+    for key in ('bureau1', 'bureau2', 'bureau3'):
+        bureau_names[key] = data.get(key, bureau_names[key])
+    os.makedirs('data', exist_ok=True)
+    with open('data/bureaux.txt', 'w') as f:
+        f.write('\n'.join(bureau_names.values()))
+    socketio.emit('update_bureau_names', bureau_names)
+
+# --- Internal Sync Helpers ---
+def _sync_usagers_list():
+    socketio.emit('update_usagers', {'usagers': usagers_list})
+
+def _sync_usager_states():
     socketio.emit('update_displayed_usagers', {'displayed_usagers': list(displayed_usagers)})
     socketio.emit('update_selected_usagers', {'selected_usagers': list(selected_usagers)})
+    _sync_usagers_list()
 
+def _sync_display():
+    socketio.emit('update_display', {'usager': current_usager, 'bureau': current_bureau})
+def _sync_all():
+    _sync_usagers_list()
+    _sync_usager_states()
+    socketio.emit('update_current_bureau', {'current_bureau': current_bureau})
+    _sync_display()
+
+# --- Bureau Names Persistence ---
+def load_saved_bureaux():
+    try:
+        with open('data/bureaux.txt') as f:
+            names = [line.strip() for line in f.readlines()]
+            for idx, key in enumerate(bureau_names.keys()):
+                bureau_names[key] = names[idx]
+            socketio.emit('update_bureau_names', bureau_names)
+    except FileNotFoundError:
+        pass
+
+# --- Application Entry Point ---
 if __name__ == '__main__':
-    load_bureau_names()
+    load_saved_bureaux()
     print(f"Serveur lancé sur http://{IP}:{PORT}")
     socketio.run(app, debug=True, host=IP, port=PORT)
