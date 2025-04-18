@@ -288,4 +288,8 @@ socket.on('update_bureau_names', function(data)
     document.getElementById("btn_bureau_1").textContent = data.bureau1;
     document.getElementById("btn_bureau_2").textContent = data.bureau2;
     document.getElementById("btn_bureau_3").textContent = data.bureau3;
+
+    document.getElementById("bureau1").setAttribute("value", data.bureau1);
+    document.getElementById("bureau2").setAttribute("value", data.bureau2);
+    document.getElementById("bureau3").setAttribute("value", data.bureau3);
 });
