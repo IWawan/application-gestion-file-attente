@@ -181,7 +181,6 @@ function ouvrirPopupBandeau()
 {
     document.getElementById("popup-bandeau").style.display = "flex";
     fermerOngletMenu();
-    fermerPopupBureaux();
 }
 
 function fermerPopupBandeau() { document.getElementById("popup-bandeau").style.display = "none"; }
@@ -190,14 +189,12 @@ function envoyerMessageBandeau()
 {
     var message = document.getElementById("bandeau-input").value;
     if (message.trim() !== "") { socket.emit("bandeau_message", { message: message }); }
-    fermerPopupBandeau();
 } 
 
 // Modifications bureaux
 function ouvrirPopupBureaux() {
     document.getElementById("popup-bureaux").style.display = "flex";
     fermerOngletMenu();
-    fermerPopupBandeau();
 }
 
 function fermerPopupBureaux() { document.getElementById("popup-bureaux").style.display = "none"; }
