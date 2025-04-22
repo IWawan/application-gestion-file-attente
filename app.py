@@ -52,7 +52,7 @@ current_usager = ""
 current_bureau = ""
 displayed_usagers = set()
 selected_usagers = set()
-bureau_names = {
+bureaux = {
     'bureau1': 'Bureau 1',
     'bureau2': 'Bureau 2',
     'bureau3': 'Bureau 3'
@@ -193,17 +193,17 @@ def on_clear_display():
     _sync_current_bureau()
 
 # Sauvegarde les noms des bureaux
-@socketio.on('save_bureau_names')
-def on_save_bureau_names(data):
+@socketio.on('save_bureaux')
+def on_save_bureaux(data):
     for key in ('bureau1', 'bureau2', 'bureau3'):
-        bureau_names[key] = data.get(key, bureau_names[key])
+        bureaux[key] = data.get(key, bureaux[key])
 
     os.makedirs('data', exist_ok=True)
 
     with open("data/bureaux.txt", "w") as file:
-        file.write('\n'.join(bureau_names.values()))
+        file.write('\n'.join(bureaux.values()))
 
-    socketio.emit('update_bureau_names', bureau_names)
+    socketio.emit('update_bureaux', bureaux)
 
 @socketio.on('reset_all')
 def on_reset_all():
@@ -218,16 +218,16 @@ def on_reset_all():
 # --- Persistance des bureaux ---
 
 def load_bureaux():
-    global bureau_names
+    global bureaux
     try:
         with open("data/bureaux.txt", "r") as file:
             lines = file.readlines()
             if len(lines) >= 3:
-                bureau_names['bureau1'] = lines[0].strip()
-                bureau_names['bureau2'] = lines[1].strip()
-                bureau_names['bureau3'] = lines[2].strip()
+                bureaux['bureau1'] = lines[0].strip()
+                bureaux['bureau2'] = lines[1].strip()
+                bureaux['bureau3'] = lines[2].strip()
 
-                socketio.emit('update_bureau_names', bureau_names)
+                socketio.emit('update_bureaux', bureaux)
     except FileNotFoundError:
         print("bureaux.txt introuvable, noms par défaut utilisés.")
 

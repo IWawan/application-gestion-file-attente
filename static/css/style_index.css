@@ -600,7 +600,6 @@ button:hover
         position: fixed;
         top: 10px;
         left: 10px;
-        z-index: 1001;
     }
 
     #hamburger-btn

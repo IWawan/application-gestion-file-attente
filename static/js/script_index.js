@@ -166,6 +166,8 @@ function ouvrirOngletMenu()
 {
     var ongletMenu = document.getElementById("onglet-menu");
     ongletMenu.style.display = ongletMenu.style.display === "block" ? "none" : "block";
+    fermerPopupBandeau();
+    fermerPopupBureaux();
 }
 
 function fermerOngletMenu()
@@ -179,14 +181,15 @@ function ouvrirPopupBandeau()
 {
     document.getElementById("popup-bandeau").style.display = "flex";
     fermerOngletMenu();
+    fermerPopupBureaux();
 }
-    
+
 function fermerPopupBandeau() { document.getElementById("popup-bandeau").style.display = "none"; }
 
 function envoyerMessageBandeau()
 {
     var message = document.getElementById("bandeau-input").value;
-    if (message.trim() !== "") { socket.emit("bandeau_message", { message: message });}
+    if (message.trim() !== "") { socket.emit("bandeau_message", { message: message }); }
     fermerPopupBandeau();
 } 
 
@@ -194,6 +197,7 @@ function envoyerMessageBandeau()
 function ouvrirPopupBureaux() {
     document.getElementById("popup-bureaux").style.display = "flex";
     fermerOngletMenu();
+    fermerPopupBandeau();
 }
 
 function fermerPopupBureaux() { document.getElementById("popup-bureaux").style.display = "none"; }
@@ -216,7 +220,7 @@ function sauvegarderModifsBureaux()
     if (bureau1 && bureau2 && bureau3)
     {
         // Envoie les nouveaux noms au serveur via Socket.IO
-        socket.emit('save_bureau_names', { bureau1, bureau2, bureau3 });
+        socket.emit('save_bureaux', { bureau1, bureau2, bureau3 });
 
         // Fermer le menu après la sauvegarde
         fermerPopupBureaux();
@@ -288,7 +292,7 @@ socket.on('update_selected_usagers', function(data)
 });
 
 // Mettre à jour les noms des bureaux sur tous les clients
-socket.on('update_bureau_names', function(data)
+socket.on('update_bureaux', function(data)
 {
     document.getElementById("btn-bureau-1").textContent = data.bureau1;
     document.getElementById("btn-bureau-2").textContent = data.bureau2;
