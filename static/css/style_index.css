@@ -86,7 +86,7 @@ button:hover
 }
 
 /* === BOUTONS BUREAUX === */
-.bureaux-btn
+.bureaux-btn-container
 {
     position: fixed;
     left: 20px;
@@ -96,7 +96,7 @@ button:hover
     gap: 20px;
 }
 
-.bureaux-btn button
+.bureaux-btn-container button
 {
     padding: 15px 30px;
     font-size: 1.2em;
@@ -111,17 +111,17 @@ button:hover
     max-width: 250px;
 }
 
-.bureaux-btn button:hover
+.bureaux-btn-container button:hover
 {
     background-color: var(--color-btn-menu-2);
 }
 
-.bureaux-btn button.selected
+.bureaux-btn-container button.selected
 {
     background-color: var(--color-display);
 }
 
-.bureaux-btn button.selected:hover
+.bureaux-btn-container button.selected:hover
 {
     background-color: var(--color-display-2);
 }
@@ -604,7 +604,7 @@ button:hover
         border-radius: 0;
     }
 
-    .bureaux-btn
+    .bureaux-btn-container
     {
         position: static;
         display: grid;
@@ -616,7 +616,7 @@ button:hover
         margin-right: auto;
     }
     
-    .bureaux-btn button
+    .bureaux-btn-container button
     {
         font-size: 1rem;
         padding: 12px;
@@ -684,12 +684,12 @@ button:hover
         padding: 50px 10px;
     }
 
-    .bureaux-btn
+    .bureaux-btn-container
     {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .bureaux-btn button:nth-child(3)
+    .bureaux-btn-container button:nth-child(3)
     {
         grid-column: 1 / 3;
         justify-self: center;

@@ -207,7 +207,7 @@ function selectionnerBureau(bureauBtn)
     socket.emit('select_bureau', { bureau: bureau });
 }
 
-// Fonction pour modifier les noms des bureaux 
+// Fonction pour modifier les bureaux 
 function sauvegarderModifsBureaux()
 {
     var bureau1 = document.getElementById("bureau1").value.trim();
@@ -228,26 +228,40 @@ function sauvegarderModifsBureaux()
     }
 }
 
+function modifierBtnBureaux()
+{
+    const bureauxContainer = document.getElementById("bureaux-btn-container")
+    bureauxContainer.textContent = ""; // Efface les boutons
+
+    bureaux = ["A", "B", "C"] // Liste des bureaux
+
+    i = 0
+
+    bureaux.forEach(function(bureau)
+    {
+        var bureauBtn = document.createElement('button');
+        bureauBtn.id = 'btn-bureau-' + (++i);
+        bureauBtn.textContent = bureau;
+        bureauBtn.onclick = function() { selectionnerBureau(bureauBtn); };
+
+        bureauxContainer.appendChild(bureauBtn);
+    });
+}
+
 // Fonction pour changer l'état du bureau sélectionné
 function changeEtat()
 {
-    // Met à jour l'état visuel des boutons
-    document.querySelectorAll('#bureaux-btn button').forEach(btn =>
+    const btnBureaux = document.querySelectorAll('#bureaux-btn-container button');
+    const bureauSelect = Array.from(btnBureaux).find(btn => btn.innerText.trim() === current_bureau);
+
+    btnBureaux.forEach(btn =>
     {
         btn.classList.remove('selected');
     });
 
-    if (current_bureau === document.getElementById('btn-bureau-1').innerText.trim())
+    if (bureauSelect)
     {
-        document.getElementById('btn-bureau-1').classList.add('selected');
-    }
-    else if (current_bureau === document.getElementById('btn-bureau-2').innerText.trim())
-    {
-        document.getElementById('btn-bureau-2').classList.add('selected');
-    }
-    else if (current_bureau === document.getElementById('btn-bureau-3').innerText.trim())
-    {
-        document.getElementById('btn-bureau-3').classList.add('selected');
+        bureauSelect.classList.add('selected');
     }
 }
 
