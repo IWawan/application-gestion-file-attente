@@ -217,7 +217,6 @@ def on_reset_all():
 def load_bureaux():
     global bureaux
     bureaux = {}
-    print("Chargement des bureaux...")
 
     try:
         with open("data/bureaux.txt", "r") as file:

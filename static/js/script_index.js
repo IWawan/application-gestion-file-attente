@@ -204,9 +204,7 @@ function fermerPopupBureaux() { document.getElementById("popup-bureaux").style.d
 function selectionnerBureau(bureauBtn)
 {
     const bureau = bureauBtn.innerText.trim();
-    console.log(bureau);
     
-
     socket.emit('select_bureau', { bureau: bureau });
 }
 
@@ -218,19 +216,18 @@ function ajouterBureau()
     bureaux[newKey] = "Bureau " + (nbBureaux + 1);
 
     socket.emit('save_bureaux', { bureaux: bureaux });
-    updateBtnBureaux();
+    updateBureaux();
 }
 
-function supprimerBureau()
+function supprimerBureau(key)
 {
     let nbBureaux = Object.keys(bureaux).length;
 
     if (nbBureaux > 1)
     {
-        delete bureaux["bureau" + nbBureaux];
-
+        delete bureaux[key];
         socket.emit('save_bureaux', { bureaux: bureaux });
-        updateBtnBureaux();
+        updateBureaux();
     }
 }
 
@@ -255,12 +252,13 @@ function sauvegarderModifsBureaux()
     }
 }
 
-function updateBtnBureaux()
+function updateBureaux()
 {
-    const bureauxContainer = document.getElementById("bureaux-btn-container");
-    bureauxContainer.textContent = ""; // Efface les boutons
+    const bureauxBtnContainer = document.getElementById("bureaux-btn-container");
+    bureauxBtnContainer.textContent = "";
 
-    console.log("update");
+    const bureauxModifContainer = document.getElementById("bureaux-modif-container");
+    bureauxModifContainer.textContent = "";
     
     let i = 0;
     
@@ -268,13 +266,30 @@ function updateBtnBureaux()
     {
         const nom = bureaux[key];
 
+        // bureaux-btn-container
         let bureauBtn = document.createElement('button');
         bureauBtn.id = 'btn-bureau-' + (++i);
         bureauBtn.textContent = nom;
-        
         bureauBtn.onclick = function() { selectionnerBureau(bureauBtn); };
+        bureauxBtnContainer.appendChild(bureauBtn);
 
-        bureauxContainer.appendChild(bureauBtn);
+        // bureaux-modif-container
+        let bureauLabel = document.createElement('label');
+        bureauLabel.setAttribute('for', key);
+        bureauLabel.textContent = nom;
+        let bureauInput = document.createElement('input');
+        bureauInput.type = 'text';
+        bureauInput.id = key;
+        bureauInput.value = nom;
+        bureauInput.onchange = function() { bureaux[key] = bureauInput.value; };
+        bureauLabel.appendChild(bureauInput);
+        let removeBureauBtn = document.createElement('button');
+        removeBureauBtn.classList.add('remove-bureau-btn');
+        removeBureauBtn.innerHTML = '&times;';
+        removeBureauBtn.onclick = function() { supprimerBureau(key); };
+        bureauxModifContainer.appendChild(bureauLabel);
+        bureauxModifContainer.appendChild(removeBureauBtn);
+        bureauxModifContainer.appendChild(document.createElement('br'));
     }
 }
 
@@ -336,7 +351,6 @@ socket.on('update_selected_usagers', function(data)
 socket.on('update_bureaux', function(data)
 {
     bureaux = data.bureaux;
-    console.log("A : " + bureaux);
     
-    updateBtnBureaux(); // Met à jour les boutons de bureaux
+    updateBureaux();
 });

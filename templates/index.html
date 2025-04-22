@@ -15,7 +15,6 @@
         <button onclick="document.getElementById('fileInput').click()">Charger</button>
         <button onclick="resetAll(), chargerListeUsagers()">Afficher</button>
         <button onclick="resetAll(), effacerListeUsagers(), effacerAffichage()">Effacer</button>
-        <button onclick="updateBtnBureaux()">Test</button>
     </div>
 
     <div id="bureaux-btn-container" class="bureaux-btn-container">
@@ -46,19 +45,20 @@
     <!-- Popup de modification des bureaux -->
     <div class="popup" id="popup-bureaux">
         <div class="popup-content">
-            <h3>Modifier les bureaux</h3>
-            <label for="bureau1">Bureau 1 :</label>
-            <input type="text" id="bureau1" value="Bureau 1">
-            <br>
-            <label for="bureau2">Bureau 2 :</label>
-            <input type="text" id="bureau2" value="Bureau 2">
-            <br>
-            <label for="bureau3">Bureau 3 :</label>
-            <input type="text" id="bureau3" value="Bureau 3">
-            <br>
+            <div id="bureaux-modif-container">
+                <h3>Modifier les bureaux</h3>
+                <label for="bureau1">Bureau 1 :</label>
+                <input type="text" id="bureau1" value="Bureau 1">
+                <br>
+                <label for="bureau2">Bureau 2 :</label>
+                <input type="text" id="bureau2" value="Bureau 2">
+                <br>
+                <label for="bureau3">Bureau 3 :</label>
+                <input type="text" id="bureau3" value="Bureau 3">
+                <br>
+            </div>
             <div class="popup-btn">
                 <button onclick="ajouterBureau()">Ajouter un bureau</button>
-                <button onclick="supprimerBureau()">Supprimer un bureau</button>
                 <button onclick="sauvegarderModifsBureaux()">Sauvegarder</button>
                 <button class="cancel-btn" onclick="fermerPopupBureaux()">Annuler</button>
             </div>
