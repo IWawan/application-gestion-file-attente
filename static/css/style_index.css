@@ -117,81 +117,8 @@ button:hover
     transform: scale(1.05);
 }
 
-/* === MENU PARAMETRES === */
-.menu-settings
-{
-    display: none;
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 300px;
-    height: 100%;
-    background-color: var(--color-white);
-    padding: 20px;
-    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    border-top-left-radius: var(--radius);
-    border-bottom-left-radius: var(--radius);
-    transition: var(--transition);
-}
-
-.menu-settings h3
-{
-    margin-top: 0;
-    color: var(--color-primary);
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-}
-
-.menu-settings label
-{
-    font-weight: bold;
-    color: var(--color-secondary-2);
-    display: block;
-    margin-top: 15px;
-    margin-bottom: 5px;
-}
-
-.menu-settings input
-{
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: var(--radius);
-    border: 1px solid #ccc;
-    background-color: var(--color-light);
-    transition: var(--transition);
-}
-
-.menu-settings input:focus
-{
-    outline: none;
-    border-color: var(--color-primary);
-    background-color: #ffffff;
-}
-
-.menu-settings button
-{
-    margin-top: 20px;
-    padding: 12px;
-    background-color: var(--color-btn-menu);
-    color: var(--color-white);
-    border: none;
-    border-radius: var(--radius);
-    cursor: pointer;
-    width: 100%;
-    font-size: 1rem;
-    font-weight: bold;
-}
-
-.menu-settings button:hover
-{
-    background-color: var(--color-btn-menu-2);
-    transform: scale(1.03);
-}
-
 /* === BOUTONS BUREAUX === */
-.bureaux_buttons
+.bureaux-btn
 {
     position: fixed;
     left: 20px;
@@ -201,7 +128,7 @@ button:hover
     gap: 20px;
 }
 
-.bureaux_buttons button
+.bureaux-btn button
 {
     padding: 15px 30px;
     font-size: 1.2em;
@@ -216,23 +143,23 @@ button:hover
     max-width: 250px;
 }
 
-.bureaux_buttons button:hover
+.bureaux-btn button:hover
 {
     background-color: var(--color-btn-menu-2);
 }
 
-.bureaux_buttons button.selected
+.bureaux-btn button.selected
 {
     background-color: var(--color-display);
 }
 
-.bureaux_buttons button.selected:hover
+.bureaux-btn button.selected:hover
 {
     background-color: var(--color-display-2);
 }
 
 /* === USAGERS LISTE === */
-#usagers_list_container
+#usagers-list-container
 {
     width: 100%;
     max-width: 500px;
@@ -247,7 +174,7 @@ button:hover
 }
 
 /* === USAGER CONTAINER === */
-.usager_container
+.usager-container
 {
     display: flex;
     align-items: center;
@@ -257,7 +184,7 @@ button:hover
 }
 
 /* === BOUTONS USAGER === */
-.usager_button
+.usager-btn
 {
     flex: 1;
     padding: 10px;
@@ -270,45 +197,45 @@ button:hover
     text-align: left;
 }
 
-.usager_button:hover
+.usager-btn:hover
 {
     background-color: var(--color-primary-2);
     transform: scale(1.02);
 }
 
-.usager_button.default
+.usager-btn.default
 {
     background-color: var(--color-primary);
 }
 
-.usager_button.default:hover
+.usager-btn.default:hover
 {
     background-color: var(--color-primary-2);
 }
 
-.usager_button.selected
+.usager-btn.selected
 {
     background-color: var(--color-select);
 }
 
-.usager_button.selected:hover
+.usager-btn.selected:hover
 {
     background-color: var(--color-select-2);
 }
 
-.usager_button.displayed
+.usager-btn.displayed
 {
     background-color: var(--color-display);
 }
 
-.usager_button.displayed:hover
+.usager-btn.displayed:hover
 {
     background-color: var(--color-display-2);
 }
 
 /* === BOUTONS ACTIONS === */
-.usager_select_button,
-.clear_button
+.usager-select-btn,
+.clear-btn
 {
     width: 40px;
     height: 40px;
@@ -325,18 +252,18 @@ button:hover
     font-weight: bold;
 }
 
-.usager_select_button
+.usager-select-btn
 {
     background-color: var(--color-select);
     color: var(--color-white);
 }
 
-.usager_select_button:hover
+.usager-select-btn:hover
 {
     background-color: var(--color-select-2);
 }
 
-.usager_select_button.prêt
+.usager-select-btn.prêt
 {
     border-radius: 20px;
     width: auto;
@@ -345,19 +272,19 @@ button:hover
     margin-left: 0px;
 }
 
-.clear_button
+.clear-btn
 {
     background-color: var(--color-btn-clear);
     color: var(--color-white);
 }
 
-.clear_button:hover
+.clear-btn:hover
 {
     background-color: var(--color-btn-clear-2);
 }
 
 /* === AFFICHAGE USAGER === */
-#display_section
+#display-section
 {
     display: flex;
     justify-content: center;
@@ -372,22 +299,156 @@ button:hover
     padding: 10px;
 }
 
-#usager_display
+#usager-display
 {
     font-size: 2rem;
     font-weight: bold;
     color: var(--color-display-2);
 }
 
-#clear_button
+#clear-btn
 {
     width: auto;
     border-radius: var(--radius);
     padding: 10px 20px;
 }
 
+/* === ONGLET MENU === */
+#onglet-menu {
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 100%;
+    background-color: var(--color-light);
+    transition: right 0.3s ease;
+    padding: 20px;
+    z-index: 1000;
+}
+
+#onglet-menu h3
+{
+    margin-top: 0;
+    color: var(--color-primary);
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+}
+
+#onglet-menu button
+{
+    margin-top: 20px;
+    padding: 12px;
+    background-color: var(--color-btn-menu);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+#onglet-menu button:hover
+{
+    background-color: var(--color-btn-menu-2);
+    transform: scale(1.03);
+}
+
+#onglet-menu .cancel-btn
+{
+    background-color: var(--color-btn-clear);
+}
+
+#onglet-menu .cancel-btn:hover
+{
+    background-color: var(--color-btn-clear-2);
+}
+
 /* === POPUP === */
-#popup_bandeau
+.popup
+{
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: var(--color-white);
+    padding: 20px;
+    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-top-left-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
+    transition: var(--transition);
+}
+
+.popup h3
+{
+    margin-top: 0;
+    color: var(--color-primary);
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+}
+
+.popup label
+{
+    font-weight: bold;
+    color: var(--color-secondary-2);
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.popup input
+{
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid #ccc;
+    background-color: var(--color-light);
+    transition: var(--transition);
+}
+
+.popup input:focus
+{
+    outline: none;
+    border-color: var(--color-primary);
+    background-color: #ffffff;
+}
+
+.popup button
+{
+    margin-top: 20px;
+    padding: 12px;
+    background-color: var(--color-btn-menu);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.popup button:hover
+{
+    background-color: var(--color-btn-menu-2);
+    transform: scale(1.03);
+}
+
+.popup .cancel-btn
+{
+    background-color: var(--color-btn-clear);
+}
+
+.popup .cancel-btn:hover
+{
+    background-color: var(--color-btn-clear-2);
+}
+
+#popup-bandeau
 {
     position: fixed;
     top: 0; left: 0;
@@ -400,7 +461,20 @@ button:hover
     z-index: 999;
 }
 
-.popup_content
+#popup-bureaux
+{
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.popup-content
 {
     background-color: var(--color-white);
     padding: 25px;
@@ -411,7 +485,7 @@ button:hover
     box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
 
-.popup_content h3
+.popup-content h3
 {
     margin-bottom: 15px;
     font-weight: bold;
@@ -419,9 +493,9 @@ button:hover
     color: var(--color-primary);
 }
 
-.popup_buttons,
-.popup_content
-.buttons_container
+.popup-btn,
+.popup-content
+.btn-container
 {
     display: flex;
     flex-direction: column;
@@ -429,8 +503,8 @@ button:hover
     margin-top: 10px;
 }
 
-.popup_buttons button,
-.popup_content button
+.popup-btn button,
+.popup-content button
 {
     width: 60%;
     gap: 20px;
@@ -446,24 +520,24 @@ button:hover
     transition: var(--transition);
 }
 
-.popup_content button:hover,
-.popup_buttons button:hover
+.popup-content button:hover,
+.popup-btn button:hover
 {
     background-color: var(--color-btn-menu-2);
     transform: scale(1.04);
 }
 
-#popup_content_cancel_button
+#popup-content-cancel-btn
 {
     background-color: var(--color-btn-menu);
 }
 
-#popup_content_cancel_button:hover
+#popup-content-cancel-btn:hover
 {
     background-color: var(--color-btn-menu-2);
 }
 
-#bandeau_input
+#bandeau-input
 {
     width: 100%;
     padding: 10px;
@@ -536,14 +610,14 @@ button:hover
         font-size: 1.5rem;
     }
 
-    .menu-settings
+    .popup
     {
         width: 100%;
         height: 100%;
         border-radius: 0;
     }
 
-    .bureaux_buttons
+    .bureaux-btn
     {
         position: static;
         display: grid;
@@ -555,61 +629,61 @@ button:hover
         margin-right: auto;
     }
     
-    .bureaux_buttons button
+    .bureaux-btn button
     {
         font-size: 1rem;
         padding: 12px;
         width: 100%;
     }
 
-    #usagers_list_container
+    #usagers-list-container
     {
         max-height: 60vh;
         max-width: 100%;
     }
 
-    .usager_button
+    .usager-btn
     {
         font-size: 1rem;
         padding: 10px;
         text-align: center;
     }
 
-    #display_section
+    #display-section
     {
         flex-direction: column;
         gap: 8px;
         max-width: 100%;
     }
 
-    #usager_display
+    #usager-display
     {
         font-size: 1.6rem;
         text-align: center;
     }
 
-    .usager_select_button,
-    .clear_button
+    .usager-select-btn,
+    .clear-btn
     {
         width: 36px;
         height: 36px;
         font-size: 0.9rem;
     }
 
-    .usager_select_button.prêt
+    .usager-select-btn.prêt
     {
         font-size: 0.95rem;
         padding: 6px 12px;
     }
 
-    .popup_content
+    .popup-content
     {
         padding: 15px;
         font-size: 1rem;
     }
 
-    .popup_buttons button,
-    .popup_content button
+    .popup-btn button,
+    .popup-content button
     {
         font-size: 1rem;
         width: 100%;
@@ -623,29 +697,29 @@ button:hover
         padding: 50px 10px;
     }
 
-    .bureaux_buttons
+    .bureaux-btn
     {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .bureaux_buttons button:nth-child(3)
+    .bureaux-btn button:nth-child(3)
     {
         grid-column: 1 / 3;
         justify-self: center;
         width: 60%;
     }
 
-    .clear_button
+    .clear-btn
     {
         font-size: 80%;
     }
 
-    .usager_select_button
+    .usager-select-btn
     {
         font-size: 80%;
     }
 
-    .usager_select_button.prêt
+    .usager-select-btn.prêt
     {
         font-size: 80%;
         width: 30%;

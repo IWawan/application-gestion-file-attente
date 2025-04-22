@@ -1,8 +1,4 @@
 var socket = io.connect('http://' + window.location.hostname + ':' + window.location.port);
-const rootStyles = getComputedStyle(document.documentElement);
-const colorPrimary = rootStyles.getPropertyValue('--color-primary').trim();
-const colorSecondary = rootStyles.getPropertyValue('--color-secondary').trim();
-const colorSelect = rootStyles.getPropertyValue('--color-select-button').trim();
 
 var displayed_usagers = new Set()
 var selected_usagers = new Set()
@@ -10,18 +6,6 @@ var current_usager = "";
 var current_bureau;
 
 // -- FONCTIONS --
-
-// Ouvrir/Fermer menu paramètres
-function toggleMenu()
-{
-    var menu = document.getElementById("menu-settings-bureaux");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
-}
-
-function closeMenu()
-{
-    document.getElementById("menu-settings-bureaux").style.display = "none";
-}
 
 // Fonction pour séléctionner un fichier .xlsx à charger
 function selectXLSX(event)
@@ -74,70 +58,70 @@ function chargerListeUsagers()
 // Fonction pour mettre à jour la liste des usagers
 function mettreAJourListe(usagers)
 {
-    var usagersListContainer = document.getElementById('usagers_list_container');
+    var usagersListContainer = document.getElementById('usagers-list-container');
     usagersListContainer.innerHTML = ""; // Efface les anciens boutons
 
     usagers.forEach(function(usager, index)
     {
         var usagerContainer = document.createElement('div');
-        usagerContainer.classList.add('usager_container');
+        usagerContainer.classList.add('usager-container');
 
         // Boutons principal des usagers
-        var usagerButton = document.createElement('button');
-        usagerButton.classList.add('usager_button');
-        usagerButton.id = 'usager_button_' + index;
-        usagerButton.textContent = usager;
+        var usagerBtn = document.createElement('button');
+        usagerBtn.classList.add('usager-btn');
+        usagerBtn.id = 'usager-btn-' + index;
+        usagerBtn.textContent = usager;
 
         // Couleur en fonction des états
         if (selected_usagers.has(usager))
         {
-            usagerButton.classList.add('selected');
+            usagerBtn.classList.add('selected');
         }
         else if (displayed_usagers.has(usager))
         {
-            usagerButton.classList.add('displayed');
+            usagerBtn.classList.add('displayed');
         }
         else
         {
-            usagerButton.classList.add('default');
+            usagerBtn.classList.add('default');
         }
 
-        usagerButton.onclick = function() { envoyerUsager(usager); };
+        usagerBtn.onclick = function() { envoyerUsager(usager); };
 
         // Boutons selectionner un usager
-        var usagerSelectButton = document.createElement('button');
-        usagerSelectButton.classList.add('usager_select_button');
-        usagerSelectButton.id = 'usager_select_button' + index;
+        var usagerSelectBtn = document.createElement('button');
+        usagerSelectBtn.classList.add('usager-select-btn');
+        usagerSelectBtn.id = 'usager-select-btn-' + index;
 
         if (selected_usagers.has(usager))
         {
-            usagerSelectButton.classList.add('prêt');
-            usagerSelectButton.innerHTML = 'EN ATTENTE';
+            usagerSelectBtn.classList.add('prêt');
+            usagerSelectBtn.innerHTML = 'EN ATTENTE';
         }
         else
         {
-            usagerSelectButton.classList.remove('prêt');
-            usagerSelectButton.innerHTML = '&#10003;';
+            usagerSelectBtn.classList.remove('prêt');
+            usagerSelectBtn.innerHTML = '&#10003;';
         }
         
-        usagerSelectButton.onclick = function()
+        usagerSelectBtn.onclick = function()
         {
             socket.emit('select_usager', { usager: usager });
         };
 
         // Boutons effacer un usager
-        var usagerDeleteButton = document.createElement('button');
-        usagerDeleteButton.classList.add('clear_button');
-        usagerDeleteButton.id = 'usager_delete_button_' + index;
-        usagerDeleteButton.innerHTML = '&times;';
-        usagerDeleteButton.onclick = function()
+        var usagerDeleteBtn = document.createElement('button');
+        usagerDeleteBtn.classList.add('clear-btn');
+        usagerDeleteBtn.id = 'usager-delete-btn-' + index;
+        usagerDeleteBtn.innerHTML = '&times;';
+        usagerDeleteBtn.onclick = function()
         {
             socket.emit('remove_usager', { usager: usager });
         };
 
-        usagerContainer.appendChild(usagerButton);
-        usagerContainer.appendChild(usagerSelectButton);
-        usagerContainer.appendChild(usagerDeleteButton);
+        usagerContainer.appendChild(usagerBtn);
+        usagerContainer.appendChild(usagerSelectBtn);
+        usagerContainer.appendChild(usagerDeleteBtn);
         usagersListContainer.appendChild(usagerContainer);
     });
 }
@@ -158,12 +142,12 @@ function envoyerUsager(usager)
 // Fonction pour afficher un usager sur l'interface
 function mettreAJourAffichage(usager, bureau)
 {
-    var usagerDisplay = document.getElementById('usager_display');
+    var usagerDisplay = document.getElementById('usager-display');
 
     usagerDisplay.textContent = usager.substring(usager.indexOf("|") + 1).toUpperCase();
 
-    // Affiche le bouton "clear_button" si un usager est affiché
-    if (usager != "") { document.getElementById('display_section').style.display = 'flex'; }
+    // Affiche le bouton "clear-btn" si un usager est affiché
+    if (usager != "") { document.getElementById('display-section').style.display = 'flex'; }
 }
 
 // Fonction pour effacer la liste des usagers
@@ -174,44 +158,56 @@ function effacerAffichage()
 {
     socket.emit('clear_display');
     // Cache la "display_section"
-    document.getElementById('display_section').style.display = 'none';
+    document.getElementById('display-section').style.display = 'none';
 }
+
+// Ouvrir/Fermer l'onglet menu
+function ouvrirOngletMenu()
+{
+    var ongletMenu = document.getElementById("onglet-menu");
+    ongletMenu.style.display = ongletMenu.style.display === "block" ? "none" : "block";
+}
+
+function fermerOngletMenu()
+{
+    var ongletMenu = document.getElementById("onglet-menu");
+    ongletMenu.style.display = ongletMenu.style.display === "none" ? "block" : "none";
+}
+
+// Modifications bandeau
+function ouvrirPopupBandeau()
+{
+    document.getElementById("popup-bandeau").style.display = "flex";
+    fermerOngletMenu();
+}
+    
+function fermerPopupBandeau() { document.getElementById("popup-bandeau").style.display = "none"; }
+
+function envoyerMessageBandeau()
+{
+    var message = document.getElementById("bandeau-input").value;
+    if (message.trim() !== "") { socket.emit("bandeau_message", { message: message });}
+    fermerPopupBandeau();
+} 
+
+// Modifications bureaux
+function ouvrirPopupBureaux() {
+    document.getElementById("popup-bureaux").style.display = "flex";
+    fermerOngletMenu();
+}
+
+function fermerPopupBureaux() { document.getElementById("popup-bureaux").style.display = "none"; }
 
 // Fonction pour séléctionner un bureau
 function selectionnerBureau(bureauBtn)
 {
     const bureau = bureauBtn.innerText.trim();
 
-    console.log("Bouton " + bureau + " cliqué !");
     socket.emit('select_bureau', { bureau: bureau });
-    console.log(current_bureau + " sélectionné");
-}
-
-// Fonction pour changer l'état du bureau sélectionné
-function changeEtat()
-{
-    // Met à jour l'état visuel des boutons
-    document.querySelectorAll('#bureaux_buttons button').forEach(btn =>
-    {
-        btn.classList.remove('selected');
-    });
-
-    if (current_bureau === document.getElementById('btn_bureau_1').innerText.trim())
-    {
-        document.getElementById('btn_bureau_1').classList.add('selected');
-    }
-    else if (current_bureau === document.getElementById('btn_bureau_2').innerText.trim())
-    {
-        document.getElementById('btn_bureau_2').classList.add('selected');
-    }
-    else if (current_bureau === document.getElementById('btn_bureau_3').innerText.trim())
-    {
-        document.getElementById('btn_bureau_3').classList.add('selected');
-    }
 }
 
 // Fonction pour modifier les noms des bureaux 
-function saveBureauNames()
+function sauvegarderModifsBureaux()
 {
     var bureau1 = document.getElementById("bureau1").value.trim();
     var bureau2 = document.getElementById("bureau2").value.trim();
@@ -223,7 +219,7 @@ function saveBureauNames()
         socket.emit('save_bureau_names', { bureau1, bureau2, bureau3 });
 
         // Fermer le menu après la sauvegarde
-        closeMenu();
+        fermerPopupBureaux();
     }
     else
     {
@@ -231,17 +227,28 @@ function saveBureauNames()
     }
 }
 
-// Bandeau
-function ouvrirPopupBandeau() { document.getElementById("popup_bandeau").style.display = "flex"; }
-
-function fermerPopupBandeau() { document.getElementById("popup_bandeau").style.display = "none"; }
-
-function envoyerMessageBandeau()
+// Fonction pour changer l'état du bureau sélectionné
+function changeEtat()
 {
-    var message = document.getElementById("bandeau_input").value;
-    if (message.trim() !== "") { socket.emit("bandeau_message", { message: message });}
-    fermerPopupBandeau();
-} 
+    // Met à jour l'état visuel des boutons
+    document.querySelectorAll('#bureaux-btn button').forEach(btn =>
+    {
+        btn.classList.remove('selected');
+    });
+
+    if (current_bureau === document.getElementById('btn-bureau-1').innerText.trim())
+    {
+        document.getElementById('btn-bureau-1').classList.add('selected');
+    }
+    else if (current_bureau === document.getElementById('btn-bureau-2').innerText.trim())
+    {
+        document.getElementById('btn-bureau-2').classList.add('selected');
+    }
+    else if (current_bureau === document.getElementById('btn-bureau-3').innerText.trim())
+    {
+        document.getElementById('btn-bureau-3').classList.add('selected');
+    }
+}
 
 // Reinitialise les variables
 function resetAll() { socket.emit('reset_all'); } 
@@ -258,8 +265,6 @@ socket.on('update_usagers', function(data)
 socket.on('update_current_bureau', function(data)
 {
     current_bureau = data.current_bureau;
-
-    console.log(current_bureau);
     
     changeEtat(); // Met à jour l'état visuel des boutons de bureau
 });
@@ -285,9 +290,9 @@ socket.on('update_selected_usagers', function(data)
 // Mettre à jour les noms des bureaux sur tous les clients
 socket.on('update_bureau_names', function(data)
 {
-    document.getElementById("btn_bureau_1").textContent = data.bureau1;
-    document.getElementById("btn_bureau_2").textContent = data.bureau2;
-    document.getElementById("btn_bureau_3").textContent = data.bureau3;
+    document.getElementById("btn-bureau-1").textContent = data.bureau1;
+    document.getElementById("btn-bureau-2").textContent = data.bureau2;
+    document.getElementById("btn-bureau-3").textContent = data.bureau3;
 
     document.getElementById("bureau1").setAttribute("value", data.bureau1);
     document.getElementById("bureau2").setAttribute("value", data.bureau2);

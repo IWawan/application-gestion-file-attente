@@ -15,54 +15,66 @@
         <button onclick="document.getElementById('fileInput').click()">Charger</button>
         <button onclick="resetAll(), chargerListeUsagers()">Afficher</button>
         <button onclick="resetAll(), effacerListeUsagers(), effacerAffichage()">Effacer</button>
-        <button onclick="ouvrirPopupBandeau()">Bandeau</button>
+        
     </div>
 
-    <div id="bureaux_buttons" class="bureaux_buttons">
-        <button onclick="selectionnerBureau(this)" id="btn_bureau_1">Bureau 1</button>
-        <button onclick="selectionnerBureau(this)" id="btn_bureau_2">Bureau 2</button>
-        <button onclick="selectionnerBureau(this)" id="btn_bureau_3">Bureau 3</button>
+    <div id="bureaux-btn" class="bureaux-btn">
+        <button onclick="selectionnerBureau(this)" id="btn-bureau-1">Bureau 1</button>
+        <button onclick="selectionnerBureau(this)" id="btn-bureau-2">Bureau 2</button>
+        <button onclick="selectionnerBureau(this)" id="btn-bureau-3">Bureau 3</button>
     </div>
 
     <div id="hamburger-menu" class="hamburger-menu">
-        <button id="hamburger-btn" onclick="toggleMenu()">☰</button>
+        <button id="hamburger-btn" onclick="ouvrirOngletMenu()">☰</button>
     </div>
 
-    <!-- Menu de modification des bureaux -->
-    <div class="menu-settings" id="menu-settings-bureaux">
-        <h3>Modifier les bureaux</h3>
-        <label for="bureau1">Bureau 1 :</label>
-        <input type="text" id="bureau1" value="Bureau 1">
-        <br>
-        <label for="bureau2">Bureau 2 :</label>
-        <input type="text" id="bureau2" value="Bureau 2">
-        <br>
-        <label for="bureau3">Bureau 3 :</label>
-        <input type="text" id="bureau3" value="Bureau 3">
-        <br>
-        <button onclick="saveBureauNames()">Sauvegarder</button>
-        <button onclick="closeMenu()">Annuler</button>
+    <div id="onglet-menu" class="onglet-menu" style="display:none;">
+        <h3>Onglet menu</h3>
+        <button onclick="ouvrirPopupBandeau()">Bandeau</button>
+        <button onclick="ouvrirPopupBureaux()">Bureaux</button>
+        <button class="cancel-btn" onclick="fermerOngletMenu()">Fermer</button>
     </div>
 
-    <div id="usagers_list_container" class="usagers_list_container">
+    <!-- Popup de modification du bandeau -->
+    <div class="popup" id="popup-bandeau">
+        <div class="popup-content">
+            <h3>Message pour le bandeau</h3>
+            <input type="text" id="bandeau-input" placeholder="Entrez un message">
+            <div class="popup-btn">
+                <button onclick="envoyerMessageBandeau()">Envoyer</button>
+                <button class="cancel-btn" onclick="fermerPopupBandeau()">Annuler</button>
+            </div>
+        </div>
+    </div> 
+
+    <!-- Popup de modification des bureaux -->
+    <div class="popup" id="popup-bureaux">
+        <div class="popup-content">
+            <h3>Modifier les bureaux</h3>
+            <label for="bureau1">Bureau 1 :</label>
+            <input type="text" id="bureau1" value="Bureau 1">
+            <br>
+            <label for="bureau2">Bureau 2 :</label>
+            <input type="text" id="bureau2" value="Bureau 2">
+            <br>
+            <label for="bureau3">Bureau 3 :</label>
+            <input type="text" id="bureau3" value="Bureau 3">
+            <br>
+            <div class="popup-btn">
+                <button onclick="sauvegarderModifsBureaux()">Sauvegarder</button>
+                <button class="cancel-btn" onclick="fermerPopupBureaux()">Annuler</button>
+            </div>
+        </div>
+    </div> 
+
+    <div id="usagers-list-container" class="usagers-list-container">
         <!-- Liste des usagers dynamique -->
     </div>
 
-    <div id="display_section" class="display_section" style="display:none;">
-        <h2 id="usager_display"></h2>
-        <button class="clear_button" id="clear_button" onclick="effacerAffichage()" style="margin-left: 20px;">RDV TERMINÉ</button>
-    </div>
-
-    <div id="popup_bandeau" class="popup_bandeau">
-        <div class="popup_content">
-            <h3>Message pour le bandeau</h3>
-            <input type="text" id="bandeau_input" placeholder="Entrez un message">
-            <div class="popup_buttons">
-                <button onclick="envoyerMessageBandeau()">Envoyer</button>
-                <button onclick="fermerPopupBandeau()">Annuler</button>
-            </div>
-        </div>
-    </div>    
+    <div id="display-section" class="display-section" style="display:none;">
+        <h2 id="usager-display"></h2>
+        <button class="clear-btn" id="clear-btn" onclick="effacerAffichage()" style="margin-left: 20px;">RDV TERMINÉ</button>
+    </div>   
 
     <input type="file" id="fileInput" style="display: none;" accept=".xlsx" onchange="selectXLSX(event)">
 
