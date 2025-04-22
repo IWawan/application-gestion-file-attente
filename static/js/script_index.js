@@ -4,6 +4,7 @@ var displayed_usagers = new Set()
 var selected_usagers = new Set()
 var current_usager = "";
 var current_bureau;
+var bureaux;
 
 // -- FONCTIONS --
 
@@ -203,8 +204,34 @@ function fermerPopupBureaux() { document.getElementById("popup-bureaux").style.d
 function selectionnerBureau(bureauBtn)
 {
     const bureau = bureauBtn.innerText.trim();
+    console.log(bureau);
+    
 
     socket.emit('select_bureau', { bureau: bureau });
+}
+
+function ajouterBureau()
+{
+    let nbBureaux = Object.keys(bureaux).length;
+    let newKey = "bureau" + (nbBureaux + 1);
+
+    bureaux[newKey] = "Bureau " + (nbBureaux + 1);
+
+    socket.emit('save_bureaux', { bureaux: bureaux });
+    updateBtnBureaux();
+}
+
+function supprimerBureau()
+{
+    let nbBureaux = Object.keys(bureaux).length;
+
+    if (nbBureaux > 1)
+    {
+        delete bureaux["bureau" + nbBureaux];
+
+        socket.emit('save_bureaux', { bureaux: bureaux });
+        updateBtnBureaux();
+    }
 }
 
 // Fonction pour modifier les bureaux 
@@ -228,24 +255,27 @@ function sauvegarderModifsBureaux()
     }
 }
 
-function modifierBtnBureaux()
+function updateBtnBureaux()
 {
-    const bureauxContainer = document.getElementById("bureaux-btn-container")
+    const bureauxContainer = document.getElementById("bureaux-btn-container");
     bureauxContainer.textContent = ""; // Efface les boutons
 
-    bureaux = ["A", "B", "C"] // Liste des bureaux
-
-    i = 0
-
-    bureaux.forEach(function(bureau)
+    console.log("update");
+    
+    let i = 0;
+    
+    for (let key in bureaux)
     {
-        var bureauBtn = document.createElement('button');
+        const nom = bureaux[key];
+
+        let bureauBtn = document.createElement('button');
         bureauBtn.id = 'btn-bureau-' + (++i);
-        bureauBtn.textContent = bureau;
+        bureauBtn.textContent = nom;
+        
         bureauBtn.onclick = function() { selectionnerBureau(bureauBtn); };
 
         bureauxContainer.appendChild(bureauBtn);
-    });
+    }
 }
 
 // Fonction pour changer l'état du bureau sélectionné
@@ -305,11 +335,8 @@ socket.on('update_selected_usagers', function(data)
 // Mettre à jour les noms des bureaux sur tous les clients
 socket.on('update_bureaux', function(data)
 {
-    document.getElementById("btn-bureau-1").textContent = data.bureau1;
-    document.getElementById("btn-bureau-2").textContent = data.bureau2;
-    document.getElementById("btn-bureau-3").textContent = data.bureau3;
-
-    document.getElementById("bureau1").setAttribute("value", data.bureau1);
-    document.getElementById("bureau2").setAttribute("value", data.bureau2);
-    document.getElementById("bureau3").setAttribute("value", data.bureau3);
+    bureaux = data.bureaux;
+    console.log("A : " + bureaux);
+    
+    updateBtnBureaux(); // Met à jour les boutons de bureaux
 });

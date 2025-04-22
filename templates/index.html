@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion file d'attente</title>
-    <link rel="stylesheet" href="/static/css/style_index.css">
+    <link rel="stylesheet" href="/static/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 </head>
 
@@ -15,19 +15,16 @@
         <button onclick="document.getElementById('fileInput').click()">Charger</button>
         <button onclick="resetAll(), chargerListeUsagers()">Afficher</button>
         <button onclick="resetAll(), effacerListeUsagers(), effacerAffichage()">Effacer</button>
-        <button onclick="modifierBtnBureaux()">Test</button>
+        <button onclick="updateBtnBureaux()">Test</button>
     </div>
 
     <div id="bureaux-btn-container" class="bureaux-btn-container">
-        <button onclick="selectionnerBureau(this)" id="btn-bureau-1">Bureau 1</button>
-        <button onclick="selectionnerBureau(this)" id="btn-bureau-2">Bureau 2</button>
-        <button onclick="selectionnerBureau(this)" id="btn-bureau-3">Bureau 3</button>
     </div>
 
     <!-- Bouton d'ouverture de l'onglet menu -->
     <button id="open-onglet-menu-btn" onclick="ouvrirOngletMenu()">☰</button>
 
-    <div id="onglet-menu" class="onglet-menu" style="display:none;">
+    <div id="onglet-menu" class="onglet-menu">
         <h3>Onglet menu</h3>
         <button onclick="ouvrirPopupBandeau()">Bandeau</button>
         <button onclick="ouvrirPopupBureaux()">Bureaux</button>
@@ -60,6 +57,8 @@
             <input type="text" id="bureau3" value="Bureau 3">
             <br>
             <div class="popup-btn">
+                <button onclick="ajouterBureau()">Ajouter un bureau</button>
+                <button onclick="supprimerBureau()">Supprimer un bureau</button>
                 <button onclick="sauvegarderModifsBureaux()">Sauvegarder</button>
                 <button class="cancel-btn" onclick="fermerPopupBureaux()">Annuler</button>
             </div>
@@ -70,12 +69,12 @@
         <!-- Liste des usagers dynamique -->
     </div>
 
-    <div id="display-section" class="display-section" style="display:none;">
+    <div id="display-section" class="display-section">
         <h2 id="usager-display"></h2>
-        <button class="clear-btn" id="clear-btn" onclick="effacerAffichage()" style="margin-left: 20px;">RDV TERMINÉ</button>
+        <button class="clear-btn" id="clear-btn" onclick="effacerAffichage()">RDV TERMINÉ</button>
     </div>   
 
-    <input type="file" id="fileInput" style="display: none;" accept=".xlsx" onchange="selectXLSX(event)">
+    <input type="file" id="fileInput" accept=".xlsx" onchange="selectXLSX(event)">
 
     <script src="/static/js/script_index.js"></script>
 </body>

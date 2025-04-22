@@ -52,11 +52,7 @@ current_usager = ""
 current_bureau = ""
 displayed_usagers = set()
 selected_usagers = set()
-bureaux = {
-    'bureau1': 'Bureau 1',
-    'bureau2': 'Bureau 2',
-    'bureau3': 'Bureau 3'
-}
+bureaux = {}
 
 # --- Routes HTTP ---
 
@@ -107,8 +103,6 @@ def load_usagers():
 # Initialisation à la connexion
 @socketio.on('connect')
 def on_connect():
-    load_bureaux()
-
     _sync_all()
 
 # Met à jour la liste des usagers
@@ -192,18 +186,21 @@ def on_clear_display():
     _sync_display()
     _sync_current_bureau()
 
-# Sauvegarde les noms des bureaux
+# Sauvegarde les bureaux
 @socketio.on('save_bureaux')
 def on_save_bureaux(data):
-    for key in ('bureau1', 'bureau2', 'bureau3'):
-        bureaux[key] = data.get(key, bureaux[key])
+    global bureaux
+    bureaux = {}
+
+    for key, value in data.get('bureaux', {}).items():
+        bureaux[key] = value
 
     os.makedirs('data', exist_ok=True)
 
     with open("data/bureaux.txt", "w") as file:
         file.write('\n'.join(bureaux.values()))
 
-    socketio.emit('update_bureaux', bureaux)
+    _sync_bureaux()
 
 @socketio.on('reset_all')
 def on_reset_all():
@@ -219,15 +216,18 @@ def on_reset_all():
 
 def load_bureaux():
     global bureaux
+    bureaux = {}
+    print("Chargement des bureaux...")
+
     try:
         with open("data/bureaux.txt", "r") as file:
             lines = file.readlines()
-            if len(lines) >= 3:
-                bureaux['bureau1'] = lines[0].strip()
-                bureaux['bureau2'] = lines[1].strip()
-                bureaux['bureau3'] = lines[2].strip()
+            for i, line in enumerate(lines, start=1):
+                bureau_id = f"bureau{i}"
+                bureaux[bureau_id] = line.strip()
 
-                socketio.emit('update_bureaux', bureaux)
+        socketio.emit('update_bureaux', bureaux)
+
     except FileNotFoundError:
         print("bureaux.txt introuvable, noms par défaut utilisés.")
 
@@ -239,6 +239,9 @@ def _sync_usager_states():
     socketio.emit('update_displayed_usagers', {'displayed_usagers': list(displayed_usagers)})
     socketio.emit('update_selected_usagers', {'selected_usagers': list(selected_usagers)})
     _sync_usagers_list()
+
+def _sync_bureaux():
+    socketio.emit('update_bureaux', {'bureaux': bureaux})
 
 def _sync_current_bureau():
     socketio.emit('update_current_bureau', {'current_bureau': current_bureau})
@@ -253,6 +256,7 @@ def _sync_display():
 def _sync_all():
     _sync_usagers_list()
     _sync_usager_states()
+    _sync_bureaux()
     _sync_current_bureau()
     _sync_display()
 
