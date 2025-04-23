@@ -5,59 +5,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion file d'attente</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style_index.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 </head>
 
 <body>
 
-    <div id="menu" class="menu">
+    <!-- Menu principal -->
+    <div id="main-menu" class="main-menu">
         <button onclick="document.getElementById('fileInput').click()">Charger</button>
         <button onclick="resetAll(), chargerListeUsagers()">Afficher</button>
-        <button onclick="resetAll(), effacerListeUsagers(), effacerAffichage()">Effacer</button>
+        <button onclick="resetAll(), effacerListeUsagers()">Effacer</button>
     </div>
 
     <!-- Bouton d'ouverture du menu latéral -->
     <button id="open-side-menu-btn" onclick="ouvrirMenuLateral()">☰</button>
 
-    <div id="menu-lateral" class="menu-lateral">
-        <h3>Menu latéral</h3>
+    <!-- Menu latéral -->
+    <nav id="side-menu" class="side-menu">
         <button onclick="ouvrirPopupBandeau()">Bandeau</button>
         <button onclick="ouvrirPopupBureaux()">Bureaux</button>
-        <button class="cancel-btn" onclick="fermerMenuLateral()">Fermer</button>
-    </div>
+        <button class="close-btn" onclick="fermerMenuLateral()">Fermer</button>
+    </nav>
 
     <!-- Popup de modification du bandeau -->
     <div class="popup" id="popup-bandeau">
+        <div class="popup-overlay"></div>
         <div class="popup-content">
             <h3>Message pour le bandeau</h3>
             <input type="text" id="bandeau-input" placeholder="Entrez un message">
             <div class="popup-btn">
                 <button onclick="envoyerMessageBandeau()">Envoyer</button>
-                <button class="cancel-btn" onclick="fermerPopupBandeau()">Annuler</button>
+                <button class="close-btn" onclick="fermerPopupBandeau()">Fermer</button>
             </div>
         </div>
     </div> 
 
     <!-- Popup de modification des bureaux -->
     <div class="popup" id="popup-bureaux">
+        <div class="popup-overlay"></div>
         <div class="popup-content">
+            <h3>Modifier les bureaux</h3>
             <div id="bureaux-modif-container">
-                <h3>Modifier les bureaux</h3>
-                <label for="bureau1">Bureau 1 :</label>
-                <input type="text" id="bureau1" value="Bureau 1">
-                <br>
-                <label for="bureau2">Bureau 2 :</label>
-                <input type="text" id="bureau2" value="Bureau 2">
-                <br>
-                <label for="bureau3">Bureau 3 :</label>
-                <input type="text" id="bureau3" value="Bureau 3">
-                <br>
+                <!-- Bureaux dynamiques -->
             </div>
             <div class="popup-btn">
                 <button onclick="ajouterBureau()">Ajouter un bureau</button>
-                <button onclick="sauvegarderModifsBureaux()">Sauvegarder</button>
-                <button class="cancel-btn" onclick="fermerPopupBureaux()">Annuler</button>
+                <button onclick="renommerBureaux()">Renommer</button>
+                <button class="close-btn" onclick="fermerPopupBureaux()">Fermer</button>
             </div>
         </div>
     </div> 

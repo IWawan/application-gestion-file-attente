@@ -1,5 +1,4 @@
-:root
-{
+:root {
     --color-primary: #962030;
     --color-primary-2: #7a1a28;
     --color-secondary: #6b6b6b;
@@ -23,16 +22,14 @@
 }
 
 /* === RESET === */
-*
-{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
 /* === PRINCIPAL === */
-body
-{
+body {
     animation: fadeIn 1s forwards;
     font-family: var(--font-family);
     background-color: var(--color-white);
@@ -43,22 +40,23 @@ body
     flex-direction: column;
     align-items: center;
     min-height: 90vh;
+    overflow-x: hidden; /* Empêche le scroll horizontal */
 }
 
-button
-{
+button {
     transition: var(--transition);
 }
-
-button:hover
-{
-    transition: var(--transition);
+button:hover {
     transform: scale(1.05);
 }
 
-/* === MENU === */
-#menu
-{
+/* === CACHER L'INPUT FICHIER === */
+#fileInput {
+    display: none;
+}
+
+/* === MENU PRINCIPAL === */
+#main-menu {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -66,9 +64,7 @@ button:hover
     margin-bottom: 20px;
     width: 100%;
 }
-
-#menu button
-{
+#main-menu button {
     background-color: var(--color-btn-menu);
     color: var(--color-white);
     padding: 12px 24px;
@@ -76,18 +72,14 @@ button:hover
     border-radius: var(--radius);
     font-size: 1.2rem;
     cursor: pointer;
-    transition: var(--transition);
     min-width: 120px;
 }
-
-#menu button:hover
-{
+#main-menu button:hover {
     background-color: var(--color-btn-menu-2);
 }
 
 /* === BOUTONS BUREAUX === */
-.bureaux-btn-container
-{
+.bureaux-btn-container {
     position: fixed;
     left: 20px;
     top: 30%;
@@ -95,40 +87,46 @@ button:hover
     flex-direction: column;
     gap: 20px;
 }
-
-.bureaux-btn-container button
-{
+.bureaux-btn-container button {
     padding: 15px 30px;
     font-size: 1.2em;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--radius);
     background-color: var(--color-btn-menu);
-    color: white;
+    color: var(--color-white);
     cursor: pointer;
     white-space: normal;
     word-wrap: break-word;
     text-align: center;
     max-width: 250px;
 }
-
-.bureaux-btn-container button:hover
-{
+.bureaux-btn-container button:hover {
     background-color: var(--color-btn-menu-2);
 }
-
-.bureaux-btn-container button.selected
-{
+.bureaux-btn-container button.selected {
     background-color: var(--color-display);
 }
-
-.bureaux-btn-container button.selected:hover
-{
+.bureaux-btn-container button.selected:hover {
     background-color: var(--color-display-2);
 }
 
-/* === USAGERS LISTE === */
-#usagers-list-container
-{
+.remove-bureau-btn {
+    width: 25px;
+    height: 25px;
+    font-size: 1rem;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 50%;
+    font-weight: bold;
+    transition: var(--transition);
+    background-color: var(--color-btn-clear);
+    color: var(--color-white);
+}
+
+/* === LISTE DES USAGERS === */
+#usagers-list-container {
     width: 100%;
     max-width: 500px;
     display: flex;
@@ -141,9 +139,8 @@ button:hover
     border-radius: var(--radius);
 }
 
-/* === USAGER CONTAINER === */
-.usager-container
-{
+/* === CONTAINER USAGER === */
+.usager-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -151,60 +148,39 @@ button:hover
     width: 100%;
 }
 
-/* === BOUTONS USAGER === */
-.usager-btn
-{
+/* === BOUTON USAGER PRINCIPAL === */
+.usager-btn {
     flex: 1;
     padding: 10px;
     font-size: 1rem;
     border: none;
     border-radius: var(--radius);
     color: var(--color-white);
-    transition: var(--transition);
     cursor: pointer;
     text-align: left;
 }
-
-.usager-btn:hover
-{
-    background-color: var(--color-primary-2);
-    transform: scale(1.02);
-}
-
-.usager-btn.default
-{
+.usager-btn.default {
     background-color: var(--color-primary);
 }
-
-.usager-btn.default:hover
-{
+.usager-btn.default:hover {
     background-color: var(--color-primary-2);
 }
-
-.usager-btn.selected
-{
+.usager-btn.selected {
     background-color: var(--color-select);
 }
-
-.usager-btn.selected:hover
-{
+.usager-btn.selected:hover {
     background-color: var(--color-select-2);
 }
-
-.usager-btn.displayed
-{
+.usager-btn.displayed {
     background-color: var(--color-display);
 }
-
-.usager-btn.displayed:hover
-{
+.usager-btn.displayed:hover {
     background-color: var(--color-display-2);
 }
 
-/* === BOUTONS ACTIONS === */
+/* === BOUTONS D'ACTION USAGER === */
 .usager-select-btn,
-.clear-btn
-{
+.clear-btn {
     width: 40px;
     height: 40px;
     font-size: 1.1rem;
@@ -214,47 +190,34 @@ button:hover
     align-items: center;
     background-color: var(--color-light);
     cursor: pointer;
-    transition: var(--transition);
-    white-space: nowrap;
     border-radius: 50%;
     font-weight: bold;
+    transition: var(--transition);
 }
-
-.usager-select-btn
-{
+.usager-select-btn {
     background-color: var(--color-select);
     color: var(--color-white);
 }
-
-.usager-select-btn:hover
-{
+.usager-select-btn:hover {
     background-color: var(--color-select-2);
 }
-
-.usager-select-btn.prêt
-{
+.usager-select-btn.prêt {
     border-radius: 20px;
     width: auto;
     padding: 0 18px;
     font-size: 1rem;
-    margin-left: 0px;
 }
-
-.clear-btn
-{
+.clear-btn {
     background-color: var(--color-btn-clear);
     color: var(--color-white);
 }
-
-.clear-btn:hover
-{
+.clear-btn:hover {
     background-color: var(--color-btn-clear-2);
 }
 
-/* === AFFICHAGE USAGER === */
-#display-section
-{
-    display: flex;
+/* === SECTION AFFICHAGE USAGER === */
+#display-section {
+    display: none;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
@@ -266,24 +229,19 @@ button:hover
     max-width: 600px;
     padding: 10px;
 }
-
-#usager-display
-{
+#usager-display {
     font-size: 2rem;
     font-weight: bold;
     color: var(--color-display-2);
 }
-
-#clear-btn
-{
+#clear-btn {
     width: auto;
     border-radius: var(--radius);
     padding: 10px 20px;
 }
 
-/* === ONGLET MENU === */
-#open-onglet-menu-btn
-{
+/* === MENU LATÉRAL === */
+#open-side-menu-btn {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -295,126 +253,35 @@ button:hover
     border: none;
     border-radius: 50%;
     cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1100;
 }
 
-#open-onglet-menu-btn:hover
-{
+#open-side-menu-btn:hover {
     background-color: var(--color-btn-menu-2);
     transform: scale(1.05);
 }
 
-#onglet-menu
-{
-    display: block;
-    position: fixed;
-    top: 0;
+.side-menu {
+    position: absolute;
+    top: 80px;
     right: 0;
-    width: 250px;
-    height: 100%;
-    background-color: var(--color-light);
-    transition: right 0.3s ease;
-    padding: 20px;
-    z-index: 1000;
-}
-
-#onglet-menu h3
-{
-    margin-top: 0;
-    color: var(--color-primary);
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-}
-
-#onglet-menu button
-{
-    margin-top: 20px;
-    padding: 12px;
-    background-color: var(--color-btn-menu);
-    color: var(--color-white);
-    border: none;
-    border-radius: var(--radius);
-    cursor: pointer;
-    width: 100%;
-    font-size: 1rem;
-    font-weight: bold;
-}
-
-#onglet-menu button:hover
-{
-    background-color: var(--color-btn-menu-2);
-    transform: scale(1.03);
-}
-
-#onglet-menu .cancel-btn
-{
-    background-color: var(--color-btn-clear);
-}
-
-#onglet-menu .cancel-btn:hover
-{
-    background-color: var(--color-btn-clear-2);
-}
-
-/* === POPUP === */
-.popup
-{
-    display: none;
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 300px;
-    height: 100%;
-    background-color: var(--color-white);
-    padding: 20px;
-    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    border-top-left-radius: var(--radius);
-    border-bottom-left-radius: var(--radius);
-    transition: var(--transition);
-}
-
-.popup h3
-{
-    margin-top: 0;
-    color: var(--color-primary);
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-}
-
-.popup label
-{
-    font-weight: bold;
-    color: var(--color-secondary-2);
-    display: block;
-    margin-top: 15px;
-    margin-bottom: 5px;
-}
-
-.popup input
-{
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: var(--radius);
+    width: 200px;
+    background-color: #f9f9f9;
     border: 1px solid #ccc;
-    background-color: var(--color-light);
-    transition: var(--transition);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+}
+.side-menu.open {
+    transform: translateX(0);
 }
 
-.popup input:focus
-{
-    outline: none;
-    border-color: var(--color-primary);
-    background-color: #ffffff;
-}
-
-.popup button
-{
+.side-menu button {
     margin-top: 20px;
     padding: 12px;
     background-color: var(--color-btn-menu);
@@ -425,52 +292,35 @@ button:hover
     width: 100%;
     font-size: 1rem;
     font-weight: bold;
+    transition: var(--transition);
 }
-
-.popup button:hover
-{
+.side-menu button:hover {
     background-color: var(--color-btn-menu-2);
     transform: scale(1.03);
 }
-
-.popup .cancel-btn
-{
+.side-menu .close-btn {
     background-color: var(--color-btn-clear);
 }
-
-.popup .cancel-btn:hover
-{
+.side-menu .close-btn:hover {
     background-color: var(--color-btn-clear-2);
 }
 
-#popup-bandeau
-{
+/* === POPUPS === */
+.popup {
+    display: none;
     position: fixed;
     top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.6);
-    display: none;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
     justify-content: center;
     align-items: center;
     z-index: 999;
+    transition: var(--transition);
 }
-
-#popup-bureaux
-{
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.6);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
+.popup.open {
+    display: flex;
 }
-
-.popup-content
-{
+.popup-content {
     background-color: var(--color-white);
     padding: 25px;
     border-radius: var(--radius);
@@ -479,239 +329,151 @@ button:hover
     max-width: 400px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
-
-.popup-content h3
-{
+.popup-content h3 {
     margin-bottom: 15px;
     font-weight: bold;
     font-size: 1.5rem;
     color: var(--color-primary);
 }
-
-.popup-btn,
-.popup-content
-.btn-container
-{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
+.popup-content label {
+    font-weight: bold;
+    color: var(--color-secondary-2);
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
 }
-
-.popup-btn button,
-.popup-content button
-{
-    width: 60%;
-    gap: 20px;
-    margin-top: 8px;
-    flex: 1;
-    padding: 10px;
-    font-size: 1rem;
-    border: none;
-    border-radius: var(--radius);
-    cursor: pointer;
-    background-color: var(--color-btn-menu);
-    color: var(--color-white);
-    transition: var(--transition);
-}
-
-.popup-content button:hover,
-.popup-btn button:hover
-{
-    background-color: var(--color-btn-menu-2);
-    transform: scale(1.04);
-}
-
-#popup-content-cancel-btn
-{
-    background-color: var(--color-btn-menu);
-}
-
-#popup-content-cancel-btn:hover
-{
-    background-color: var(--color-btn-menu-2);
-}
-
-#bandeau-input
-{
+.popup-content input {
     width: 100%;
     padding: 10px;
     font-size: 1rem;
     border-radius: var(--radius);
     border: 1px solid #ccc;
+    background-color: var(--color-light);
+    transition: var(--transition);
+}
+.popup-content input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background-color: #ffffff;
+}
+.popup-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+.popup-btn button {
+    type: button;
+    width: 60%;
+    padding: 12px;
+    margin-top: 8px;
+    font-size: 1rem;
+    background-color: var(--color-btn-menu);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+.popup-btn button:hover {
+    background-color: var(--color-btn-menu-2);
+    transform: scale(1.04);
+}
+.popup-btn .close-btn {
+    background-color: var(--color-btn-clear);
+}
+.popup-btn .close-btn:hover {
+    background-color: var(--color-btn-clear-2);
 }
 
-/* Animations */
-@keyframes fadeIn
-{
-  from
-  {
-    opacity: 0;
-  }
-  to
-  {
-    opacity: 1;
-  }
+/* === ANIMATION === */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-/* === RESPONSIVE DESIGN === */
-
-@media (max-width: 900px)
-{
-    body
-    {
+/* === RÉPONSIVE === */
+@media (max-width: 900px) {
+    body {
         padding: 35px 10px;
         font-size: 1rem;
-        flex-direction: column;
         align-items: stretch;
     }
-
-    #menu
-    {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
+    #main-menu {
         gap: 8px;
-        flex-wrap: wrap;
     }
-    
-    #menu button
-    {
+    #main-menu button {
         font-size: 1.1rem;
         padding: 14px 20px;
-        background-color: var(--color-primary);
-        width: auto;
-        min-width: 120px;
+        min-width: auto;
     }
-
-    #menu button:hover
-    {
-        background-color: var(--color-primary-2);
-    }
-
-    #open-onglet-menu-btn
-    {
-        width: 40px;
-        height: 40px;
+    #open-side-menu-btn {
+        width: 40px; height: 40px;
         font-size: 1.5rem;
     }
-
-    .popup
-    {
-        width: 100%;
-        height: 100%;
-        border-radius: 0;
-    }
-
-    .bureaux-btn-container
-    {
+    .bureaux-btn-container {
         position: static;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3,1fr);
         gap: 10px;
         margin-bottom: 20px;
         max-width: 300px;
-        margin-left: auto;
-        margin-right: auto;
+        margin: 0 auto;
     }
-    
-    .bureaux-btn-container button
-    {
+    .bureaux-btn-container button {
         font-size: 1rem;
         padding: 12px;
         width: 100%;
     }
-
-    #usagers-list-container
-    {
+    #usagers-list-container {
         max-height: 60vh;
         max-width: 100%;
     }
-
-    .usager-btn
-    {
+    .usager-btn {
         font-size: 1rem;
         padding: 10px;
         text-align: center;
     }
-
-    #display-section
-    {
+    #display-section {
         flex-direction: column;
         gap: 8px;
         max-width: 100%;
     }
-
-    #usager-display
-    {
+    #usager-display {
         font-size: 1.6rem;
-        text-align: center;
     }
-
-    .usager-select-btn,
-    .clear-btn
-    {
-        width: 36px;
-        height: 36px;
+    .usager-select-btn, .clear-btn {
+        width: 36px; height: 36px;
         font-size: 0.9rem;
     }
-
-    .usager-select-btn.prêt
-    {
+    .usager-select-btn.prêt {
         font-size: 0.95rem;
         padding: 6px 12px;
     }
-
-    .popup-content
-    {
+    .popup-content {
         padding: 15px;
         font-size: 1rem;
     }
-
-    .popup-btn button,
-    .popup-content button
-    {
-        font-size: 1rem;
+    .popup-btn button {
         width: 100%;
+        font-size: 1rem;
     }
 }
-
-@media (max-width: 600px)
-{
-    body
-    {
-        padding: 50px 10px;
+@media (max-width: 600px) {
+    .bureaux-btn-container {
+        grid-template-columns: repeat(2,1fr);
     }
-
-    .bureaux-btn-container
-    {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .bureaux-btn-container button:nth-child(3)
-    {
-        grid-column: 1 / 3;
-        justify-self: center;
+    .bureaux-btn-container button:nth-child(3) {
+        grid-column: 1/3;
         width: 60%;
+        justify-self: center;
     }
-
-    .clear-btn
-    {
+    .usager-select-btn, .clear-btn {
         font-size: 80%;
     }
-
-    .usager-select-btn
-    {
-        font-size: 80%;
-    }
-
-    .usager-select-btn.prêt
-    {
-        font-size: 80%;
+    .usager-select-btn.prêt {
         width: 30%;
         white-space: normal;
-        word-wrap: break-word;
         text-align: center;
         line-height: 1.3;
     }

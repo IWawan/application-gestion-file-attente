@@ -1,6 +1,3 @@
 Bureau 1
 Bureau 2
 Bureau 3
-Bureau 6
-Bureau 5
-Bureau 6

@@ -179,12 +179,9 @@ def on_clear_usagers():
 @socketio.on('clear_display')
 def on_clear_display():
     global current_usager
-    global current_bureau
     current_usager = ""  # Efface l'usager affiché
-    current_bureau = ""  # Efface le bureau affiché
 
     _sync_display()
-    _sync_current_bureau()
 
 # Supprime un bureau
 @socketio.on('remove_bureau')
