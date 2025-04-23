@@ -17,17 +17,14 @@
         <button onclick="resetAll(), effacerListeUsagers(), effacerAffichage()">Effacer</button>
     </div>
 
-    <div id="bureaux-btn-container" class="bureaux-btn-container">
-    </div>
+    <!-- Bouton d'ouverture du menu latéral -->
+    <button id="open-side-menu-btn" onclick="ouvrirMenuLateral()">☰</button>
 
-    <!-- Bouton d'ouverture de l'onglet menu -->
-    <button id="open-onglet-menu-btn" onclick="ouvrirOngletMenu()">☰</button>
-
-    <div id="onglet-menu" class="onglet-menu">
-        <h3>Onglet menu</h3>
+    <div id="menu-lateral" class="menu-lateral">
+        <h3>Menu latéral</h3>
         <button onclick="ouvrirPopupBandeau()">Bandeau</button>
         <button onclick="ouvrirPopupBureaux()">Bureaux</button>
-        <button class="cancel-btn" onclick="fermerOngletMenu()">Fermer</button>
+        <button class="cancel-btn" onclick="fermerMenuLateral()">Fermer</button>
     </div>
 
     <!-- Popup de modification du bandeau -->
@@ -67,6 +64,10 @@
 
     <div id="usagers-list-container" class="usagers-list-container">
         <!-- Liste des usagers dynamique -->
+    </div>
+
+    <div id="bureaux-btn-container" class="bureaux-btn-container">
+        <!-- Boutons des bureaux dynamique -->
     </div>
 
     <div id="display-section" class="display-section">

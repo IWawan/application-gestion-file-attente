@@ -186,21 +186,39 @@ def on_clear_display():
     _sync_display()
     _sync_current_bureau()
 
-# Sauvegarde les bureaux
+# Supprime un bureau
+@socketio.on('remove_bureau')
+def on_remove_bureau(data):
+    global bureaux
+
+    key_to_remove = data.get('key')
+    if key_to_remove in bureaux:
+        noms = list(bureaux.values())
+        index = list(bureaux.keys()).index(key_to_remove)
+        noms.pop(index)
+
+        # Recréer bureaux avec des clés ordonnées
+        bureaux = {f"bureau{i+1}": nom for i, nom in enumerate(noms)}
+
+        os.makedirs('data', exist_ok=True)
+        with open("data/bureaux.txt", "w") as f:
+            f.write("\n".join(bureaux.values()))
+
+        _sync_bureaux()
+
 @socketio.on('save_bureaux')
 def on_save_bureaux(data):
     global bureaux
-    bureaux = {}
 
-    for key, value in data.get('bureaux', {}).items():
-        bureaux[key] = value
+    noms = list(data.get('bureaux', {}).values())
+    bureaux = {f"bureau{i+1}": nom for i, nom in enumerate(noms)}
 
     os.makedirs('data', exist_ok=True)
-
-    with open("data/bureaux.txt", "w") as file:
-        file.write('\n'.join(bureaux.values()))
+    with open("data/bureaux.txt", "w") as f:
+        f.write("\n".join(bureaux.values()))
 
     _sync_bureaux()
+
 
 @socketio.on('reset_all')
 def on_reset_all():

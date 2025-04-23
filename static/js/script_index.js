@@ -8,7 +8,7 @@ var bureaux;
 
 // -- FONCTIONS --
 
-// Fonction pour séléctionner un fichier .xlsx à charger
+// Séléctionner un fichier .xlsx à charger
 function selectXLSX(event)
 {
     var file = event.target.files[0];  // Récupère le fichier sélectionné
@@ -38,7 +38,7 @@ function selectXLSX(event)
     }
 }
 
-// Fonction pour charger la liste des usagers
+// Charger la liste des usagers
 function chargerListeUsagers()
 {   
     var xhr = new XMLHttpRequest();
@@ -56,7 +56,7 @@ function chargerListeUsagers()
     xhr.send();
 }
 
-// Fonction pour mettre à jour la liste des usagers
+// Mettre à jour la liste des usagers
 function mettreAJourListe(usagers)
 {
     var usagersListContainer = document.getElementById('usagers-list-container');
@@ -127,132 +127,8 @@ function mettreAJourListe(usagers)
     });
 }
 
-// Fonction pour envoyer un usager, si un bureau est sélectionné
-function envoyerUsager(usager)
-{
-    if (current_bureau)
-    {
-        socket.emit('display_usager', { usager: usager });
-    }
-    else
-    {
-        alert("Veuillez sélectionner un bureau avant d'afficher un usager !");
-    }
-}
-
-// Fonction pour afficher un usager sur l'interface
-function mettreAJourAffichage(usager, bureau)
-{
-    var usagerDisplay = document.getElementById('usager-display');
-
-    usagerDisplay.textContent = usager.substring(usager.indexOf("|") + 1).toUpperCase();
-
-    // Affiche le bouton "clear-btn" si un usager est affiché
-    if (usager != "") { document.getElementById('display-section').style.display = 'flex'; }
-}
-
-// Fonction pour effacer la liste des usagers
-function effacerListeUsagers(usager) { socket.emit('clear_usagers'); }
-
-// Fonction pour effacer l'affichage
-function effacerAffichage()
-{
-    socket.emit('clear_display');
-    // Cache la "display_section"
-    document.getElementById('display-section').style.display = 'none';
-}
-
-// Ouvrir/Fermer l'onglet menu
-function ouvrirOngletMenu()
-{
-    var ongletMenu = document.getElementById("onglet-menu");
-    ongletMenu.style.display = ongletMenu.style.display === "block" ? "none" : "block";
-    fermerPopupBandeau();
-    fermerPopupBureaux();
-}
-
-function fermerOngletMenu()
-{
-    var ongletMenu = document.getElementById("onglet-menu");
-    ongletMenu.style.display = ongletMenu.style.display === "none" ? "block" : "none";
-}
-
-// Modifications bandeau
-function ouvrirPopupBandeau()
-{
-    document.getElementById("popup-bandeau").style.display = "flex";
-    fermerOngletMenu();
-}
-
-function fermerPopupBandeau() { document.getElementById("popup-bandeau").style.display = "none"; }
-
-function envoyerMessageBandeau()
-{
-    var message = document.getElementById("bandeau-input").value;
-    if (message.trim() !== "") { socket.emit("bandeau_message", { message: message }); }
-} 
-
-// Modifications bureaux
-function ouvrirPopupBureaux() {
-    document.getElementById("popup-bureaux").style.display = "flex";
-    fermerOngletMenu();
-}
-
-function fermerPopupBureaux() { document.getElementById("popup-bureaux").style.display = "none"; }
-
-// Fonction pour séléctionner un bureau
-function selectionnerBureau(bureauBtn)
-{
-    const bureau = bureauBtn.innerText.trim();
-    
-    socket.emit('select_bureau', { bureau: bureau });
-}
-
-function ajouterBureau()
-{
-    let nbBureaux = Object.keys(bureaux).length;
-    let newKey = "bureau" + (nbBureaux + 1);
-
-    bureaux[newKey] = "Bureau " + (nbBureaux + 1);
-
-    socket.emit('save_bureaux', { bureaux: bureaux });
-    updateBureaux();
-}
-
-function supprimerBureau(key)
-{
-    let nbBureaux = Object.keys(bureaux).length;
-
-    if (nbBureaux > 1)
-    {
-        delete bureaux[key];
-        socket.emit('save_bureaux', { bureaux: bureaux });
-        updateBureaux();
-    }
-}
-
-// Fonction pour modifier les bureaux 
-function sauvegarderModifsBureaux()
-{
-    var bureau1 = document.getElementById("bureau1").value.trim();
-    var bureau2 = document.getElementById("bureau2").value.trim();
-    var bureau3 = document.getElementById("bureau3").value.trim();
-
-    if (bureau1 && bureau2 && bureau3)
-    {
-        // Envoie les nouveaux noms au serveur via Socket.IO
-        socket.emit('save_bureaux', { bureau1, bureau2, bureau3 });
-
-        // Fermer le menu après la sauvegarde
-        fermerPopupBureaux();
-    }
-    else
-    {
-        alert("Veuillez remplir tous les champs !");
-    }
-}
-
-function updateBureaux()
+// Mettre à jour les bureaux
+function mettreAJourBureaux()
 {
     const bureauxBtnContainer = document.getElementById("bureaux-btn-container");
     bureauxBtnContainer.textContent = "";
@@ -276,7 +152,7 @@ function updateBureaux()
         // bureaux-modif-container
         let bureauLabel = document.createElement('label');
         bureauLabel.setAttribute('for', key);
-        bureauLabel.textContent = nom;
+        bureauLabel.textContent = key.slice(0, 1).toUpperCase() + key.slice(1, 6) + " " + key.slice(6) + " : ";
         let bureauInput = document.createElement('input');
         bureauInput.type = 'text';
         bureauInput.id = key;
@@ -293,7 +169,26 @@ function updateBureaux()
     }
 }
 
-// Fonction pour changer l'état du bureau sélectionné
+// Mettre à jour l'affichage des usagers sur l'interface
+function mettreAJourAffichage(usager, bureau)
+{
+    var usagerDisplay = document.getElementById('usager-display');
+
+    usagerDisplay.textContent = usager.substring(usager.indexOf("|") + 1).toUpperCase();
+
+    // Affiche le bouton "clear-btn" si un usager est affiché
+    if (usager != "") { document.getElementById('display-section').style.display = 'flex'; }
+}
+
+// Séléctionner un bureau
+function selectionnerBureau(bureauBtn)
+{
+    const bureau = bureauBtn.innerText.trim();
+    
+    socket.emit('select_bureau', { bureau: bureau });
+}
+
+// Changer l'état du bureau sélectionné
 function changeEtat()
 {
     const btnBureaux = document.querySelectorAll('#bureaux-btn-container button');
@@ -307,6 +202,113 @@ function changeEtat()
     if (bureauSelect)
     {
         bureauSelect.classList.add('selected');
+    }
+}
+
+// Envoyer un usager sur le serveur, si un bureau est sélectionné
+function envoyerUsager(usager)
+{
+    if (current_bureau)
+    {
+        socket.emit('display_usager', { usager: usager });
+    }
+    else
+    {
+        alert("Veuillez sélectionner un bureau avant d'afficher un usager !");
+    }
+}
+
+// Effacer la liste des usagers
+function effacerListeUsagers(usager) { socket.emit('clear_usagers'); }
+
+// Effacer l'affichage
+function effacerAffichage()
+{
+    socket.emit('clear_display');
+    // Cache la "display_section"
+    document.getElementById('display-section').style.display = 'none';
+}
+
+// -- Popup et menu --
+
+// Ouvrir le menu latéral
+function ouvrirMenuLateral()
+{
+    var ongletMenu = document.getElementById("menu-lateral");
+    ongletMenu.style.display = ongletMenu.style.display === "block" ? "none" : "block";
+    fermerPopupBandeau();
+    fermerPopupBureaux();
+}
+
+// Fermer le menu latéral
+function fermerMenuLateral()
+{
+    var ongletMenu = document.getElementById("menu-lateral");
+    ongletMenu.style.display = ongletMenu.style.display === "none" ? "block" : "none";
+}
+
+// Ouvrir le popup du bandeau
+function ouvrirPopupBandeau()
+{
+    document.getElementById("popup-bandeau").style.display = "flex";
+    fermerOngletMenu();
+}
+
+// Fermer le popup du bandeau
+function fermerPopupBandeau() { document.getElementById("popup-bandeau").style.display = "none"; }
+
+// Afficher un message sur le bandeau
+function envoyerMessageBandeau()
+{
+    var message = document.getElementById("bandeau-input").value;
+    if (message.trim() !== "") { socket.emit("bandeau_message", { message: message }); }
+} 
+
+// Ouvrir le popup dde modification des bureaux
+function ouvrirPopupBureaux()
+{
+    document.getElementById("popup-bureaux").style.display = "flex";
+    fermerOngletMenu();
+}
+
+// Fermer le popup dde modification des bureaux
+function fermerPopupBureaux() { document.getElementById("popup-bureaux").style.display = "none"; }
+
+// Ajouter un nouveau bureau
+function ajouterBureau()
+{
+    let nbBureaux = Object.keys(bureaux).length;
+    let newKey = "bureau" + (nbBureaux + 1);
+
+    bureaux[newKey] = "Bureau " + (nbBureaux + 1);
+
+    socket.emit('save_bureaux', { bureaux: bureaux });
+}
+
+// Supprimer un bureau
+function supprimerBureau(key)
+{
+    socket.emit('remove_bureau', { key: key });
+}
+
+// Sauvegarder les modifications des bureaux 
+function sauvegarderModifsBureaux()
+{
+    var bureau1 = document.getElementById("bureau1").value.trim();
+    var bureau2 = document.getElementById("bureau2").value.trim();
+    var bureau3 = document.getElementById("bureau3").value.trim();
+
+    if (bureau1 && bureau2 && bureau3)
+    {
+        // Envoie les nouveaux noms au serveur via Socket.IO
+        socket.emit('save_bureaux', { bureau1, bureau2, bureau3 });
+
+        // Fermer le menu après la sauvegarde
+        fermerPopupBureaux();
+    }
+    else
+    {
+        alert("Veuillez remplir tous les champs !");
     }
 }
 
@@ -352,5 +354,5 @@ socket.on('update_bureaux', function(data)
 {
     bureaux = data.bureaux;
     
-    updateBureaux();
+    mettreAJourBureaux();
 });
