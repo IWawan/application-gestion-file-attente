@@ -151,8 +151,8 @@ function mettreAJourListe(usagers)
 
         // Boutons sélection
         var sel = document.createElement('button');
-        sel.classList.add('usager-select-btn');
-        sel.id = 'usager-select-btn-' + i;
+        sel.classList.add('select-btn');
+        sel.id = 'select-btn-' + i;
 
         if (selected_usagers.has(usager))
         {
@@ -162,7 +162,7 @@ function mettreAJourListe(usagers)
         else
         {
             sel.classList.remove('prêt');
-            sel.innerHTML = '&#10003;';
+            sel.innerHTML = '<i data-feather="check"></i>'; // Icône coche
         }
         
         sel.onclick = function()
@@ -172,9 +172,9 @@ function mettreAJourListe(usagers)
 
         // Boutons supression
         var del = document.createElement('button');
-        del.classList.add('clear-btn');
-        del.id = 'usager-delete-btn-' + i;
-        del.innerHTML = '&times;';
+        del.classList.add('delete-btn');
+        del.id = 'delete-btn-' + i;
+        del.innerHTML = '<i data-feather="x"></i>'; // Icône croix
         del.onclick = function()
         {
             socket.emit('remove_usager', { usager: usager });
@@ -182,6 +182,7 @@ function mettreAJourListe(usagers)
 
         div.append(btn, sel, del);
         cont.appendChild(div);
+        feather.replace();
     });
 }
 
