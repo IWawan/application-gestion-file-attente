@@ -26,9 +26,9 @@
     --c-btn-del-text: #FFFFFF;
 
     /* Bouton valider */
-    --c-btn-validate: #34D399;         
-    --c-btn-validate-hover: #10B981;     
-    --c-btn-validate-text: #FFFFFF;
+    --c-btn-ok: #34D399;         
+    --c-btn-ok-hover: #10B981;     
+    --c-btn-ok-text: #FFFFFF;
 
     /* Side-menu */
     --c-sm-text: #111827;
@@ -45,6 +45,11 @@
 
 /* === GENERAL === */
 
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 body {
     background-color: var(--c-general-bg);
     color: var(--c-general-text);
@@ -57,8 +62,6 @@ body {
     min-height: 90vh;
     overflow-x: hidden;
     overflow-y: hidden;
-    margin: 0;
-    padding: 0;
 }
 
 /* === BUTTONS === */
@@ -86,6 +89,25 @@ button:focus {
     outline-offset: 2px;
 }
 
+.ok-btn {
+    background-color: var(--c-btn-ok);
+    color: var(--c-btn-ok-text);
+}
+
+.ok-btn:hover {
+    background-color: var(--c-btn-ok-hover);
+}
+
+
+.close-btn {
+    background-color: var(--c-btn-del);
+    color: var(--c-btn-del-text);
+}
+
+.close-btn:hover {
+    background-color: var(--c-btn-del-hover);
+}
+
 #fileInput {
     display: none;
 }
@@ -96,14 +118,14 @@ button:focus {
 {
     background-color: var(--c-general-bg-2);
     border-bottom: 2px solid var(--c-general-border);
-    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
     padding: 10px;
     display: flex;
     justify-content: center;
-    z-index: 1; 
     position: fixed;
-    top: 0;
-    left: 0;
+    
 }
 
 .main-menu button {
@@ -116,8 +138,8 @@ button:focus {
 .display-section {
     position: fixed;            
     bottom: 0;                   
-    left: 0;                     
-    width: 100%;           
+    left: 0; 
+    right: 0;                            
     background-color: var(--c-general-bg-2);
     border-top: 2px solid var(--c-general-border);
     padding: 10px;
@@ -156,17 +178,22 @@ button:focus {
 /* === USAGERS LIST CONTAINER === */
 
 .usagers-list-container {
+    background-color: var(--c-general-bg-2);
+    color: var(--c-general-text);
+    position: fixed;       
+    top: 50%;             
+    left: 50%;              
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     width: 100%;
     max-width: 600px;
-    margin: 10px;
-    max-height: 70vh; 
+    max-height: 70vh;
     overflow-y: auto; 
     overflow-x: hidden; 
-    padding-right: 8px; 
+    padding: 10px 8px;     
 }
 
 .usager-container
@@ -207,12 +234,12 @@ button:focus {
 }
 
 .usager-container .usager-btn.displayed {
-    background-color: var(--c-btn-validate);
-    color: var(--c-btn-validate-text);
+    background-color: var(--c-btn-ok);
+    color: var(--c-btn-ok-text);
 }
 
 .usager-container .usager-btn.displayed:hover {
-    background-color: var(--c-btn-validate-hover);
+    background-color: var(--c-btn-ok-hover);
 }
 
 .usager-container .delete-btn,
@@ -244,7 +271,6 @@ button:focus {
 /* === BUREAUX BUTTONS CONTAINER === */
 
 .bureaux-btn-container {
-    background-color: var(--c-general-bg-2);
     height: 100vh;            
     position: fixed;     
     top: 0;                 
@@ -255,18 +281,29 @@ button:focus {
     align-items: center;        
     justify-content: center;    
     gap: 10px;                 
-    border-right: 2px solid var(--c-general-border);
+}
+
+.bureaux-btn-container button
+{
+    background-color: var(--c-btn-1);
+    color: var(--c-btn-1-text);
+    font-size: 1.1rem;
+}
+
+.bureaux-btn-container button:hover
+{
+    background-color: var(--c-btn-1-hover);
 }
 
 .bureaux-btn-container button.selected
 {
-    background-color: var(--c-btn-validate);
-    color: var(--c-btn-validate-text);
+    background-color: var(--c-btn-ok);
+    color: var(--c-btn-ok-text);
 }
 
 .bureaux-btn-container button.selected:hover
 {
-    background-color: var(--c-btn-validate-hover);
+    background-color: var(--c-btn-ok-hover);
 }
 
 /* === OPEN SIDE MENU BUTTON === */
@@ -303,7 +340,7 @@ button:focus {
     right: 0;
     overflow-x: hidden;
     transition: width 0.3s ease;
-    z-index: 1;
+    z-index: 5;
     padding-top: 60px;
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
 }
@@ -338,7 +375,7 @@ button:focus {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.3);
-    z-index: 2000;
+    z-index: 50;
 }
 
 .popup.open {
@@ -348,6 +385,6 @@ button:focus {
 /* === ANIMATION === */
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
