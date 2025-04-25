@@ -13,11 +13,16 @@
 <body>
 
     <!-- Menu principal -->
-    <div id="main-menu" class="main-menu">
+    <div id="main-menu" class="header main-menu">
         <button onclick="document.getElementById('fileInput').click()">Charger</button>
         <button onclick="resetAll(), chargerListeUsagers()">Afficher</button>
         <button onclick="resetAll(), effacerListeUsagers()">Effacer</button>
     </div>
+
+    <div id="display-section" class="header display-section">
+        <h2 id="usager-display"></h2>
+        <button class="clear-btn" id="clear-btn" onclick="effacerAffichage()">RDV TERMINÉ</button>
+    </div>   
 
     <!-- Bouton d'ouverture du menu latéral -->
     <button id="open-side-menu-btn" onclick="ouvrirMenuLateral()">☰</button>
@@ -64,11 +69,6 @@
     <div id="bureaux-btn-container" class="bureaux-btn-container">
         <!-- Boutons des bureaux dynamique -->
     </div>
-
-    <div id="display-section" class="display-section">
-        <h2 id="usager-display"></h2>
-        <button class="clear-btn" id="clear-btn" onclick="effacerAffichage()">RDV TERMINÉ</button>
-    </div>   
 
     <input type="file" id="fileInput" accept=".xlsx" onchange="selectXLSX(event)">
 

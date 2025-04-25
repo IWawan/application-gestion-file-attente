@@ -286,6 +286,8 @@ function envoyerMessageBandeau()
 {
     var message = document.getElementById("bandeau-input").value;
     if (message.trim() !== "") { socket.emit("bandeau_message", { message: message }); }
+
+    fermerPopupBandeau();
 } 
 
 // Ajouter un nouveau bureau
@@ -330,6 +332,8 @@ function renommerBureaux()
     }
 
     socket.emit('save_bureaux', { bureaux: nouveauBureaux });
+
+    fermerPopupBureaux();
 }
 
 // Fermeture du popup au clic sur l’overlay
