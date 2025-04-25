@@ -73,10 +73,16 @@ body
     animation: fadeIn 0.5s ease-in-out forwards;
     font-family: var(--font-family);
     text-align: center;
-    display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 90vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 150px 1fr;
+    grid-template-areas:
+        "main-menu main-menu"
+        "bureaux usagers"
+        "display display";
+    min-height: 100vh;
 }
 
 h2
@@ -189,8 +195,10 @@ button:focus
 
 .main-menu
 {
+    grid-area: main-menu;
     display: flex;
-    bottom: auto;                     
+    bottom: auto;   
+    width: 100%;                   
 }
 
 .main-menu button
@@ -199,54 +207,69 @@ button:focus
     margin : 0 10px;
 }
 
-/* === DISPLAY SECTION === */
+/* === BUREAUX BUTTONS CONTAINER === */
 
-.display-section
-{ 
-    display: none; /* Masqué par défaut */          
-    top: auto;                                              
-}
-
-.display-section h2
-{  
-    white-space: normal; 
-    word-break: break-word;
-    margin: 0;
-}
-
-.display-section button
+.bureaux-btn-container
 {
-    background-color: var(--c-btn-del);
-    color: var(--c-btn-del-text);
-    padding: 12px 18px; 
-    margin: 0 20px;               
+    grid-area: bureaux;
+    position: static;   
+    padding: 10px;   
+    display: flex;            
+    flex-direction: column;   
+    align-items: center;        
+    justify-content: flex-start;  
+    gap: 10px;  
+    height: auto; 
+    top: auto;                 
+    left: auto;                   
+    max-height: 80vh;
+    overflow-x: hidden;   
+    overflow-Y: auto;          
 }
 
-.display-section button:hover
+.bureaux-btn-container button
 {
-    background-color: var(--c-btn-del-hover);
+    background-color: var(--c-btn-1);
+    color: var(--c-btn-1-text);
+}
+
+.bureaux-btn-container button:hover
+{
+    background-color: var(--c-btn-1-hover);
+}
+
+.bureaux-btn-container button.selected
+{
+    background-color: var(--c-btn-ok);
+    color: var(--c-btn-ok-text);
+}
+
+.bureaux-btn-container button.selected:hover
+{
+    background-color: var(--c-btn-ok-hover);
 }
 
 /* === USAGERS LIST CONTAINER === */
 
 .usagers-list-container
 {
+    grid-area: usagers;
     background-color: var(--c-general-bg-2);
-    color: var(--c-general-text);
-    position: fixed;       
-    top: 50%;             
-    left: 50%;              
-    transform: translate(-50%, -50%);
+    color: var(--c-general-text);           
+    transform: none;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    width: 100%;
-    max-width: 600px;
+    margin: 0 auto;
+    justify-self: center;
     max-height: 80vh;
+    max-width: 600px;
+    width: auto;
+    padding: 10px 8px;   
     overflow-x: hidden; 
     overflow-y: auto; 
-    padding: 10px 8px;     
+      
 }
 
 .usager-container
@@ -352,45 +375,34 @@ button:focus
     background-color: var(--c-btn-del-hover);
 }
 
-/* === BUREAUX BUTTONS CONTAINER === */
+/* === DISPLAY SECTION === */
 
-.bureaux-btn-container
-{
-    height: 100vh;            
-    position: fixed;     
-    top: 0;                 
-    left: 0;                   
-    padding: 10px;               
-    display: flex;            
-    flex-direction: column;   
-    align-items: center;        
-    justify-content: center;    
-    gap: 10px;     
-    max-height: 80vh;
-    overflow-x: hidden;   
-    overflow-Y: auto;          
+.display-section
+{ 
+    grid-area: display;
+    display: none; /* Masqué par défaut */          
+    top: auto;   
+    width: 100%;                                           
 }
 
-.bureaux-btn-container button
-{
-    background-color: var(--c-btn-1);
-    color: var(--c-btn-1-text);
+.display-section h2
+{  
+    white-space: normal; 
+    word-break: break-word;
+    margin: 0;
 }
 
-.bureaux-btn-container button:hover
+.display-section button
 {
-    background-color: var(--c-btn-1-hover);
+    background-color: var(--c-btn-del);
+    color: var(--c-btn-del-text);
+    padding: 12px 18px; 
+    margin: 0 20px;               
 }
 
-.bureaux-btn-container button.selected
+.display-section button:hover
 {
-    background-color: var(--c-btn-ok);
-    color: var(--c-btn-ok-text);
-}
-
-.bureaux-btn-container button.selected:hover
-{
-    background-color: var(--c-btn-ok-hover);
+    background-color: var(--c-btn-del-hover);
 }
 
 /* === OPEN SIDE MENU BUTTON === */
@@ -565,14 +577,6 @@ button:focus
 /* === MOBILE FIRST (jusqu’à 600px) === */
 @media screen and (max-width: 600px)
 {
-    html, body
-    {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    }
-
     :root
     {
         --font-size-small: 0.7rem;
@@ -580,47 +584,50 @@ button:focus
         --font-size-big: 0.9rem;
     }
 
-    .header {
+    html, body
+    {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+    body 
+    {
+        grid-template-rows: auto auto 1fr auto;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "main-menu"
+          "bureaux"
+          "display"
+          "usagers";
+        max-width: 100vw;
+        height: 100vh;
+    }
+
+    .header
+    {
         position: static;
         width: 100%;
         top: auto;
         bottom: auto;
         border-bottom: none;
         box-shadow: none;
-      }
-
-    /* Ordonnancement pour avoir : main-menu → bureaux → usagers → display */
-    .main-menu              { order: 1; }
-    .bureaux-btn-container  { order: 2; }
-    .display-section        { order: 3; }
-    .usagers-list-container { order: 4; }
+    }
     
-
     .bureaux-btn-container
-    {
+    {   
         background-color: var(--c-header-bg);
-        position: static;
-        display: flex;
-        flex-direction: row;
+        flex-direction: row;      
+        width: 100%;        
+        max-width: 100vw; 
+        align-items: center;  
         justify-content: center;
-        height: auto;
-        width: 100%;
-        overflow-x: auto; 
-    }
-
-    .usagers-list-container
-    {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        width: 95%;
-        height: 65vh;
-        max-width: none;
-        max-height: none;
-        overflow-x: hidden; 
-        overflow-y: auto;
-    }
+        overflow-x: auto;       
+        overflow-y: hidden;                      
+    }    
 
     .display-section
     {
@@ -628,10 +635,26 @@ button:focus
         border-bottom: 1px solid var(--c-btn-2);
         border-radius: var(--radius) var(--radius) 0 0; 
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-        position: static;
-        bottom: auto;
-        left: auto;
-        right: auto;
-        width: 100%;
+        justify-self: start;
+        align-self: start;  
+    }
+
+    .usagers-list-container
+    {       
+        transform: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        
+        margin: 0 auto;
+        justify-self: center;
+        max-height: 80vh;
+        max-width: 100vw;
+        width: auto;
+
+        padding: 10px 8px;   
+        overflow-x: hidden; 
+        overflow-y: auto; 
     }
 }
