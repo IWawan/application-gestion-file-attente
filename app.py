@@ -128,11 +128,11 @@ def on_select_usager(data):
     usager = data.get('usager')
     if usager:
         if usager in selected_usagers:
-            displayed_usagers.add(usager)
             selected_usagers.discard(usager)
+            if usager in displayed_usagers:
+                displayed_usagers.add(usager)
         else:
             selected_usagers.add(usager)
-            displayed_usagers.discard(usager)
 
         _sync_usager_states()
 
