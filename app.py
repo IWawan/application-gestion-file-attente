@@ -57,12 +57,16 @@ bureaux = {}
 # --- Routes HTTP ---
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    return render_template('home.html', ip=IP, port=PORT)
 
-@app.route('/display')
+@app.route('/tableau-de-bord')
+def index():
+    return render_template('tableau_de_bord.html')
+
+@app.route('/file-d-attente')
 def display():
-    return render_template('display.html')
+    return render_template('file_d_attente.html')
 
 # Récupère le fichier xlsx "FILE_NAME" et le sauvegarde dans le dossier "RESOURCES_FOLDER"
 @app.route('/upload_xlsx', methods=['POST'])

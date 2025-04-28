@@ -10,5 +10,5 @@ python3 app.py &
 sleep 4
 
 # Ouvre les URLs dans le navigateur par défaut
-xdg-open "http://$LOCAL_IP:8080/" 2>/dev/null || open "http://$LOCAL_IP:8080/"
-xdg-open "http://$LOCAL_IP:8080/display" 2>/dev/null || open "http://$LOCAL_IP:8080/display"
+xdg-open "http://$LOCAL_IP:8080/tableau-de-bord" 2>/dev/null || open "http://$LOCAL_IP:8080/"
+xdg-open "http://$LOCAL_IP:8080/file-d-attente" 2>/dev/null || open "http://$LOCAL_IP:8080/display"

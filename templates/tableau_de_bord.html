@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord</title>
+    <link rel="stylesheet" href="/static/css/style_tableau_de_bord.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body>
+
+    <!-- Menu principal -->
+    <div id="main-menu" class="header main-menu">
+        <button onclick="document.getElementById('fileInput').click()">Charger</button>
+        <button onclick="resetAll(), chargerListeUsagers()">Afficher</button>
+        <button onclick="resetAll(), effacerListeUsagers()">Effacer</button>
+    </div>
+
+    <div id="display-section" class="header display-section">
+        <h2 id="usager-display"></h2>
+        <button class="clear-btn" id="clear-btn" onclick="effacerAffichage()">RDV TERMINÉ</button>
+    </div>   
+
+    <!-- Bouton d'ouverture du menu latéral -->
+    <button id="open-side-menu-btn" onclick="ouvrirMenuLateral()">☰</button>
+    
+    <!-- Menu latéral -->
+    <nav id="side-menu" class="side-menu">
+        <button onclick="ouvrirPopupBandeau()">Bandeau</button>
+        <button onclick="ouvrirPopupBureaux()">Bureaux</button>
+    </nav>
+
+    <!-- Popup de modification du bandeau -->
+    <div class="popup" id="popup-bandeau">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <h3>Message pour le bandeau</h3>
+            <input type="text" id="bandeau-input" placeholder="Entrez un message">
+            <div class="popup-btn">
+                <button class="ok-btn" onclick="envoyerMessageBandeau()">Ok</button>
+                <button class="close-btn" onclick="fermerPopupBandeau()">Fermer</button>
+            </div>
+        </div>
+    </div> 
+
+    <!-- Popup de modification des bureaux -->
+    <div class="popup" id="popup-bureaux">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <h3>Modifier les bureaux</h3>
+            <div id="bureaux-modif-container">
+                <!-- Bureaux dynamiques -->
+            </div>
+            <div class="popup-btn">
+                <button onclick="ajouterBureau()">Ajouter un bureau</button>
+                <button class="ok-btn" onclick="renommerBureaux()">Ok</button>
+                <button class="close-btn" onclick="fermerPopupBureaux()">Fermer</button>
+            </div>
+        </div>
+    </div> 
+
+    <div id="usagers-list-container" class="usagers-list-container">
+        <!-- Liste des usagers dynamique -->
+    </div>
+
+    <div id="bureaux-btn-container" class="bureaux-btn-container">
+        <!-- Boutons des bureaux dynamique -->
+    </div>
+
+    <input type="file" id="fileInput" accept=".xlsx" onchange="selectXLSX(event)">
+
+    <script src="/static/js/script_tableau_de_bord.js"></script>
+</body>
+
+</html>
