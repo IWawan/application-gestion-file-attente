@@ -467,6 +467,17 @@ button:focus
     background-color: var(--c-btn-2-hover);
 }
 
+.side-menu button.close-btn
+{
+    background-color: var(--c-btn-del);
+    color: var(--c-btn-del-text);
+}
+
+.side-menu button.close-btn:hover
+{
+    background-color: var(--c-btn-del-hover);
+}
+
 /* === POPUPS === */
 
 .popup

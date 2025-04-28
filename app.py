@@ -62,7 +62,7 @@ def home():
 
 @app.route('/tableau-de-bord')
 def index():
-    return render_template('tableau_de_bord.html')
+    return render_template('tableau_de_bord.html', ip=IP, port=PORT)
 
 @app.route('/file-d-attente')
 def display():
