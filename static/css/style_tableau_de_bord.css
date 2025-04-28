@@ -329,6 +329,17 @@ button:focus
     background-color: var(--c-btn-ok-hover);
 }
 
+.usager-container .usager-btn.new-usager
+{
+    background-color: var(--c-btn-ok);
+    color: var(--c-btn-ok-text);
+}
+
+.usager-container .usager-btn.new-usager:hover
+{
+    background-color: var(--c-btn-ok-hover);
+}
+
 .usager-container .delete-btn,
 .usager-container .select-btn
 {

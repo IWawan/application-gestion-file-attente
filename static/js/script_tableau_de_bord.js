@@ -142,6 +142,10 @@ function mettreAJourListe(usagers)
         {
             btn.classList.add('displayed');
         }
+        else if (usager.includes("|"))
+        {
+            btn.classList.add('new-usager');
+        }
         else
         {
             btn.classList.add('default');
@@ -267,7 +271,7 @@ function fermerPopupBandeau()
     document.getElementById('popup-bandeau').classList.remove('open');
 }
 
-// Ouvrir le popup dde modification des bureaux
+// Ouvrir le popup de modification des bureaux
 function ouvrirPopupBureaux()
 {
     document.getElementById('popup-bureaux').classList.add('open');
@@ -275,10 +279,24 @@ function ouvrirPopupBureaux()
     fermerMenuLateral();
 }
 
-// Fermer le popup dde modification des bureaux
+// Fermer le popup de modification des bureaux
 function fermerPopupBureaux()
 {
     document.getElementById('popup-bureaux').classList.remove('open');
+}
+
+// Ouvrir le popup d'ajout de rendez-vous
+function ouvrirPopupRDV()
+{
+    document.getElementById('popup-rdv').classList.add('open');
+
+    fermerMenuLateral();
+}
+
+// Fermer le popup d'ajout de rendez-vous
+function fermerPopupRDV()
+{
+    document.getElementById('popup-rdv').classList.remove('open');
 }
 
 // Afficher un message sur le bandeau
@@ -334,6 +352,20 @@ function renommerBureaux()
     socket.emit('save_bureaux', { bureaux: nouveauBureaux });
 
     fermerPopupBureaux();
+}
+
+// Ajouter un nouveau rendez-vous
+function ajouterRDV()
+{
+    const nom = document.getElementById("new-usager-input").value.trim();
+
+    if (nom)
+    {
+        socket.emit('add_usager', { usager: nom });
+    }
+    
+    document.getElementById("new-usager-input").value = ""; // Réinitialise le champ de saisie
+    fermerPopupRDV();
 }
 
 // Fermeture du popup au clic sur l’overlay

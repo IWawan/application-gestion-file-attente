@@ -126,6 +126,15 @@ def on_remove_usager(data):
 
         _sync_usagers_list()
 
+# Ajoute un usager à la liste
+@socketio.on('add_usager')
+def on_add_usager(data):
+    usager = data.get('usager')
+    if usager:
+        usagers_list.append(usager)
+
+        _sync_usagers_list()
+
 # Sélectionne un usager de la liste
 @socketio.on('select_usager')
 def on_select_usager(data):

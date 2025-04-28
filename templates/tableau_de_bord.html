@@ -31,6 +31,7 @@
     <nav id="side-menu" class="side-menu">
         <button onclick="ouvrirPopupBandeau()">Bandeau</button>
         <button onclick="ouvrirPopupBureaux()">Bureaux</button>
+        <button onclick="ouvrirPopupRDV()">Ajouter RDV</button>
         <button class="close-btn" onclick="window.location.href='http://{{ ip }}:{{ port }}'">Retour</button>
     </nav>
 
@@ -62,6 +63,20 @@
             </div>
         </div>
     </div> 
+
+        <!-- Popup d'ajout de rendez-vous-->
+        <div class="popup" id="popup-rdv" >
+            <div class="popup-overlay"></div>
+            <div class="popup-content">
+                <h3>Ajout d'un rendez-vous</h3>
+                <label for="new-usager-input">Nom :</label>
+                <input type="text" id="new-usager-input" placeholder="Nom" required>
+                <div class="popup-btn">
+                    <button class="ok-btn" onclick="ajouterRDV()">Ok</button>
+                    <button class="close-btn" onclick="fermerPopupRDV()">Fermer</button>
+                </div>
+            </div>
+        </div> 
 
     <div id="usagers-list-container" class="usagers-list-container">
         <!-- Liste des usagers dynamique -->
