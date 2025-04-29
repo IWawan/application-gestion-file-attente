@@ -97,7 +97,7 @@ def load_usagers():
     file_path = RESOURCES_FOLDER + '/' + FILE_NAME
     extractor = extract_xlsx(file_path)
     extracted = extractor.to_array()
-    usagers_list.append([usager for usager in extracted if usager not in usagers_list])
+    usagers_list.extend([usager for usager in extracted if usager not in usagers_list])
 
     _sync_usagers_list()
 
@@ -132,7 +132,7 @@ def on_remove_usager(data):
 def on_add_usager(data):
     usager = data.get('usager')
     if usager:
-        usagers_list.append(usager)
+        usagers_list.insert(0, usager)
 
         _sync_usagers_list()
 
