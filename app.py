@@ -4,8 +4,6 @@ from flask_socketio import SocketIO
 import socket
 import os
 import redis
-import eventlet
-eventlet.monkey_patch()
 
 # --- Configuration ---
 
@@ -26,7 +24,7 @@ app.config['ALLOWED_EXTENSIONS'] = {'xlsx'}
 app.config['UPLOAD_FOLDER'] = RESOURCES_FOLDER
 
 Session(app)
-socketio = SocketIO(app, async_mode="eventlet", manage_session=False)
+socketio = SocketIO(app, manage_session=False)
 
 # --- Helper Functions ---
 
@@ -295,4 +293,4 @@ def _sync_all():
 if __name__ == '__main__':
     load_bureaux()
     print(f"Serveur lancé sur http://{IP}:{PORT}")
-    socketio.run(app, host=IP, port=PORT)
+    socketio.run(app, debug=True, host=IP, port=PORT)

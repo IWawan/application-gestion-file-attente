@@ -4,7 +4,7 @@ for /f "tokens=* USEBACKQ" %%f in (`powershell -command "(Get-NetIPAddress -Addr
 
 REM Démarre le serveur Flask
 start "" python app.py
-timeout /t 4 >nul
+timeout /t 6 >nul
 
 REM Ouvre les navigateurs avec l'IP locale récupérée
 start "" http://%LOCAL_IP%:8080/tableau-de-bord
