@@ -9,6 +9,5 @@ python3 app.py &
 # Attend 4 secondes
 sleep 4
 
-# Ouvre les URLs dans le navigateur par défaut
-xdg-open "http://$LOCAL_IP:8080/tableau-de-bord" 2>/dev/null || open "http://$LOCAL_IP:8080/"
-xdg-open "http://$LOCAL_IP:8080/file-d-attente" 2>/dev/null || open "http://$LOCAL_IP:8080/display"
+# Ouvre l'url de la file d'attente dans le navigateur par défaut
+xdg-open "http://$LOCAL_IP:8080/file-d-attente" 2>/dev/null || open "http://$LOCAL_IP:8080/file-d-attente"
