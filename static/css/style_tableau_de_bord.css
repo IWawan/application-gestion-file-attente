@@ -6,7 +6,7 @@
     --c-general-border: #ddd;
     --c-general-text: #111827;
 
-    /* General */
+    /* Header */
     --c-header-bg: #ebeff7;
     --c-header-text: #111827;
 
@@ -22,14 +22,19 @@
 
     /* Bouton sélectionner */
     --c-btn-select: #fdbc4c;         
-    --c-btn-select-hover: #ffa200;
-    --c-btn-select-ready: #ffa200;         
+    --c-btn-select-hover: #ffad1f;
+    --c-btn-select-ready: #ffad1f;         
     --c-btn-select-ready-hover: #f09800; 
     --c-btn-select-text: #FFFFFF;
+    
+    /* Bouton nouvel usager */
+    --c-btn-new-usager: #dfc3f1;         
+    --c-btn-new-usager-hover: #cda9e6;
+    --c-btn-new-usager-text: #691679;
 
     /* Bouton ok */
-    --c-btn-ok: #34D399;         
-    --c-btn-ok-hover: #10B981;     
+    --c-btn-ok: #34d37b;         
+    --c-btn-ok-hover: #10b95c;     
     --c-btn-ok-text: #FFFFFF;
 
     /* Bouton supprimer */
@@ -331,13 +336,13 @@ button:focus
 
 .usager-container .usager-btn.new-usager
 {
-    background-color: var(--c-btn-ok);
-    color: var(--c-btn-ok-text);
+    background-color: var(--c-btn-new-usager);
+    color: var(--c-btn-new-usager-text);
 }
 
 .usager-container .usager-btn.new-usager:hover
 {
-    background-color: var(--c-btn-ok-hover);
+    background-color: var(--c-btn-new-usager-hover);
 }
 
 .usager-container .delete-btn,
@@ -502,6 +507,16 @@ button:focus
     z-index: 50;
 }
 
+.popup-overlay
+{
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+}
+
 .popup.open
 {
     display: flex;
@@ -517,6 +532,7 @@ button:focus
     width: auto;
     max-width: 500px;
     text-align: center;
+    z-index: 50;
 }
 
 .popup-content button
@@ -586,6 +602,21 @@ button:focus
 {
     color: var(--c-input-text);
     font-size: var(--font-size-medium);
+}
+
+.popup-content .new-usager-add-btn
+{
+    background-color: var(--c-btn-ok);
+    color: var(--c-btn-ok-text);
+    width: 25px;            
+    height: 25px;        
+    padding: 0px;
+}
+
+.popup-content .new-usager-add-btn:hover
+{
+    background-color: var(--c-btn-ok-hover);
+    transform: translateY(-1px);
 }
 
 /* === ANIMATION === */

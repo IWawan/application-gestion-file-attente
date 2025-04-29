@@ -58,7 +58,8 @@
             </div>
             <div class="popup-btn">
                 <button onclick="ajouterBureau()">Ajouter un bureau</button>
-                <button class="ok-btn" onclick="renommerBureaux()">Ok</button>
+                <button onclick="renommerBureaux()">Renommer</button>
+                <br>
                 <button class="close-btn" onclick="fermerPopupBureaux()">Fermer</button>
             </div>
         </div>
@@ -71,8 +72,8 @@
                 <h3>Ajout d'un rendez-vous</h3>
                 <label for="new-usager-input">Nom :</label>
                 <input type="text" id="new-usager-input" placeholder="Nom" required>
+                <button class="new-usager-add-btn" onclick="ajouterRDV()">&check;</button>
                 <div class="popup-btn">
-                    <button class="ok-btn" onclick="ajouterRDV()">Ok</button>
                     <button class="close-btn" onclick="fermerPopupRDV()">Fermer</button>
                 </div>
             </div>

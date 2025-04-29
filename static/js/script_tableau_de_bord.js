@@ -1,7 +1,8 @@
 var socket = io.connect('http://' + window.location.hostname + ':' + window.location.port);
 
-var displayed_usagers = new Set()
-var selected_usagers = new Set()
+usagers_list = [];
+var displayed_usagers = new Set();
+var selected_usagers = new Set();
 var current_usager = "";
 var current_bureau;
 var bureaux;
@@ -127,6 +128,8 @@ function mettreAJourListe(usagers)
         var div = document.createElement('div');
         div.classList.add('usager-container');
 
+        usagers_list.push(usager); // Ajoute l'usager à la liste
+
         // Boutons principal des usagers
         var btn = document.createElement('button');
         btn.classList.add('usager-btn');
@@ -142,7 +145,7 @@ function mettreAJourListe(usagers)
         {
             btn.classList.add('displayed');
         }
-        else if (usager.includes("|"))
+        else if (!usager.includes('|'))
         {
             btn.classList.add('new-usager');
         }
@@ -350,25 +353,26 @@ function renommerBureaux()
     }
 
     socket.emit('save_bureaux', { bureaux: nouveauBureaux });
-
-    fermerPopupBureaux();
 }
 
 // Ajouter un nouveau rendez-vous
 function ajouterRDV()
 {
-    const nom = document.getElementById("new-usager-input").value.trim();
+    const usager = document.getElementById("new-usager-input").value.trim();
 
-    if (nom)
+    if (!usagers_list.includes(usager))
     {
-        socket.emit('add_usager', { usager: nom });
+        socket.emit('add_usager', { usager: usager });
+    }
+    else
+    {
+        alert("Cet usager existe déjà !");
     }
     
     document.getElementById("new-usager-input").value = ""; // Réinitialise le champ de saisie
-    fermerPopupRDV();
 }
 
-// Fermeture du popup au clic sur l’overlay
+// Fermeture du popup au clic en dehors
 document.addEventListener('DOMContentLoaded', () =>
 {
     document.querySelectorAll('.popup').forEach(popup =>
@@ -376,6 +380,42 @@ document.addEventListener('DOMContentLoaded', () =>
         popup.querySelector('.popup-overlay').addEventListener('click', () => popup.classList.remove('open'));
     });
 });
+
+// Fermeture du popup avec "échap"
+document.addEventListener('keydown', (event) =>
+{
+    if (event.key === 'Escape')
+    {
+        document.querySelectorAll('.popup.open').forEach(popup =>
+        {
+            popup.classList.remove('open');
+        });
+    }
+});
+
+// Ok avec "entrée"
+document.addEventListener('keydown', (event) =>
+    {
+        if (event.key === 'Enter')
+        {
+            const popup = document.querySelector('.popup.open')
+
+            if (popup && popup.id === 'popup-bandeau')
+            {
+                envoyerMessageBandeau();
+            }
+            else if (popup && popup.id === 'popup-bureaux')
+            {
+                renommerBureaux();
+            }
+            else if (popup && popup.id === 'popup-rdv')
+            {
+                ajouterRDV();
+            }
+        }
+    });
+
+
 
 // ----------------------
 //  SOCKET.IO LISTENERS

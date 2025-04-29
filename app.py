@@ -96,7 +96,8 @@ def load_usagers():
 
     file_path = RESOURCES_FOLDER + '/' + FILE_NAME
     extractor = extract_xlsx(file_path)
-    usagers_list = extractor.to_array()
+    extracted = extractor.to_array()
+    usagers_list.append([usager for usager in extracted if usager not in usagers_list])
 
     _sync_usagers_list()
 
