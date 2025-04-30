@@ -6,8 +6,3 @@ Pour installer les dépendances, exécuter la commande suivante dans la racine d
 ```bash
 pip install -r requirements.txt
 ```
-
-ou :
-```bash
-pip install --break-system-packages -r requirements.txt
-```
