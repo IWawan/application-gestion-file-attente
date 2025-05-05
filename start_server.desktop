@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=start_server
+Comment=Démarrer le serveur
+Exec=/bin/bash /home/pi/app_file/start_server.sh
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=Utility;
+Name[fr_FR]=Démarrer le serveur

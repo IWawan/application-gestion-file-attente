@@ -737,3 +737,19 @@ button:focus
         margin: 60px auto;
     }
 }
+
+/* === TABLETTE EN MODE PAYSAGE === */
+@media screen and (min-width: 601px) and (max-width: 1024px) and (orientation: landscape)
+{
+    .usagers-list-container
+    {      
+        max-height: 75dvh;
+        width: 95vw;
+        padding-bottom: 20px;
+    }
+
+    .usager-container
+    {
+        padding: 5px;
+    }
+}

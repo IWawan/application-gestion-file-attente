@@ -8,7 +8,7 @@
 
     /* UI basics */
     --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    --font-size: 1.7rem;
+    --font-size: 1.5rem;
     --radius: 10px;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
@@ -44,7 +44,7 @@ button:hover
 .image
 {
     background-color: var(--c-bg);
-    min-height: 140px;
+    min-height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -52,7 +52,7 @@ button:hover
 
 .image img
 {
-    width: 30%;
+    width: 25%;
     max-width: 300px;
     height: auto;
 }
@@ -67,13 +67,14 @@ button:hover
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    margin-top: 20px;
 }
 
 .btn-container button
 {
     width: 150%;
-    padding: 20px 16px;
-    margin: 40px;
+    padding: 15px;
+    margin: 20px;
 }
 
 /* === MOBILE FIRST (jusqu’à 600px) === */
