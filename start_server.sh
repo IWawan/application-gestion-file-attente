@@ -17,4 +17,4 @@ until LOCAL_IP=$(hostname -I | awk '{print $1}'); [ -n "$LOCAL_IP" ]; do
 done
 
 # Ouvre l url de la file d attente dans le navigateur par défaut
-/usr/bin/chromium-browser --noerrdialogs --kiosk --incognito "http://$LOCAL_IP:8080/file-d-attente" 2>/dev/null
+/usr/bin/chromium-browser --noerrdialogs --start-fullscreen --incognito "http://$LOCAL_IP:8080/file-d-attente" 2>/dev/null
