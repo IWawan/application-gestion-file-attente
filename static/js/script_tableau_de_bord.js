@@ -360,14 +360,7 @@ function ajouterRDV()
 {
     const usager = document.getElementById("new-usager-input").value.trim();
 
-    if (!usagers_list.includes(usager))
-    {
-        socket.emit('add_usager', { usager: usager });
-    }
-    else
-    {
-        alert("Cet usager existe déjà !");
-    }
+    socket.emit('add_usager', { usager: usager });
     
     document.getElementById("new-usager-input").value = ""; // Réinitialise le champ de saisie
 }
@@ -414,8 +407,6 @@ document.addEventListener('keydown', (event) =>
             }
         }
     });
-
-
 
 // ----------------------
 //  SOCKET.IO LISTENERS
