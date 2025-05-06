@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Lancement du serveur de gestion de file d'attente
+bash /home/pi/app_file/start_server.sh &

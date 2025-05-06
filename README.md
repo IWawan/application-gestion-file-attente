@@ -12,8 +12,8 @@ pip install --break-system-packages -r requirements.txt
 - Le déplacer dans "/home/pi/".
 - Déplacer le fichier "start_server.desktop" a l'endroit voulu, et démarrer le serveur en cliquant dessus.
 
-# Démarrer le serveur au boot du Raspberry Pi
+# Démarrer le serveur au boot du Raspberry Pi sur LXDE-pi-labwc
 - Renommer le dossier de l'application en "app_file".
 - Le déplacer dans "/home/pi/".
-- Dans le termiinal, exécuter la commande suivante : ```crontab -e```
-- Dans le crontab ajouter cette ligne tout en bas : "@reboot DISPLAY=:0 /home/pi/app_file/start_server.sh"
+- Créer le répertoire "labxc" dans "/home/pi".
+- Déplacer le fichier "autostart" dans "/home/pi/labwc.
