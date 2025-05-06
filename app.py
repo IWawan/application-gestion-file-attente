@@ -1,9 +1,12 @@
+import sys
 from flask import Flask, render_template, jsonify, request
 from flask_session import Session
 from flask_socketio import SocketIO
 import socket
 import os
 import redis
+import signal
+import atexit
 
 # --- Configuration ---
 
@@ -260,6 +263,7 @@ def load_bureaux():
         print("bureaux.txt introuvable, noms par défaut utilisés.")
 
 # --- Sync fonctions --
+
 def _sync_usagers_list():
     socketio.emit('update_usagers', {'usagers': usagers_list})
 
@@ -288,9 +292,65 @@ def _sync_all():
     _sync_current_bureau()
     _sync_display()
 
-# --- Application Entry Point ---
+# --- Verrouillage d'instance unique ---
+LOCKFILE = 'flask_server.lock'  # Utiliser un fichier de verrouillage dans le répertoire courant
 
+# Vérifie si une autre instance du serveur est déjà en cours d'exécution
+def is_instance_running():
+    if not os.path.exists(LOCKFILE):
+        return False
+
+    try:
+        with open(LOCKFILE, 'r') as f:
+            pid = int(f.read().strip())
+
+        # Vérifie si un processus avec ce PID existe
+        os.kill(pid, 0)
+    except (ValueError, ProcessLookupError, PermissionError):
+        # Le fichier est corrompu ou le processus n'existe plus
+        print("Fichier de lock obsolète détecté. Suppression automatique.")
+        remove_lock()
+        return False
+
+    return True
+
+# Vérifie si le fichier de verrouillage existe et si le processus est toujours actif
+def create_lock():
+    with open(LOCKFILE, 'w') as f:
+        f.write(str(os.getpid()))  # Enregistre l'ID du processus dans le fichier.
+
+# Supprime le fichier de verrouillage à la fermeture de l'application
+def remove_lock():
+    if os.path.exists(LOCKFILE):
+        os.remove(LOCKFILE)
+    
+# --- Cleanup on exit ---
+def handle_exit(*args):
+    print("Fermeture du serveur, suppression du fichier lock.")
+    remove_lock()
+    sys.exit(0)
+
+# Enregistre le nettoyage sur fermeture normale
+atexit.register(remove_lock)
+
+# Gère Ctrl+C et fermeture de fenêtre
+signal.signal(signal.SIGINT, handle_exit)
+signal.signal(signal.SIGTERM, handle_exit)
+
+# --- Application Entry Point ---
 if __name__ == '__main__':
+    if is_instance_running():
+        print("Une autre instance du serveur est déjà en cours d'exécution. Arrêt de cette instance.")
+        sys.exit(1)  # Exit si une instance est déjà en cours
+
+    create_lock()  # Crée le verrou pour cette instance
+
+    # Charger les bureaux
     load_bureaux()
-    print(f"Serveur lancé sur http://{IP}:{PORT}")
-    socketio.run(app, debug=True, host=IP, port=PORT)
+
+    print(f"Serveur lancé sur http://{IP}:{8080}")
+    
+    try:
+        socketio.run(app, debug=False, host=IP, port=8080)
+    finally:
+        remove_lock()  # Nettoyer le verrou à l'arrêt du serveur
