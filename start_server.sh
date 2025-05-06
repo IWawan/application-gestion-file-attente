@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sleep 10
+
 # Dossier du script
 cd "$(dirname "$0")"
 
@@ -9,7 +11,7 @@ echo "Lancement du serveur..."
 
 # Attend que le serveur démarre
 echo "Lancement du navigateur..."
-sleep 10
+sleep 20
 
 # Récupère l'adresse IP locale
 until LOCAL_IP=$(hostname -I | awk '{print $1}'); [ -n "$LOCAL_IP" ]; do
