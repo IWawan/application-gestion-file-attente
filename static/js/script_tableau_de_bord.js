@@ -118,9 +118,10 @@ function resetAll()
 // -------------
 
 // Mettre à jour la liste des usagers
-function mettreAJourListe(usagers)
+function mettreAJourListe(usagers, name_list)
 {
-    var cont = document.getElementById('usagers-list-container');
+    var list = 'usagers-list-' + name_list + '-container';
+    var cont = document.getElementById(list);
     cont.innerHTML = ""; // Efface les anciens boutons
 
     usagers.forEach(function(usager, i)
@@ -164,12 +165,12 @@ function mettreAJourListe(usagers)
         if (selected_usagers.has(usager))
         {
             sel.classList.add('prêt');
-            sel.innerHTML = 'EN ATTENTE';
+            sel.innerHTML = 'ATTENTE';
         }
         else
         {
             sel.classList.remove('prêt');
-            sel.innerHTML = '<i data-feather="check"></i>'; // Icône coche
+            sel.innerHTML = '&check;'; // Icône coche
         }
         
         sel.onclick = function()
@@ -181,7 +182,7 @@ function mettreAJourListe(usagers)
         var del = document.createElement('button');
         del.classList.add('delete-btn');
         del.id = 'delete-btn-' + i;
-        del.innerHTML = '<i data-feather="x"></i>'; // Icône croix
+        del.innerHTML = '&times;'; // Icône croix
         del.onclick = function()
         {
             socket.emit('remove_usager', { usager: usager });
@@ -415,7 +416,8 @@ document.addEventListener('keydown', (event) =>
 // Mise à jour de la liste d'usagers
 socket.on('update_usagers', function(data)
 {
-    mettreAJourListe(data.usagers);
+    mettreAJourListe(data.usagers, 1);
+    mettreAJourListe(data.usagers, 2);
 });
 
 // Mise à jour du bureau sélectionné
