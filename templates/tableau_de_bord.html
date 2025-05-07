@@ -12,13 +12,7 @@
 
 <body>
 
-    <!-- Menu principal -->
-    <div id="main-menu" class="header main-menu">
-        <button onclick="document.getElementById('fileInput').click()">Charger</button>
-        <button onclick="resetAll(), chargerListeUsagers()">Afficher</button>
-        <button onclick="resetAll(), effacerListeUsagers()">Effacer</button>
-    </div>
-
+    <!-- Display section -->
     <div id="display-section" class="header display-section">
         <h2 id="usager-display"></h2>
         <button class="clear-btn" id="clear-btn" onclick="effacerAffichage()">RDV TERMINÉ</button>
@@ -81,10 +75,20 @@
 
     <div id="usagers-list-global-container" class="usagers-list-global-container">
         <div id="usagers-list-1-container" class="usagers-list-container">
-            <!-- Liste des usagers dynamique -->
+            <button onclick="document.getElementById('fileInput').click()">Charger</button>
+            <button onclick="resetAll(), chargerListeUsagers()">Afficher</button>
+            <button onclick="resetAll(), effacerListeUsagers()">Effacer</button>
+            <div id="usagers-list-1-content" class="usagers-list-content">
+                <!-- Liste des usagers dynamique -->
+            </div>
         </div>
         <div id="usagers-list-2-container" class="usagers-list-container">
-            <!-- Liste des usagers dynamique -->
+            <button onclick="document.getElementById('fileInput').click()">Charger</button>
+            <button onclick="resetAll(), chargerListeUsagers()">Afficher</button>
+            <button onclick="resetAll(), effacerListeUsagers()">Effacer</button>
+            <div id="usagers-list-2-content" class="usagers-list-content">
+                <!-- Liste des usagers dynamique -->
+            </div>
         </div>
     </div>
 

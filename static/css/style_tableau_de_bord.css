@@ -84,7 +84,6 @@ body
     grid-template-rows: auto 1fr auto;
     grid-template-columns: 150px 1fr;
     grid-template-areas:
-        "main-menu main-menu"
         "bureaux usagers"
         "display display";
     min-height: 100vh;
@@ -196,22 +195,6 @@ button:focus
     z-index: 3;
 }
 
-/* === MAIN MENU === */
-
-.main-menu
-{
-    grid-area: main-menu;
-    display: flex;
-    bottom: auto;   
-    width: 100%;                   
-}
-
-.main-menu button
-{
-    font-size: var(--font-size-medium);
-    margin : 0 10px;
-}
-
 /* === BUREAUX BUTTONS CONTAINER === */
 
 .bureaux-btn-container
@@ -267,7 +250,7 @@ button:focus
     width: 70vw;
 }
 
-.usagers-list-container
+.usagers-list-content
 {
     color: var(--c-general-text);           
     transform: none;
@@ -657,7 +640,6 @@ button:focus
         grid-template-rows: auto auto auto minmax(0, 1fr);
         grid-template-columns: 1fr;
         grid-template-areas:
-          "main-menu"
           "bureaux"
           "display"
           "usagers";
@@ -672,11 +654,6 @@ button:focus
         bottom: auto;
         border-bottom: none;
         box-shadow: none;
-    }
-
-    .main-menu
-    {
-        background-color: var(--c-general-bg-2);
     }
     
     .bureaux-btn-container
@@ -709,7 +686,7 @@ button:focus
         align-self: start;  
     }
 
-    .usagers-list-container
+    .usagers-list-content
     {      
         background-color: var(--c-general-bg-2);
         max-height: calc(100dvh - 260px);
@@ -759,7 +736,7 @@ button:focus
         padding: 8px 12px;
     }
 
-    .usagers-list-container
+    .usagers-list-content
     {      
         max-height: 75dvh;
         width: 95vw;

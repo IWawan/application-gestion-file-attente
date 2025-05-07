@@ -120,7 +120,7 @@ function resetAll()
 // Mettre à jour la liste des usagers
 function mettreAJourListe(usagers, name_list)
 {
-    var list = 'usagers-list-' + name_list + '-container';
+    var list = 'usagers-list-' + name_list + '-content';
     var cont = document.getElementById(list);
     cont.innerHTML = ""; // Efface les anciens boutons
 
