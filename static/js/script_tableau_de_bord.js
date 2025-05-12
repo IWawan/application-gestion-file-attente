@@ -349,6 +349,13 @@ function envoyerMessageBandeau()
 function ajouterBureau()
 {
     let n = Object.keys(bureaux).length;
+
+    if (n >= 9)
+    {
+        alert("Impossible d'ajouter plus de 9 bureaux.");
+        return;   
+    }
+    
     let newKey = "bureau" + (n + 1);
     bureaux[newKey] = "Bureau " + (n + 1);
 

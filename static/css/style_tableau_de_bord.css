@@ -2,13 +2,9 @@
 {
     /* General */
     --c-general-bg: #F9FAFB;
-    --c-general-bg-2: #F3F4F6;
+    --c-general-bg-2: #ebeff7;
     --c-general-border: #ddd;
     --c-general-text: #111827;
-
-    /* Header */
-    --c-header-bg: #ebeff7;
-    --c-header-text: #111827;
 
     /* Bouton principal */
     --c-btn-1: #3B82F6;
@@ -83,7 +79,7 @@ body
     align-items: center;
     display: grid;
     grid-template-rows: auto 1fr auto;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 160px 1fr;
     grid-template-areas:
         "bureaux usagers"
         "display display";
@@ -181,35 +177,60 @@ button:focus
   background-color: var(--c-btn-1-hover);
 }
 
-/* === HEADER === */
+/* === DISPLAY SECTION === */
 
-.header
+.display-section
 {
-    background-color: var(--c-header-bg);
-    color: var(--c-header-text);
-    border-bottom: 2px solid var(--c-general-border);
-    border-radius: var(--radius) var(--radius) 0 0; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
+    background-color: var(--c-general-bg-2);
+    color: var(--c-general-text);
+    border: 1px solid var(--c-btn-2);
+    border-radius: var(--radius) var(--radius) 0 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: fixed;
-    top: 0;
-    bottom: 0; 
     left: 0;
     right: 0;
     padding: 10px;
     justify-content: center;
-    align-items: center;                         
+    align-items: center;
     z-index: 3;
+    grid-area: display;
+    display: none; /* Masqué par défaut */
+    top: auto;
+    bottom: 0; 
+    width: 100%;
+}
+
+
+.display-section h2
+{  
+    white-space: normal; 
+    word-break: break-word;
+    margin: 0;
+}
+
+.display-section button
+{
+    background-color: var(--c-btn-del);
+    color: var(--c-btn-del-text);
+    padding: 12px 18px; 
+    margin: 0 20px;               
+}
+
+.display-section button:hover
+{
+    background-color: var(--c-btn-del-hover);
 }
 
 /* === BUREAUX BUTTONS CONTAINER === */
 
 .bureaux-btn-container
 {
-    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    padding: 10px;
+    margin-left: 20px;
     gap: 10px;
 
     /* Taille adaptative */
@@ -256,16 +277,20 @@ button:focus
 .usagers-list-global-container
 {
     grid-area: usagers;
-    background-color: var(--c-general-bg);
+    background-color: var(--c-general-bg-2);
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
-    height: auto;
-    max-height: 70vh;
-    width: auto;
-    max-width: 70vw;
-    margin-left: 2vh;
+    height: 100vh;
+    width: 80vw;
+    border-left: 1px solid var(--c-btn-2);
+    border-right: 1px solid var(--c-btn-2);
+}
+
+#usagers-list-1-container
+{
+    border-right: 1px solid var(--c-btn-2);
 }
 
 .usagers-list-content
@@ -280,7 +305,7 @@ button:focus
     margin: 8px;
     height: auto;
     max-height: 70vh;
-    width: 35vw;
+    width: 38vw;
     padding: 10px 8px;   
     overflow-x: hidden; 
     overflow-y: auto; 
@@ -357,7 +382,8 @@ button:focus
 .usager-container .select-btn
 {
     width: auto;
-    padding: 1px, 3px;
+    padding: 8px;
+    max-height: 30px;
     border-radius: 20px;
 }
 
@@ -395,36 +421,6 @@ button:focus
 }
 
 .usager-container .delete-btn:hover
-{
-    background-color: var(--c-btn-del-hover);
-}
-
-/* === DISPLAY SECTION === */
-
-.display-section
-{ 
-    grid-area: display;
-    display: none; /* Masqué par défaut */          
-    top: auto;   
-    width: 100%;                                           
-}
-
-.display-section h2
-{  
-    white-space: normal; 
-    word-break: break-word;
-    margin: 0;
-}
-
-.display-section button
-{
-    background-color: var(--c-btn-del);
-    color: var(--c-btn-del-text);
-    padding: 12px 18px; 
-    margin: 0 20px;               
-}
-
-.display-section button:hover
 {
     background-color: var(--c-btn-del-hover);
 }
@@ -535,7 +531,7 @@ button:focus
     background-color: var(--c-sm-bg-1);
     color: var(--c-sm-text);
     box-sizing: border-box;
-    padding: 10px;
+    padding: 20px;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     width: auto;
@@ -607,6 +603,12 @@ button:focus
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: var(--transition);
     outline: none;
+    width: 90px;
+}
+
+.popup-content #bandeau-input
+{
+    width: 250px;
 }
 
 .popup-content label
@@ -634,7 +636,7 @@ button:focus
 {
     background-color: var(--c-sm-bg-2);
     border: 1px solid var(--c-btn-2);
-    border-radius: var(--radius) var(--radius) 0 0; 
+    border-radius: var(--radius) var(--radius) var(--radius) var(--radius); 
     overflow-y: auto;
     height: auto;
     max-height: 50vh;
@@ -664,106 +666,9 @@ button:focus
 {
     :root
     {
-        --font-size-small: 0.7rem;
-        --font-size-medium: 0.8rem;
-        --font-size-big: 0.9rem;
-    }
-
-    html, body
-    {
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-        overflow-y: hidden;
-    }
-
-    body 
-    {
-        background-color: var(--c-general-bg-2);
-        grid-template-rows: auto auto auto minmax(0, 1fr);
-        grid-template-columns: 1fr;
-        grid-template-areas:
-          "bureaux"
-          "display"
-          "usagers";
-        height: 100vh;
-    }
-
-    .header
-    {
-        position: static;
-        width: 100%;
-        top: auto;
-        bottom: auto;
-        border-bottom: none;
-        box-shadow: none;
-    }
-    
-    .bureaux-btn-container
-    {
-        grid-area: bureaux;
-        padding: 10px;   
-        display: flex;            
-        flex-direction: column;   
-        align-items: center;        
-        justify-content: flex-start;  
-        gap: 10px;  
-        height: auto;                  
-        max-height: 80vh;
-        overflow-x: hidden;   
-        overflow-Y: auto;          
-    }
-
-    .bureaux-btn-container button
-    {
-        height: auto;
-        width: auto;
-        padding: 7px;
-        font-size: var(--font-size-small);
-    }
-
-    .display-section
-    {
-        border-top: 1px solid var(--c-btn-2);
-        border-bottom: 1px solid var(--c-btn-2);
-        border-radius: var(--radius) var(--radius) 0 0; 
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-        justify-self: start;
-        align-self: start;  
-    }
-
-    .usagers-list-content
-    {      
-        background-color: var(--c-general-bg-2);
-        max-height: calc(100dvh - 260px);
-        max-width: none;
-        width: 95vw;
-        padding-bottom: 150px;
-    }
-
-    .usager-container
-    {
-        padding: 5px;
-    }
-
-    .usager-container button
-    {
-        height: auto;
-    }
-    
-    .usager-container .usager-btn
-    {
-        font-size: var(--font-size-small);
-    }
-
-    #open-side-menu-btn
-    {
-        top: 50px;
-    }
-
-    .side-menu button
-    {
-        margin: 60px auto;
+        --font-size-small: 0.6rem;
+        --font-size-medium: 0.7rem;
+        --font-size-big: 0.8rem;
     }
 }
 
@@ -772,33 +677,13 @@ button:focus
 {
     :root
     {
-        --font-size-small: 0.9rem;
-        --font-size-medium: 1rem;
-        --font-size-big: 1.2rem;
-    }
-
-    button
-    {
-        padding: 8px 12px;
+        --font-size-small: 0.7rem;
+        --font-size-medium: 0.8rem;
+        --font-size-big: 1rem;
     }
 
     .usagers-list-content
-    {      
-        max-height: 75dvh;
-        width: 95vw;
-        padding-bottom: 20px;
-    }
-
-
-    .usager-container
     {
-        padding: 5px;
-    } 
-
-    .usager-container button
-    {
-        width: 100%;
-        height: 35px;
-        paddIng: 10px;
+        max-height: 46vh;
     }
 }
