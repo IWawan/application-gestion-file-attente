@@ -51,10 +51,13 @@ PORT = 8080
 
 usagers_list_1 = []
 usagers_list_2 = []
+displayed_usagers_1 = set()
+displayed_usagers_2 = set()
+selected_usagers_1 = set()
+selected_usagers_2 = set()
 current_usager = ""
 current_bureau = ""
-displayed_usagers = set()
-selected_usagers = set()
+
 bureaux = {}
 
 # --- Routes HTTP ---
@@ -162,14 +165,23 @@ def on_update_usagers_list_2(data):
 
     _sync_usagers_list_2()
 
-# Efface un usager de la liste
-@socketio.on('remove_usager')
-def on_remove_usager(data):
+# Efface un usager de la liste 2
+@socketio.on('remove_usager_1')
+def on_remove_usager_1(data):
     usager = data.get('usager')
     if usager in usagers_list_1:
         usagers_list_1.remove(usager)
 
         _sync_usagers_list_1()
+
+# Efface un usager de la liste 2
+@socketio.on('remove_usager_2')
+def on_remove_usager_2(data):
+    usager = data.get('usager')
+    if usager in usagers_list_2:
+        usagers_list_2.remove(usager)
+
+        _sync_usagers_list_2()
 
 # Ajoute un usager à la liste 1
 @socketio.on('add_usager_1')
@@ -189,29 +201,58 @@ def on_add_usager_2(data):
 
         _sync_usagers_list_2()
 
-# Sélectionne un usager de la liste
-@socketio.on('select_usager')
-def on_select_usager(data):
+# Sélectionne un usager de la liste 1
+@socketio.on('select_usager_1')
+def on_select_usager_1(data):
     usager = data.get('usager')
     if usager:
-        if usager in selected_usagers:
-            selected_usagers.discard(usager)
-            if usager in displayed_usagers:
-                displayed_usagers.add(usager)
+        if usager in selected_usagers_1:
+            selected_usagers_1.discard(usager)
+            if usager in displayed_usagers_1:
+                displayed_usagers_1.add(usager)
         else:
-            selected_usagers.add(usager)
+            selected_usagers_1.add(usager)
+
+        _sync_usager_states()
+    
+# Sélectionne un usager de la liste 2
+@socketio.on('select_usager_2')
+def on_select_usager_2(data):
+    usager = data.get('usager')
+    if usager:
+        if usager in selected_usagers_2:
+            selected_usagers_2.discard(usager)
+            if usager in displayed_usagers_2:
+                displayed_usagers_2.add(usager)
+        else:
+            selected_usagers_2.add(usager)
 
         _sync_usager_states()
 
-# Sélectionne un usager et l'envoi à tous les écrans avec le bureau sélectionné
-@socketio.on('display_usager')
-def on_display_usager(data):
+# Sélectionne un usager de la liste 1 et l'envoi à tous les écrans avec le bureau sélectionné
+@socketio.on('display_usager_1')
+def on_display_usager_1(data):
     global current_usager
     usager = data.get('usager')
 
     if usager :
-        displayed_usagers.add(usager)
-        selected_usagers.discard(usager)
+        displayed_usagers_1.add(usager)
+        selected_usagers_1.discard(usager)
+        current_usager = usager
+
+        _sync_current_bureau()
+        _sync_usager_states()
+        _sync_display()
+
+# Sélectionne un usager de la liste 2 et l'envoi à tous les écrans avec le bureau sélectionné
+@socketio.on('display_usager_2')
+def on_display_usager_2(data):
+    global current_usager
+    usager = data.get('usager')
+
+    if usager :
+        displayed_usagers_2.add(usager)
+        selected_usagers_2.discard(usager)
         current_usager = usager
 
         _sync_current_bureau()
@@ -237,8 +278,8 @@ def on_bandeau_message(data):
 @socketio.on('clear_usagers_1')
 def on_clear_usagers_1():
     usagers_list_1.clear()
-    selected_usagers.clear()
-    displayed_usagers.clear()   
+    selected_usagers_1.clear()
+    displayed_usagers_1.clear()   
 
     _sync_usagers_list_1()
 
@@ -246,8 +287,8 @@ def on_clear_usagers_1():
 @socketio.on('clear_usagers_2')
 def on_clear_usagers_2():
     usagers_list_2.clear()
-    selected_usagers.clear()
-    displayed_usagers.clear()   
+    selected_usagers_1.clear()
+    displayed_usagers_2.clear()   
 
     _sync_usagers_list_2()
 
@@ -297,10 +338,13 @@ def on_save_bureaux(data):
 def on_reset_all():
     usagers_list_1 = []
     usagers_list_2 = []
+    displayed_usagers_1 = set()
+    displayed_usagers_2 = set()
+    selected_usagers_1 = set()
+    selected_usagers_2 = set()
     current_usager = ""
     current_bureau = ""
-    displayed_usagers = set()
-    selected_usagers = set()
+    
 
     _sync_all()
 
@@ -331,8 +375,11 @@ def _sync_usagers_list_2():
     socketio.emit('update_usagers_list_2', {'usagers': usagers_list_2})
 
 def _sync_usager_states():
-    socketio.emit('update_displayed_usagers', {'displayed_usagers': list(displayed_usagers)})
-    socketio.emit('update_selected_usagers', {'selected_usagers': list(selected_usagers)})
+    print("_sync_usager_states")
+    socketio.emit('update_displayed_usagers_1', {'displayed_usagers': list(displayed_usagers_1)})
+    socketio.emit('update_displayed_usagers_2', {'displayed_usagers': list(displayed_usagers_2)})
+    socketio.emit('update_selected_usagers_1', {'selected_usagers': list(selected_usagers_1)})
+    socketio.emit('update_selected_usagers_2', {'selected_usagers': list(selected_usagers_2)})
     _sync_usagers_list_1()
     _sync_usagers_list_2()
 

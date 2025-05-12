@@ -2,8 +2,10 @@ var socket = io.connect('http://' + window.location.hostname + ':' + window.loca
 
 usagers_list_1 = [];
 usagers_list_2 = [];
-var displayed_usagers = new Set();
-var selected_usagers = new Set();
+var displayed_usagers_1 = new Set();
+var displayed_usagers_2 = new Set();
+var selected_usagers_1 = new Set();
+var selected_usagers_2 = new Set();
 var current_usager = "";
 var current_bureau;
 var bureaux;
@@ -108,7 +110,7 @@ function changeEtat()
 }
 
 // Envoyer un usager sur le serveur, si un bureau est sélectionné
-function envoyerUsager(usager)
+function envoyerUsager(usager, nb_list)
 {
     if (!current_bureau)
     {
@@ -116,7 +118,15 @@ function envoyerUsager(usager)
         return;
     }
 
-    socket.emit('display_usager', { usager: usager });
+    if (nb_list == 1)
+    {
+        socket.emit('display_usager_1', { usager: usager });
+    }
+    if (nb_list == 2)
+    {
+        socket.emit('display_usager_2', { usager: usager });
+    }
+    
 }
 
 // Effacer la liste des usagers
@@ -151,10 +161,10 @@ function resetAll()
 //  MISE À JOUR
 // -------------
 
-// Mettre à jour la liste des usagers
-function mettreAJourListe(usagers, usagers_list, content)
+// Mettre à jour la liste 1
+function mettreAJourListe_1(usagers)
 {
-    var cont = document.getElementById(content);
+    var cont = document.getElementById("usagers-list-1-content");
     cont.innerHTML = ""; // Efface les anciens boutons
 
     usagers.forEach(function(usager, i)
@@ -162,7 +172,7 @@ function mettreAJourListe(usagers, usagers_list, content)
         var div = document.createElement('div');
         div.classList.add('usager-container');
 
-        usagers_list.push(usager); // Ajoute l'usager à la liste
+        usagers_list_1.push(usager); // Ajoute l'usager à la liste
 
         // Boutons principal des usagers
         var btn = document.createElement('button');
@@ -171,11 +181,11 @@ function mettreAJourListe(usagers, usagers_list, content)
         btn.textContent = usager;
 
         // Couleur en fonction des états
-        if (selected_usagers.has(usager))
+        if (selected_usagers_1.has(usager))
         {
             btn.classList.add('selected');
         }
-        else if (displayed_usagers.has(usager))
+        else if (displayed_usagers_1.has(usager))
         {
             btn.classList.add('displayed');
         }
@@ -188,14 +198,14 @@ function mettreAJourListe(usagers, usagers_list, content)
             btn.classList.add('default');
         }
 
-        btn.onclick = function() { envoyerUsager(usager); };
+        btn.onclick = function() { envoyerUsager(usager, 1); };
 
         // Boutons sélection
         var sel = document.createElement('button');
         sel.classList.add('select-btn');
         sel.id = 'select-btn-' + i;
 
-        if (selected_usagers.has(usager))
+        if (selected_usagers_1.has(usager))
         {
             sel.classList.add('prêt');
             sel.innerHTML = 'ATTENTE';
@@ -208,7 +218,7 @@ function mettreAJourListe(usagers, usagers_list, content)
         
         sel.onclick = function()
         {
-            socket.emit('select_usager', { usager: usager });
+            socket.emit('select_usager_1', { usager: usager });
         };
 
         // Boutons supression
@@ -218,7 +228,83 @@ function mettreAJourListe(usagers, usagers_list, content)
         del.innerHTML = '&times;'; // Icône croix
         del.onclick = function()
         {
-            socket.emit('remove_usager', { usager: usager });
+            socket.emit('remove_usager_1', { usager: usager });
+        };
+
+        div.append(btn, sel, del);
+        cont.appendChild(div);
+        feather.replace();
+    });
+}
+
+// Mettre à jour la liste 1
+function mettreAJourListe_2(usagers)
+{
+    var cont = document.getElementById("usagers-list-2-content");
+    cont.innerHTML = ""; // Efface les anciens boutons
+
+    usagers.forEach(function(usager, i)
+    {
+        var div = document.createElement('div');
+        div.classList.add('usager-container');
+
+        usagers_list_2.push(usager); // Ajoute l'usager à la liste
+
+        // Boutons principal des usagers
+        var btn = document.createElement('button');
+        btn.classList.add('usager-btn');
+        btn.id = 'usager-btn-' + i;
+        btn.textContent = usager;
+
+        // Couleur en fonction des états
+        if (selected_usagers_2.has(usager))
+        {
+            btn.classList.add('selected');
+        }
+        else if (displayed_usagers_2.has(usager))
+        {
+            btn.classList.add('displayed');
+        }
+        else if (!usager.includes('|'))
+        {
+            btn.classList.add('new-usager');
+        }
+        else
+        {
+            btn.classList.add('default');
+        }
+
+        btn.onclick = function() { envoyerUsager(usager, 2); };
+
+        // Boutons sélection
+        var sel = document.createElement('button');
+        sel.classList.add('select-btn');
+        sel.id = 'select-btn-' + i;
+
+        if (selected_usagers_2.has(usager))
+        {
+            sel.classList.add('prêt');
+            sel.innerHTML = 'ATTENTE';
+        }
+        else
+        {
+            sel.classList.remove('prêt');
+            sel.innerHTML = '&check;'; // Icône coche
+        }
+        
+        sel.onclick = function()
+        {
+            socket.emit('select_usager_2', { usager: usager });
+        };
+
+        // Boutons supression
+        var del = document.createElement('button');
+        del.classList.add('delete-btn');
+        del.id = 'delete-btn-' + i;
+        del.innerHTML = '&times;'; // Icône croix
+        del.onclick = function()
+        {
+            socket.emit('remove_usager_2', { usager: usager });
         };
 
         div.append(btn, sel, del);
@@ -476,13 +562,13 @@ document.addEventListener('keydown', (event) =>
 // Mise à jour de la liste d'usagers 1
 socket.on('update_usagers_list_1', function(data)
 {
-    mettreAJourListe(data.usagers, usagers_list_1, "usagers-list-1-content");
+    mettreAJourListe_1(data.usagers);
 });
 
 // Mise à jour de la liste d'usagers 2
 socket.on('update_usagers_list_2', function(data)
 {
-    mettreAJourListe(data.usagers, usagers_list_2, "usagers-list-2-content");
+    mettreAJourListe_2(data.usagers);
 });
 
 // Mise à jour du bureau sélectionné
@@ -499,16 +585,28 @@ socket.on('update_display', function(data)
     mettreAJourAffichage(data.usager, data.bureau);
 });
 
-// Mise à jour de des usagers envoyés
-socket.on('update_displayed_usagers', function(data)
+// Mise à jour de des usagers envoyés de la liste 1
+socket.on('update_displayed_usagers_1', function(data)
 {
-    displayed_usagers = new Set(data.displayed_usagers);        
+    displayed_usagers_1 = new Set(data.displayed_usagers);        
 });
 
-// Mise à jour de des usagers selectionnes
-socket.on('update_selected_usagers', function(data)
+// Mise à jour de des usagers envoyés de la liste 2
+socket.on('update_displayed_usagers_2', function(data)
 {
-    selected_usagers = new Set(data.selected_usagers);
+    displayed_usagers_2 = new Set(data.displayed_usagers);        
+});
+
+// Mise à jour de des usagers selectionnes de la liste 1
+socket.on('update_selected_usagers_1', function(data)
+{
+    selected_usagers_1 = new Set(data.selected_usagers);
+});
+
+// Mise à jour de des usagers selectionnes de la liste 2
+socket.on('update_selected_usagers_2', function(data)
+{
+    selected_usagers_2 = new Set(data.selected_usagers);
 });
 
 // Mettre à jour les noms des bureaux sur tous les clients
