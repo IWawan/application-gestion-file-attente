@@ -150,11 +150,16 @@ function effacerAffichage()
 }
 
 // Reinitialise les variables
-function resetAll()
+function resetList(nb_list)
 {
-    console.log("RESET");
-    
-    //socket.emit('reset_all');
+    if (nb_list == 1)
+    {
+        socket.emit('reset_list_1');
+    }
+    if (nb_list == 2)
+    {
+        socket.emit('reset_list_2');
+    }
 } 
 
 // -------------

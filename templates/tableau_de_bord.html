@@ -90,20 +90,21 @@
             <h2>Liste 1</h2>
             <br>
             <button onclick="document.getElementById('fileInput-1').click()">Charger</button>
-            <button onclick="resetAll(), chargerListeUsagers(1)">Afficher</button>
+            <button onclick="chargerListeUsagers(1)">Afficher</button>
             <button onclick="ouvrirPopupRDV(1)">Ajouter RDV</button>
-            <button class = "close-btn" onclick="resetAll(), effacerListeUsagers(1)">Effacer</button>
+            <button class = "close-btn" onclick="resetList(1), effacerListeUsagers(1)">Effacer</button>
             <div id="usagers-list-1-content" class="usagers-list-content">
                 <!-- Liste des usagers dynamique -->
             </div>
         </div>
+        
         <div id="usagers-list-2-container" class="usagers-list-container">
             <h2>Liste 2</h2>
             <br>
             <button onclick="document.getElementById('fileInput-2').click()">Charger</button>
-            <button onclick="resetAll(), chargerListeUsagers(2)">Afficher</button>
+            <button onclick="chargerListeUsagers(2)">Afficher</button>
             <button onclick="ouvrirPopupRDV(2)">Ajouter RDV</button>
-            <button class = "close-btn" resetAll(), effacerListeUsagers(2)">Effacer</button>
+            <button class = "close-btn" onclick="resetList(2), effacerListeUsagers(2)">Effacer</button>
             <div id="usagers-list-2-content" class="usagers-list-content">
                 <!-- Liste des usagers dynamique -->
             </div>

@@ -213,7 +213,7 @@ def on_select_usager_1(data):
         else:
             selected_usagers_1.add(usager)
 
-        _sync_usager_states()
+        _sync_usagers_states()
     
 # Sélectionne un usager de la liste 2
 @socketio.on('select_usager_2')
@@ -227,7 +227,7 @@ def on_select_usager_2(data):
         else:
             selected_usagers_2.add(usager)
 
-        _sync_usager_states()
+        _sync_usagers_states()
 
 # Sélectionne un usager de la liste 1 et l'envoi à tous les écrans avec le bureau sélectionné
 @socketio.on('display_usager_1')
@@ -241,7 +241,7 @@ def on_display_usager_1(data):
         current_usager = usager
 
         _sync_current_bureau()
-        _sync_usager_states()
+        _sync_usagers_states()
         _sync_display()
 
 # Sélectionne un usager de la liste 2 et l'envoi à tous les écrans avec le bureau sélectionné
@@ -256,7 +256,7 @@ def on_display_usager_2(data):
         current_usager = usager
 
         _sync_current_bureau()
-        _sync_usager_states()
+        _sync_usagers_states()
         _sync_display()
 
 # Sélectionne un bureau
@@ -281,7 +281,7 @@ def on_clear_usagers_1():
     selected_usagers_1.clear()
     displayed_usagers_1.clear()   
 
-    _sync_usagers_list_1()
+    _sync_usagers_states()
 
 # Efface la liste des usagers 2
 @socketio.on('clear_usagers_2')
@@ -290,7 +290,7 @@ def on_clear_usagers_2():
     selected_usagers_1.clear()
     displayed_usagers_2.clear()   
 
-    _sync_usagers_list_2()
+    _sync_usagers_states()
 
 # Efface l'affichage de l'usager
 @socketio.on('clear_display')
@@ -333,21 +333,6 @@ def on_save_bureaux(data):
 
     _sync_bureaux()
 
-
-@socketio.on('reset_all')
-def on_reset_all():
-    usagers_list_1 = []
-    usagers_list_2 = []
-    displayed_usagers_1 = set()
-    displayed_usagers_2 = set()
-    selected_usagers_1 = set()
-    selected_usagers_2 = set()
-    current_usager = ""
-    current_bureau = ""
-    
-
-    _sync_all()
-
 # --- Persistance des bureaux ---
 
 def load_bureaux():
@@ -374,8 +359,7 @@ def _sync_usagers_list_1():
 def _sync_usagers_list_2():
     socketio.emit('update_usagers_list_2', {'usagers': usagers_list_2})
 
-def _sync_usager_states():
-    print("_sync_usager_states")
+def _sync_usagers_states():
     socketio.emit('update_displayed_usagers_1', {'displayed_usagers': list(displayed_usagers_1)})
     socketio.emit('update_displayed_usagers_2', {'displayed_usagers': list(displayed_usagers_2)})
     socketio.emit('update_selected_usagers_1', {'selected_usagers': list(selected_usagers_1)})
@@ -399,7 +383,7 @@ def _sync_display():
 def _sync_all():
     _sync_usagers_list_1()
     _sync_usagers_list_2()
-    _sync_usager_states()
+    _sync_usagers_states()
     _sync_bureaux()
     _sync_current_bureau()
     _sync_display()
