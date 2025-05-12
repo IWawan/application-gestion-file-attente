@@ -41,6 +41,7 @@ def get_ip_address():
         s.close()
 
 def allowed_file(filename):
+    print(filename)
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 # --- Global state ---
@@ -70,9 +71,9 @@ def index():
 def display():
     return render_template('file_d_attente.html')
 
-# Récupère le fichier xlsx "FILE_NAME" et le sauvegarde dans le dossier "RESOURCES_FOLDER"
-@app.route('/upload_xlsx', methods=['POST'])
-def upload_xlsx():
+# Récupère le fichier xlsx "FILE_NAME" et le sauvegarde dans le dossier "RESOURCES_FOLDER" sous "usagers_list_1.xlsx"
+@app.route('/upload_xlsx_1', methods=['POST'])
+def upload_xlsx_1():
     if 'file' not in request.files:
         return jsonify({'error': 'Aucun fichier sélectionné'}), 400
 
@@ -82,8 +83,25 @@ def upload_xlsx():
         return jsonify({'error': 'Nom de fichier vide'}), 400
 
     if file and allowed_file(file.filename):
-        filename = FILE_NAME
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], "usagers_list_1.xlsx")
+        file.save(file_path)
+        return jsonify({'message': 'Fichier chargé avec succès'}), 200
+    else:
+        return jsonify({'error': 'Format de fichier non autorisé'}), 400
+    
+# Récupère le fichier xlsx "FILE_NAME" et le sauvegarde dans le dossier "RESOURCES_FOLDER" sous "usagers_list_2.xlsx"
+@app.route('/upload_xlsx_2', methods=['POST'])
+def upload_xlsx_2():
+    if 'file' not in request.files:
+        return jsonify({'error': 'Aucun fichier sélectionné'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'Nom de fichier vide'}), 400
+
+    if file and allowed_file(file.filename):
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], "usagers_list_2.xlsx")
         file.save(file_path)
         return jsonify({'message': 'Fichier chargé avec succès'}), 200
     else:
@@ -96,7 +114,7 @@ def load_usagers_list_1():
 
     global usagers_list_1
 
-    file_path = RESOURCES_FOLDER + '/' + FILE_NAME
+    file_path = RESOURCES_FOLDER + '/' + "usagers_list_1.xlsx"
     extractor = extract_xlsx(file_path)
     extracted = extractor.to_array()
     usagers_list_1.extend([usager for usager in extracted if usager not in usagers_list_1])
@@ -112,7 +130,7 @@ def load_usagers_list_2():
 
     global usagers_list_2
 
-    file_path = RESOURCES_FOLDER + '/' + FILE_NAME
+    file_path = RESOURCES_FOLDER + '/' + "usagers_list_2.xlsx"
     extractor = extract_xlsx(file_path)
     extracted = extractor.to_array()
     usagers_list_2.extend([usager for usager in extracted if usager not in usagers_list_2])

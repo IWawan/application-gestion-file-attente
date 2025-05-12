@@ -13,7 +13,7 @@ var bureaux;
 // ----------------------
 
 // Séléctionner un fichier .xlsx à charger
-function selectXLSX(event)
+function selectXLSX(event, nb_list)
 {
     var file = event.target.files[0];  // Récupère le fichier sélectionné
 
@@ -37,7 +37,16 @@ function selectXLSX(event)
         }
     };
 
-    xhr.open('POST', '/upload_xlsx', true);
+
+    if (nb_list == 1)
+    {
+        xhr.open('POST', '/upload_xlsx_1', true);
+    }
+    if (nb_list == 2)
+    {
+        xhr.open('POST', '/upload_xlsx_2', true);
+    }
+    
     xhr.send(formData);
 }
 
