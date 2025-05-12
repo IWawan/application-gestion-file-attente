@@ -37,7 +37,6 @@ function selectXLSX(event, nb_list)
         }
     };
 
-
     if (nb_list == 1)
     {
         xhr.open('POST', '/upload_xlsx_1', true);

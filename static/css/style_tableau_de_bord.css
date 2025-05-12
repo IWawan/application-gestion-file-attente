@@ -48,7 +48,8 @@
     --c-input-border: #a5c7f0;  
 
     /* Side-menu */
-    --c-sm-bg: #dde5f5;
+    --c-sm-bg-1: #dde5f5;
+    --c-sm-bg-2: #d8e1f1;
     --c-sm-text: #111827;
 
     /* UI basics */
@@ -204,20 +205,28 @@ button:focus
 
 .bureaux-btn-container
 {
-    grid-area: bureaux;
-    padding: 10px;   
-    margin-right: 2vh;
-    display: flex;            
-    flex-direction: column;   
-    align-items: center;        
-    justify-content: flex-start;  
-    gap: 10px;  
-    height: auto;      
-    width: auto;            
-    max-height: 80vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+
+    /* Taille adaptative */
+    width: auto;
     max-width: 20vw;
-    overflow-x: hidden;   
-    overflow-Y: auto;          
+    height: auto;
+    max-height: 80vh;
+
+    /* Scroll si trop de contenu */
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Centrage vertical à gauche */
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .bureaux-btn-container button
@@ -448,7 +457,7 @@ button:focus
 
 .side-menu
 {
-    background-color: var(--c-sm-bg);
+    background-color: var(--c-sm-bg-1);
     color: var(--c-sm-text);
     height: 100%;
     width: 0;
@@ -523,13 +532,16 @@ button:focus
 
 .popup-content
 {
-    background-color: var(--c-sm-bg);
+    background-color: var(--c-sm-bg-1);
     color: var(--c-sm-text);
-    padding: 20px;
+    box-sizing: border-box;
+    padding: 10px;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     width: auto;
-    max-width: 500px;
+    max-width: 80vw;
+    height: auto;
+    max-height: 80vh;
     text-align: center;
     z-index: 50;
 }
@@ -617,6 +629,27 @@ button:focus
     background-color: var(--c-btn-ok-hover);
     transform: translateY(-1px);
 }
+
+.popup-content #bureaux-modif-container
+{
+    background-color: var(--c-sm-bg-2);
+    border: 1px solid var(--c-btn-2);
+    border-radius: var(--radius) var(--radius) 0 0; 
+    overflow-y: auto;
+    height: auto;
+    max-height: 50vh;
+}
+
+.popup-content #bureaux-modif-container::-webkit-scrollbar-thumb
+{
+  background-color: var(--c-btn-2);
+}
+
+.popup-content #bureaux-modif-container::-webkit-scrollbar-thumb:hover
+{
+  background-color: var(--c-btn-2-hover);
+}
+
 
 /* === ANIMATION === */
 
