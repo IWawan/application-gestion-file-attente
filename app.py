@@ -48,7 +48,8 @@ def allowed_file(filename):
 IP = get_ip_address()
 PORT = 8080
 
-usagers_list = []
+usagers_list_1 = []
+usagers_list_2 = []
 current_usager = ""
 current_bureau = ""
 displayed_usagers = set()
@@ -88,21 +89,37 @@ def upload_xlsx():
     else:
         return jsonify({'error': 'Format de fichier non autorisé'}), 400
     
-# Extrait les données du fichier, et les envoie aux clients
-@app.route('/load_usagers')
-def load_usagers():
+# Extrait les données du fichier vers la liste 1, et les envoie aux clients
+@app.route('/load_usagers_list_1')
+def load_usagers_list_1():
     from extract_xlsx import extract_xlsx
 
-    global usagers_list
+    global usagers_list_1
 
     file_path = RESOURCES_FOLDER + '/' + FILE_NAME
     extractor = extract_xlsx(file_path)
     extracted = extractor.to_array()
-    usagers_list.extend([usager for usager in extracted if usager not in usagers_list])
+    usagers_list_1.extend([usager for usager in extracted if usager not in usagers_list_1])
 
-    _sync_usagers_list()
+    _sync_usagers_list_1()
 
-    return jsonify({"usagers": usagers_list})
+    return jsonify({"usagers": usagers_list_1})
+
+# Extrait les données du fichier vers la liste 2, et les envoie aux clients
+@app.route('/load_usagers_list_2')
+def load_usagers_list_2():
+    from extract_xlsx import extract_xlsx
+
+    global usagers_list_2
+
+    file_path = RESOURCES_FOLDER + '/' + FILE_NAME
+    extractor = extract_xlsx(file_path)
+    extracted = extractor.to_array()
+    usagers_list_2.extend([usager for usager in extracted if usager not in usagers_list_2])
+
+    _sync_usagers_list_2()
+
+    return jsonify({"usagers": usagers_list_1})
 
 # --- Socket.IO Events ---
 
@@ -111,31 +128,39 @@ def load_usagers():
 def on_connect():
     _sync_all()
 
-# Met à jour la liste des usagers
-@socketio.on('update_usagers')
-def on_update_usagers(data):
-    global usagers_list
-    usagers_list = data.get('usagers', [])
+# Met à jour la liste des usagers 1
+@socketio.on('update_usagers_list_1')
+def on_update_usagers_list_1(data):
+    global usagers_list_list_1
+    usagers_list_1 = data.get('usagers', [])
 
-    _sync_usagers_list()
+    _sync_usagers_list_1()
+
+# Met à jour la liste des usagers 2
+@socketio.on('update_usagers_list_2')
+def on_update_usagers_list_2(data):
+    global usagers_list_list_2
+    usagers_list_2 = data.get('usagers', [])
+
+    _sync_usagers_list_2()
 
 # Efface un usager de la liste
 @socketio.on('remove_usager')
 def on_remove_usager(data):
     usager = data.get('usager')
-    if usager in usagers_list:
-        usagers_list.remove(usager)
+    if usager in usagers_list_1:
+        usagers_list_1.remove(usager)
 
-        _sync_usagers_list()
+        _sync_usagers_list_1()
 
 # Ajoute un usager à la liste
 @socketio.on('add_usager')
 def on_add_usager(data):
     usager = data.get('usager')
     if usager:
-        usagers_list.insert(0, usager)
+        usagers_list_1.insert(0, usager)
 
-        _sync_usagers_list()
+        _sync_usagers_list_1()
 
 # Sélectionne un usager de la liste
 @socketio.on('select_usager')
@@ -181,14 +206,23 @@ def on_bandeau_message(data):
     if msg:
         socketio.emit('update_bandeau', {'bandeau_message': msg})
         
-# Efface la liste des usagers
-@socketio.on('clear_usagers')
-def on_clear_usagers():
-    usagers_list.clear()
+# Efface la liste des usagers 1
+@socketio.on('clear_usagers_1')
+def on_clear_usagers_1():
+    usagers_list_1.clear()
     selected_usagers.clear()
     displayed_usagers.clear()   
 
-    _sync_usagers_list()
+    _sync_usagers_list_1()
+
+# Efface la liste des usagers 2
+@socketio.on('clear_usagers_2')
+def on_clear_usagers_2():
+    usagers_list_2.clear()
+    selected_usagers.clear()
+    displayed_usagers.clear()   
+
+    _sync_usagers_list_2()
 
 # Efface l'affichage de l'usager
 @socketio.on('clear_display')
@@ -234,7 +268,8 @@ def on_save_bureaux(data):
 
 @socketio.on('reset_all')
 def on_reset_all():
-    usagers_list = []
+    usagers_list_1 = []
+    usagers_list_2 = []
     current_usager = ""
     current_bureau = ""
     displayed_usagers = set()
@@ -262,13 +297,17 @@ def load_bureaux():
 
 # --- Sync fonctions --
 
-def _sync_usagers_list():
-    socketio.emit('update_usagers', {'usagers': usagers_list})
+def _sync_usagers_list_1():
+    socketio.emit('update_usagers_list_1', {'usagers': usagers_list_1})
+
+def _sync_usagers_list_2():
+    socketio.emit('update_usagers_list_2', {'usagers': usagers_list_2})
 
 def _sync_usager_states():
     socketio.emit('update_displayed_usagers', {'displayed_usagers': list(displayed_usagers)})
     socketio.emit('update_selected_usagers', {'selected_usagers': list(selected_usagers)})
-    _sync_usagers_list()
+    _sync_usagers_list_1()
+    _sync_usagers_list_2()
 
 def _sync_bureaux():
     socketio.emit('update_bureaux', {'bureaux': bureaux})
@@ -284,7 +323,8 @@ def _sync_display():
     })
 
 def _sync_all():
-    _sync_usagers_list()
+    _sync_usagers_list_1()
+    _sync_usagers_list_2()
     _sync_usager_states()
     _sync_bureaux()
     _sync_current_bureau()

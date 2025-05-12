@@ -1,6 +1,7 @@
 var socket = io.connect('http://' + window.location.hostname + ':' + window.location.port);
 
-usagers_list = [];
+usagers_list_1 = [];
+usagers_list_2 = [];
 var displayed_usagers = new Set();
 var selected_usagers = new Set();
 var current_usager = "";
@@ -41,7 +42,7 @@ function selectXLSX(event)
 }
 
 // Charger la liste des usagers
-function chargerListeUsagers()
+function chargerListeUsagers(nb_list)
 {   
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function()
@@ -50,10 +51,26 @@ function chargerListeUsagers()
         {
             var response = JSON.parse(xhr.responseText);
 
-            socket.emit('update_usagers', { usagers: response.usagers });
+                if (nb_list == 1)
+                {
+                    socket.emit('update_usagers_list_1', { usagers: response.usagers });
+                }
+                if ((nb_list == 2))
+                {
+                    socket.emit('update_usagers_list_2', { usagers: response.usagers });
+                }
         }
     };
-    xhr.open('GET', '/load_usagers', true);
+
+    if (nb_list == 1)
+    {
+        xhr.open('GET', '/load_usagers_list_1', true);
+    }
+    if ((nb_list == 2))
+    {
+        xhr.open('GET', '/load_usagers_list_2', true);
+    }
+    
     xhr.send();
 }
 
@@ -95,9 +112,16 @@ function envoyerUsager(usager)
 }
 
 // Effacer la liste des usagers
-function effacerListeUsagers()
+function effacerListeUsagers(nb_list)
 {
-    socket.emit('clear_usagers');
+    if ((nb_list == 1))
+    {
+        socket.emit('clear_usagers_1');
+    }
+    if ((nb_list == 2))
+    {
+        socket.emit('clear_usagers_2');
+    }
 }
 
 // Effacer l'affichage
@@ -110,7 +134,9 @@ function effacerAffichage()
 // Reinitialise les variables
 function resetAll()
 {
-    socket.emit('reset_all');
+    console.log("RESET");
+    
+    //socket.emit('reset_all');
 } 
 
 // -------------
@@ -118,10 +144,9 @@ function resetAll()
 // -------------
 
 // Mettre à jour la liste des usagers
-function mettreAJourListe(usagers, name_list)
+function mettreAJourListe(usagers, usagers_list, content)
 {
-    var list = 'usagers-list-' + name_list + '-content';
-    var cont = document.getElementById(list);
+    var cont = document.getElementById(content);
     cont.innerHTML = ""; // Efface les anciens boutons
 
     usagers.forEach(function(usager, i)
@@ -413,11 +438,16 @@ document.addEventListener('keydown', (event) =>
 //  SOCKET.IO LISTENERS
 // ----------------------
 
-// Mise à jour de la liste d'usagers
-socket.on('update_usagers', function(data)
+// Mise à jour de la liste d'usagers 1
+socket.on('update_usagers_list_1', function(data)
 {
-    mettreAJourListe(data.usagers, 1);
-    mettreAJourListe(data.usagers, 2);
+    mettreAJourListe(data.usagers, usagers_list_1, "usagers-list-1-content");
+});
+
+// Mise à jour de la liste d'usagers 2
+socket.on('update_usagers_list_2', function(data)
+{
+    mettreAJourListe(data.usagers, usagers_list_2, "usagers-list-2-content");
 });
 
 // Mise à jour du bureau sélectionné
