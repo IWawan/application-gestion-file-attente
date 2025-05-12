@@ -323,9 +323,17 @@ function fermerPopupBureaux()
 }
 
 // Ouvrir le popup d'ajout de rendez-vous
-function ouvrirPopupRDV()
+function ouvrirPopupRDV(nb_list)
 {
-    document.getElementById('popup-rdv').classList.add('open');
+    if (nb_list == 1)
+    {
+        document.getElementById('popup-rdv-1').classList.add('open');
+    }
+    if (nb_list == 2)
+    {
+        document.getElementById('popup-rdv-2').classList.add('open');
+    }
+    
 
     fermerMenuLateral();
 }
@@ -333,7 +341,8 @@ function ouvrirPopupRDV()
 // Fermer le popup d'ajout de rendez-vous
 function fermerPopupRDV()
 {
-    document.getElementById('popup-rdv').classList.remove('open');
+    document.getElementById('popup-rdv-1').classList.remove('open');
+    document.getElementById('popup-rdv-2').classList.remove('open');
 }
 
 // Afficher un message sur le bandeau
@@ -397,13 +406,20 @@ function renommerBureaux()
 }
 
 // Ajouter un nouveau rendez-vous
-function ajouterRDV()
+function ajouterRDV(nb_list)
 {
-    const usager = document.getElementById("new-usager-input").value.trim();
-
-    socket.emit('add_usager', { usager: usager });
-    
-    document.getElementById("new-usager-input").value = ""; // Réinitialise le champ de saisie
+    if (nb_list == 1)
+    {
+        const usager = document.getElementById("new-usager-input-1").value.trim();
+        socket.emit('add_usager_1', { usager: usager });
+        document.getElementById("new-usager-input-1").value = ""; // Réinitialise le champ de saisie    
+    }
+    if (nb_list == 2)
+    {
+        const usager = document.getElementById("new-usager-input-2").value.trim();
+        socket.emit('add_usager_2', { usager: usager });
+        document.getElementById("new-usager-input-2").value = ""; // Réinitialise le champ de saisie    
+    }
 }
 
 // Fermeture du popup au clic en dehors
@@ -442,9 +458,13 @@ document.addEventListener('keydown', (event) =>
             {
                 renommerBureaux();
             }
-            else if (popup && popup.id === 'popup-rdv')
+            else if (popup && popup.id === 'popup-rdv-1')
             {
-                ajouterRDV();
+                ajouterRDV(1);
+            }
+            else if (popup && popup.id === 'popup-rdv-2')
+            {
+                ajouterRDV(2);
             }
         }
     });

@@ -22,11 +22,26 @@
     --c-btn-select-ready: #ffad1f;         
     --c-btn-select-ready-hover: #f09800; 
     --c-btn-select-text: #FFFFFF;
+
+    /* Bouton usager liste 1 */
+    --c-btn-usager-l-1: #b2cee4;         
+    --c-btn-usager-l-1-hover: #9bb9d1;
+    --c-btn-usager-l-1-text: #163079;
+
+    /* Bouton usager liste 2 */
+    --c-btn-usager-l-2: #dfc3f1;         
+    --c-btn-usager-l-2-hover: #cda9e6;
+    --c-btn-usager-l-2-text: #691679;
     
-    /* Bouton nouvel usager */
-    --c-btn-new-usager: #dfc3f1;         
-    --c-btn-new-usager-hover: #cda9e6;
-    --c-btn-new-usager-text: #691679;
+    /* Bouton nouvel usager liste 1 */
+    --c-btn-new-usager-l-1: #80c8ff;         
+    --c-btn-new-usager-l-1-hover: #6aade0;
+    --c-btn-new-usager-l-1-text: #163079;
+
+    /* Bouton nouvel usager liste 2 */
+    --c-btn-new-usager-l-2: #f07cff;         
+    --c-btn-new-usager-l-2-hover: #d573e2;
+    --c-btn-new-usager-l-2-text: #691679;
 
     /* Bouton ok */
     --c-btn-ok: #34d37b;         
@@ -288,6 +303,11 @@ button:focus
     border-right: 1px solid var(--c-btn-2);
 }
 
+.usagers-list-container
+{
+    height: 100vh;
+}
+
 #usagers-list-1-container
 {
     border-right: 1px solid var(--c-btn-2);
@@ -333,16 +353,48 @@ button:focus
     font-size: var(--font-size-medium);
 }
 
-.usager-container .usager-btn.default
+#usagers-list-1-container .usager-btn.default
 {
-    background-color: var(--c-btn-2);
-    color: var(--c-btn-2-text);
-    
+    background-color: var(--c-btn-usager-l-1);
+    color: var(--c-btn-usager-l-1-text);
 }
 
-.usager-container .usager-btn.default:hover
+#usagers-list-1-container .usager-btn.default:hover
 {
-    background-color: var(--c-btn-2-hover);
+    background-color: var(--c-btn-usager-l-1-hover);
+}
+
+#usagers-list-2-container .usager-btn.default
+{
+    background-color: var(--c-btn-usager-l-2);
+    color: var(--c-btn-usager-l-2-text);
+}
+
+#usagers-list-2-container .usager-btn.default:hover
+{
+    background-color: var(--c-btn-usager-l-2-hover);
+}
+
+#usagers-list-1-container .usager-btn.new-usager
+{
+    background-color: var(--c-btn-new-usager-l-1);
+    color: var(--c-btn-new-usager-l-1-text);
+}
+
+#usagers-list-1-container .usager-btn.new-usager:hover
+{
+    background-color: var(--c-btn-new-usager-l-1-hover);
+}
+
+#usagers-list-2-container .usager-btn.new-usager
+{
+    background-color: var(--c-btn-new-usager-l-2);
+    color: var(--c-btn-new-usager-l-2-text);
+}
+
+#usagers-list-2-container .usager-btn.new-usager:hover
+{
+    background-color: var(--c-btn-new-usager-l-2-hover);
 }
 
 .usager-container .usager-btn.selected
@@ -365,17 +417,6 @@ button:focus
 .usager-container .usager-btn.displayed:hover
 {
     background-color: var(--c-btn-ok-hover);
-}
-
-.usager-container .usager-btn.new-usager
-{
-    background-color: var(--c-btn-new-usager);
-    color: var(--c-btn-new-usager-text);
-}
-
-.usager-container .usager-btn.new-usager:hover
-{
-    background-color: var(--c-btn-new-usager-hover);
 }
 
 .usager-container .delete-btn,

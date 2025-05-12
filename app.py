@@ -171,14 +171,23 @@ def on_remove_usager(data):
 
         _sync_usagers_list_1()
 
-# Ajoute un usager à la liste
-@socketio.on('add_usager')
-def on_add_usager(data):
+# Ajoute un usager à la liste 1
+@socketio.on('add_usager_1')
+def on_add_usager_1(data):
     usager = data.get('usager')
     if usager:
         usagers_list_1.insert(0, usager)
 
         _sync_usagers_list_1()
+
+# Ajoute un usager à la liste 2
+@socketio.on('add_usager_2')
+def on_add_usager_2(data):
+    usager = data.get('usager')
+    if usager:
+        usagers_list_2.insert(0, usager)
+
+        _sync_usagers_list_2()
 
 # Sélectionne un usager de la liste
 @socketio.on('select_usager')
