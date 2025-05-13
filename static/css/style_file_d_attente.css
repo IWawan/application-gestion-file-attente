@@ -42,6 +42,8 @@ body
   align-items: center;
 }
 
+/* En-tête */
+
 header
 {
   width: 100%;
@@ -58,12 +60,15 @@ header img
   max-width: var(--maxwidth-img)
 }
 
+/* -- Container principal -- */
+
 main
 {
   text-align: center;
   margin: 2rem;
 }
 
+/* Nom de l'usager */
 .main-name
 {
   font-size: var(--font-size-name);
@@ -72,11 +77,14 @@ main
   min-height: 4rem;
 }
 
+/* Message d'assignation au bureau */
 .subtext
 {
   font-size: var(--font-size-subtext);
   margin-bottom: 2rem;
 }
+
+/* Box */
 
 .box
 {
@@ -99,6 +107,8 @@ main
   color: var(--c-main);
 }
 
+/* Météo */
+
 .meteo
 {
   right: 20%;
@@ -109,6 +119,8 @@ iframe {
   width: var(--width-meteo-widget);
   height: var(--height-meteo-widget);
 }
+
+/* Liste des prochains usagers */
 
 .next-usagers
 {
@@ -127,6 +139,8 @@ iframe {
 {
   margin: 0.5rem 0;
 }
+
+/* Bandeau */
 
 .marquee
 {
@@ -151,6 +165,7 @@ iframe {
   animation: scroll-left 20s linear infinite;
 }
 
+/* Animation du bandeau */
 @keyframes scroll-left
 {
   0%
