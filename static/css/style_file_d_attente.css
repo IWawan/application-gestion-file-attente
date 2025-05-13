@@ -5,7 +5,7 @@
   --c-secondary: #f1dede;
   --c-highlight: #c83b3b;
   --c-bg: #f9f9f9;
-  --c-text: #1a1a1a;
+  --c-text: #6e6e6e;
 
   /* Taille de police */
   --font-size-marquee: 2.5rem;
@@ -82,6 +82,7 @@ main
 {
   font-size: var(--font-size-subtext);
   margin-bottom: 2rem;
+  font-weight: bold;
 }
 
 /* Box */
@@ -138,6 +139,7 @@ iframe {
 .next-usagers li
 {
   margin: 0.5rem 0;
+  font-weight: bold;
 }
 
 /* Bandeau */

@@ -17,6 +17,7 @@ app.config.update(
     SESSION_REDIS=redis.StrictRedis(host=os.getenv('REDIS_HOST', 'localhost'), port=int(os.getenv('REDIS_PORT', 6379)), db=0),
     UPLOAD_FOLDER=os.getenv('RESOURCES_FOLDER', 'resources'),
     ALLOWED_EXTENSIONS={'xlsx'},
+)
 
 RESOURCES_FOLDER = 'resources'
 app.config['ALLOWED_EXTENSIONS'] = {'xlsx'}
@@ -304,31 +305,39 @@ def on_remove_bureau(data):
 
     key_to_remove = data.get('key')
     if key_to_remove in bureaux:
-        noms = list(bureaux.values())
+        bureau_items = list(bureaux.items())
         index = list(bureaux.keys()).index(key_to_remove)
-        noms.pop(index)
+        bureau_items.pop(index)
 
         # Recréer bureaux avec des clés ordonnées
-        bureaux = {f"bureau{i+1}": nom for i, nom in enumerate(noms)}
+        bureaux = {f"bureau{i+1}": val for i, (_, val) in enumerate(bureau_items)}
 
         os.makedirs('data', exist_ok=True)
-        with open("data/bureaux.txt", "w") as f:
-            f.write("\n".join(bureaux.values()))
+        with open("data/bureaux.txt", "w", encoding="utf-8") as f:
+            for val in bureaux.values():
+                f.write(f"{val['nom']}|{val['message']}\n")
 
         _sync_bureaux()
 
 @socketio.on('save_bureaux')
 def on_save_bureaux(data):
     global bureaux
+    bureaux_data = data.get('bureaux', {})  # format : {"bureau1": {"nom": "...", "message": "..."}, ...}
 
-    noms = list(data.get('bureaux', {}).values())
-    bureaux = {f"bureau{i+1}": nom for i, nom in enumerate(noms)}
+    bureaux = {}
+    for i, (key, val) in enumerate(bureaux_data.items()):
+        bureaux[f"bureau{i+1}"] = {
+            "nom": val.get("nom", f"Bureau {i+1}"),
+            "message": val.get("message", "")
+        }
 
     os.makedirs('data', exist_ok=True)
-    with open("data/bureaux.txt", "w") as f:
-        f.write("\n".join(bureaux.values()))
+    with open("data/bureaux.txt", "w", encoding="utf-8") as f:
+        for val in bureaux.values():
+            f.write(f"{val['nom']}|{val['message']}\n")
 
     _sync_bureaux()
+
 
 # --- Persistance des bureaux ---
 
@@ -337,11 +346,13 @@ def load_bureaux():
     bureaux = {}
 
     try:
-        with open("data/bureaux.txt", "r") as file:
+        with open("data/bureaux.txt", "r", encoding="utf-8") as file:
             lines = file.readlines()
             for i, line in enumerate(lines, start=1):
-                bureau_id = f"bureau{i}"
-                bureaux[bureau_id] = line.strip()
+                parts = line.strip().split("|", 1)
+                nom = parts[0]
+                message = parts[1] if len(parts) > 1 else ""
+                bureaux[f"bureau{i}"] = {"nom": nom, "message": message}
 
         socketio.emit('update_bureaux', bureaux)
 
@@ -371,10 +382,19 @@ def _sync_current_bureau():
     socketio.emit('update_current_bureau', {'current_bureau': current_bureau})
 
 def _sync_display():
+    msg = ""
+    for bureau_key, bureau_data in bureaux.items():
+        if bureau_data.get("nom") == current_bureau:
+            if bureau_data.get("message", current_bureau):
+                msg = bureau_data.get("message", current_bureau) # Message personalisé
+            else:
+                msg = "Est attendu au bureau " + current_bureau # Message pas défaut
+            break 
+
     socketio.emit('update_display',
     {
         'usager': current_usager,
-        'msg': current_bureau
+        'msg': msg
     })
 
 def _sync_all():

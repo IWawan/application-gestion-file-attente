@@ -76,6 +76,9 @@ function updateNextUsagers()
 socket.on('update_display', function(data)
 {    
     newUsager = data.usager.substring(data.usager.indexOf("|") + 1).toUpperCase();
+    console.log(newUsager);
+    console.log("message : " + data.msg);
+    
     updateUsager(newUsager, data.msg)
     updateNextUsagers();
 });

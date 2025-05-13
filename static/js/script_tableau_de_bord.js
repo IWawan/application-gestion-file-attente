@@ -331,7 +331,8 @@ function mettreAJourBureaux()
     
     for (let key in bureaux)
     {
-        const nom = bureaux[key];
+        const nom = bureaux[key].nom;
+        const message = bureaux[key].message || "";
 
         // bureaux-btn-container
         let btn = document.createElement('button');
@@ -341,20 +342,30 @@ function mettreAJourBureaux()
         btnCont.appendChild(btn);
 
         // bureaux-modif-container
-        let label = document.createElement('label');
-        label.setAttribute('for', key);
-        label.textContent = key.replace(/^bureau/, "Bureau ") + " : ";
-        let input = document.createElement('input');
-        input.type = 'text';
-        input.id = key;
-        input.value = nom;
-        input.onchange = function() { bureaux[key] = input.value; };
+        let labelNom = document.createElement('label');
+        labelNom.textContent = key.replace(/^bureau/, "Bureau ") + " - Nom : ";
+
+        let inputNom = document.createElement('input');
+        inputNom.type = 'text';
+        inputNom.id = key + "_nom";
+        inputNom.value = nom;
+        inputNom.onchange = () => bureaux[key].nom = inputNom.value;
+
+        let labelMessage = document.createElement('label');
+        labelMessage.textContent = " Message : ";
+
+        let inputMessage = document.createElement('input');
+        inputMessage.type = 'text';
+        inputMessage.id = key + "_message";
+        inputMessage.value = message;
+        inputMessage.onchange = () => bureaux[key].message = inputMessage.value;
+
         let rmv = document.createElement('button');
         rmv.classList.add('remove-bureau-btn');
         rmv.innerHTML = '&times;';
         rmv.onclick = function() { supprimerBureau(key); };
 
-        modifCont.append(label, input, rmv, document.createElement('br'));
+        modifCont.append(labelNom, inputNom, labelMessage, inputMessage, rmv, document.createElement('br'));
     }
 }
 
@@ -457,7 +468,7 @@ function ajouterBureau()
     }
     
     let newKey = "bureau" + (n + 1);
-    bureaux[newKey] = "Bureau " + (n + 1);
+    bureaux[newKey] = { nom: "Bureau " + (n + 1), message: "" };
 
     socket.emit('save_bureaux', { bureaux: bureaux });
 }
@@ -476,21 +487,23 @@ function renommerBureaux()
   
     for (let key of clés)
     {
-        const input = document.getElementById(key);
-        if (!input)
+        const inputNom = document.getElementById(key + "_nom");
+        const inputMessage = document.getElementById(key + "_message");
+        if (!inputNom || !inputMessage)
         {
-            alert(`Impossible de trouver l'input pour "${key}"`);
+            alert(`Erreur : champs manquants pour ${key}`);
             return;
         }
 
-        const nom = input.value.trim();
+        const nom = inputNom.value.trim();
+        const message = inputMessage.value.trim();
         if (!nom)
         {
-            alert(`Veuillez renseigner un nom pour "${key}"`);
+            alert(`Veuillez renseigner un nom pour ${key}`);
             return;
         }
         
-        nouveauBureaux[key] = nom;
+        nouveauBureaux[key] = { nom: nom, message: message };
     }
 
     socket.emit('save_bureaux', { bureaux: nouveauBureaux });
