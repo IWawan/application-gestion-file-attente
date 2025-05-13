@@ -272,7 +272,7 @@ def on_select_bureau(data):
 def on_bandeau_message(data):
     msg = data.get('message')
     if msg:
-        socketio.emit('update_bandeau', {'bandeau_message': msg})
+        socketio.emit('update_marquee', {'marquee_message': msg})
         
 # Efface la liste des usagers 1
 @socketio.on('clear_usagers_1')

@@ -44,6 +44,11 @@ function updateNextUsagers()
     var nextUsager2 = document.getElementById('next-usager-2');
     var nextUsager3 = document.getElementById('next-usager-3');
     var nextUsager4 = document.getElementById('next-usager-4');
+
+    nextUsager1.textContent = nextUsagers[0] || "";
+    nextUsager2.textContent = nextUsagers[1] || "";
+    nextUsager3.textContent = nextUsagers[2] || "";
+    nextUsager4.textContent = nextUsagers[3] || "";
     
     if (nextUsagers.length >= 1)
     {
@@ -76,11 +81,10 @@ socket.on('update_display', function(data)
 });
 
 // Mise à jour du bandeau
-socket.on('update_bandeau', function(data)
+socket.on('update_marquee', function(data)
 {
-    var bandeau = document.getElementById('bandeau');
-    bandeau.textContent = data.bandeau_message.toUpperCase();
-    bandeau.style.display = 'block';
+    var marquee = document.getElementById('marquee');
+    marquee.textContent = data.marquee_message.toUpperCase();
 });
 
 // Mise à jour de la liste d'usagers 1
@@ -95,3 +99,16 @@ socket.on('update_displayed_usagers_1', function(data)
 {
     displayed_usagers = new Set(data.displayed_usagers); 
 });
+
+// ----------------------
+//  MÉTÉO (OpenWeatherMap)
+// ----------------------
+
+async function getMeteo()
+{
+    return;
+}
+
+// Appel de la fonction pour afficher la météo
+getMeteo();
+setInterval(getMeteo, 10 * 60 * 1000); // Actualisation toutes les 10 minutes
