@@ -17,10 +17,8 @@ app.config.update(
     SESSION_REDIS=redis.StrictRedis(host=os.getenv('REDIS_HOST', 'localhost'), port=int(os.getenv('REDIS_PORT', 6379)), db=0),
     UPLOAD_FOLDER=os.getenv('RESOURCES_FOLDER', 'resources'),
     ALLOWED_EXTENSIONS={'xlsx'},
-)
 
 RESOURCES_FOLDER = 'resources'
-FILE_NAME = 'Agenda - RDV360.xlsx'
 app.config['ALLOWED_EXTENSIONS'] = {'xlsx'}
 app.config['UPLOAD_FOLDER'] = RESOURCES_FOLDER
 
@@ -41,7 +39,6 @@ def get_ip_address():
         s.close()
 
 def allowed_file(filename):
-    print(filename)
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 # --- Global state ---
@@ -74,7 +71,7 @@ def index():
 def display():
     return render_template('file_d_attente.html')
 
-# Récupère le fichier xlsx "FILE_NAME" et le sauvegarde dans le dossier "RESOURCES_FOLDER" sous "usagers_list_1.xlsx"
+# Récupère le fichier xlsx et le sauvegarde dans le dossier "RESOURCES_FOLDER" sous "usagers_list_1.xlsx"
 @app.route('/upload_xlsx_1', methods=['POST'])
 def upload_xlsx_1():
     if 'file' not in request.files:
@@ -92,7 +89,7 @@ def upload_xlsx_1():
     else:
         return jsonify({'error': 'Format de fichier non autorisé'}), 400
     
-# Récupère le fichier xlsx "FILE_NAME" et le sauvegarde dans le dossier "RESOURCES_FOLDER" sous "usagers_list_2.xlsx"
+# Récupère le fichier xlsx et le sauvegarde dans le dossier "RESOURCES_FOLDER" sous "usagers_list_2.xlsx"
 @app.route('/upload_xlsx_2', methods=['POST'])
 def upload_xlsx_2():
     if 'file' not in request.files:
@@ -140,7 +137,7 @@ def load_usagers_list_2():
 
     _sync_usagers_list_2()
 
-    return jsonify({"usagers": usagers_list_1})
+    return jsonify({"usagers": usagers_list_2})
 
 # --- Socket.IO Events ---
 
@@ -152,7 +149,7 @@ def on_connect():
 # Met à jour la liste des usagers 1
 @socketio.on('update_usagers_list_1')
 def on_update_usagers_list_1(data):
-    global usagers_list_list_1
+    global usagers_list_1
     usagers_list_1 = data.get('usagers', [])
 
     _sync_usagers_list_1()
@@ -160,7 +157,7 @@ def on_update_usagers_list_1(data):
 # Met à jour la liste des usagers 2
 @socketio.on('update_usagers_list_2')
 def on_update_usagers_list_2(data):
-    global usagers_list_list_2
+    global usagers_list_2
     usagers_list_2 = data.get('usagers', [])
 
     _sync_usagers_list_2()
@@ -287,7 +284,7 @@ def on_clear_usagers_1():
 @socketio.on('clear_usagers_2')
 def on_clear_usagers_2():
     usagers_list_2.clear()
-    selected_usagers_1.clear()
+    selected_usagers_2.clear()
     displayed_usagers_2.clear()   
 
     _sync_usagers_states()
