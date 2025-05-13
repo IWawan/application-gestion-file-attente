@@ -61,14 +61,14 @@ function chargerListeUsagers(nb_list)
         {
             var response = JSON.parse(xhr.responseText);
 
-                if (nb_list == 1)
-                {
-                    socket.emit('update_usagers_list_1', { usagers: response.usagers });
-                }
-                if ((nb_list == 2))
-                {
-                    socket.emit('update_usagers_list_2', { usagers: response.usagers });
-                }
+            if (nb_list == 1)
+            {
+                socket.emit('update_usagers_list_1', { usagers: response.usagers });
+            }
+            if ((nb_list == 2))
+            {
+                socket.emit('update_usagers_list_2', { usagers: response.usagers });
+            }
         }
     };
 
@@ -359,7 +359,7 @@ function mettreAJourBureaux()
 }
 
 // Mettre à jour l'affichage des usagers sur l'interface
-function mettreAJourAffichage(usager, bureau)
+function mettreAJourAffichage(usager)
 {
     var usagerDisplay = document.getElementById('usager-display');
 
@@ -587,7 +587,7 @@ socket.on('update_current_bureau', function(data)
 // Mise à jour de l'affichage
 socket.on('update_display', function(data)
 {
-    mettreAJourAffichage(data.usager, data.bureau);
+    mettreAJourAffichage(data.usager);
 });
 
 // Mise à jour de des usagers envoyés de la liste 1

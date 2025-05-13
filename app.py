@@ -377,7 +377,7 @@ def _sync_display():
     socketio.emit('update_display',
     {
         'usager': current_usager,
-        'bureau': current_bureau
+        'msg': current_bureau
     })
 
 def _sync_all():

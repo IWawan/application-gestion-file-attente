@@ -1,126 +1,130 @@
 :root
 {
-    /* Couleur */
-    --c-main: #962030;
-    --c-secondary: #f1dede;
-    --c-highlight: #c83b3b;
-    --c-bg: #f9f9f9;
-    --c-text: #1a1a1a;
+  /* Couleur */
+  --c-main: #962030;
+  --c-secondary: #f1dede;
+  --c-highlight: #c83b3b;
+  --c-bg: #f9f9f9;
+  --c-text: #1a1a1a;
 
-    /* Taille de police */
-    --font-size-bandeau: 2rem;
+  /* Taille de police */
+  --font-size-marquee: 2.5rem;
+  --font-size-name: 3rem;
+  --font-size-subtext: 1.8rem;
+  --font-size-nextusagers-title: 1.5rem;
+  --font-size-nextusagers: 1.2rem;
+
+  /* Général */
+  --height-marquee: 4rem;
+  --maxheight-img: 100px;
 }
 
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--c-bg);
-      color: var(--c-text);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+body
+{
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--c-bg);
+  color: var(--c-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    header {
-      width: 100%;
-      background-color: white;
-      padding: 1rem;
-      display: flex;
-      justify-content: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+header
+{
+  width: 100%;
+  background-color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
-    header img {
-      max-height: 80px;
-    }
+header img
+{
+  max-height: var(--maxheight-img)
+}
 
-    main {
-      text-align: center;
-      margin: 2rem auto;
-    }
+main
+{
+  text-align: center;
+  margin: 2rem auto;
+}
 
-    .main-name {
-      font-size: 3rem;
-      font-weight: bold;
-      color: var(--c-main);
-    }
+.main-name
+{
+  font-size: var(--font-size-name);
+  font-weight: bold;
+  color: var(--c-main);
+}
 
-    .subtext {
-      font-size: 1.8rem;
-      margin-bottom: 2rem;
-    }
+.subtext
+{
+  font-size: var(--font-size-subtext);
+  margin-bottom: 2rem;
+}
 
-    .next-people {
-      font-size: 1.2rem;
-      background-color: var(--c-secondary);
-      padding: 1.5rem 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      max-width: 420px;
-      margin: 0 auto;
-    }
+.next-usagers
+{
+  font-size: var(--font-size-nextusagers);
+  background-color: var(--c-secondary);
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  max-width: 420px;
+  margin: 0 auto;
+}
 
-    .next-people h3 {
-      margin-top: 0;
-      font-size: 1.5rem;
-      color: var(--c-main);
-    }
+.next-usagers h3
+{
+  margin-top: 0;
+  font-size: var(--font-size-nextusagers-title);
+  color: var(--c-main);
+}
 
-    .next-people ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
+.next-usagers ul
+{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 
-    .next-people li {
-      margin: 0.5rem 0;
-    }
+.next-usagers li
+{
+  margin: 0.5rem 0;
+}
 
-    .marquee {
-      width: 100%;
-      overflow: hidden;
-      background-color: var(--c-main);
-      color: white;
-      font-size: var(--font-size-bandeau);
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      height: 2.5rem;
-      display: flex;
-      align-items: center;
-    }
+.marquee
+{
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--c-main);
+  color: white;
+  font-size: var(--font-size-marquee);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: var(--height-marquee);
+  display: flex;
+  align-items: center;
+}
 
-    .marquee-text {
-      display: inline-block;
-      white-space: nowrap;
-      padding-left: 100%;
-      animation: scroll-left 20s linear infinite;
-    }
+.marquee-text
+{
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  animation: scroll-left 20s linear infinite;
+}
 
-    @keyframes scroll-left {
-      0% {
-        transform: translateX(0%);
-      }
-      100% {
-        transform: translateX(-100%);
-      }
-    }
-
-    @media (max-width: 600px) {
-      .main-name {
-        font-size: 2rem;
-      }
-
-      .subtext {
-        font-size: 1.3rem;
-      }
-
-      .next-people {
-        font-size: 1rem;
-        padding: 1rem;
-      }
-
-      .next-people h3 {
-        font-size: 1.2rem;
-      }
-    }
+@keyframes scroll-left
+{
+  0%
+  {
+    transform: translateX(0%);
+  }
+  100%
+  {
+    transform: translateX(-100%);
+  }
+}
