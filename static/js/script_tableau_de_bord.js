@@ -334,38 +334,26 @@ function mettreAJourBureaux()
         const nom = bureaux[key].nom;
         const message = bureaux[key].message || "";
 
-        // bureaux-btn-container
+        // boutons bureaux
         let btn = document.createElement('button');
         btn.id = 'btn-bureau-' + (++i);
         btn.textContent = nom;
         btn.onclick = function() { selectionnerBureau(btn); };
         btnCont.appendChild(btn);
 
-        // bureaux-modif-container
-        let labelNom = document.createElement('label');
-        labelNom.textContent = key.replace(/^bureau/, "Bureau ") + " - Nom : ";
+        // bouton "Modifier" pour chaque bureau
+        let mod = document.createElement('button');
+        mod.classList.add('modif-bureau-btn');
+        mod.innerHTML = key.replace(/^bureau/, "Bureau ");
+        mod.onclick = function() { ouvrirPopupModifBureau(key, nom, message); };
 
-        let inputNom = document.createElement('input');
-        inputNom.type = 'text';
-        inputNom.id = key + "_nom";
-        inputNom.value = nom;
-        inputNom.onchange = () => bureaux[key].nom = inputNom.value;
-
-        let labelMessage = document.createElement('label');
-        labelMessage.textContent = " Message : ";
-
-        let inputMessage = document.createElement('input');
-        inputMessage.type = 'text';
-        inputMessage.id = key + "_message";
-        inputMessage.value = message;
-        inputMessage.onchange = () => bureaux[key].message = inputMessage.value;
-
+        // bouton "Supprimer" pour chaque bureau
         let rmv = document.createElement('button');
         rmv.classList.add('remove-bureau-btn');
         rmv.innerHTML = '&times;';
         rmv.onclick = function() { supprimerBureau(key); };
 
-        modifCont.append(labelNom, inputNom, labelMessage, inputMessage, rmv, document.createElement('br'));
+        modifCont.append(mod, rmv, document.createElement('br'));
     }
 }
 
@@ -410,7 +398,7 @@ function fermerPopupBandeau()
     document.getElementById('popup-bandeau').classList.remove('open');
 }
 
-// Ouvrir le popup de modification des bureaux
+// Ouvrir le popup des bureaux
 function ouvrirPopupBureaux()
 {
     document.getElementById('popup-bureaux').classList.add('open');
@@ -418,10 +406,35 @@ function ouvrirPopupBureaux()
     fermerMenuLateral();
 }
 
-// Fermer le popup de modification des bureaux
+// Fermer le popup des bureaux
 function fermerPopupBureaux()
 {
     document.getElementById('popup-bureaux').classList.remove('open');
+}
+
+// Ouvrir le popup de modification d'un bureau
+function ouvrirPopupModifBureau(key, nom, message)
+{
+    const popupModifBureau = document.getElementById('popup-modif-bureau');
+    const inputNom = popupModifBureau.querySelector('#input-modif-nom');
+    const inputMessage = popupModifBureau.querySelector('#input-modif-message');
+
+    inputNom.value = nom;
+    inputMessage.value = message;
+
+    // Écouteurs pour appliquer les modifications
+    popupModifBureau.querySelector('#btn-save').onclick = function()
+    {
+        renommerBureau(key, inputNom.value, inputMessage.value)
+    };
+
+    popupModifBureau.classList.add('open');
+}
+
+// Fermer le popup de modification de bureau
+function fermerPopupModifBureau()
+{
+    document.getElementById('popup-modif-bureau').classList.remove('open');
 }
 
 // Ouvrir le popup d'ajout de rendez-vous
@@ -480,33 +493,13 @@ function supprimerBureau(key)
 }
 
 // Renommer les bureaux
-function renommerBureaux()
+function renommerBureau(key, nom, message)
 {
-    const clés = Object.keys(bureaux);
-    const nouveauBureaux = {};
-  
-    for (let key of clés)
-    {
-        const inputNom = document.getElementById(key + "_nom");
-        const inputMessage = document.getElementById(key + "_message");
-        if (!inputNom || !inputMessage)
-        {
-            alert(`Erreur : champs manquants pour ${key}`);
-            return;
-        }
+    bureaux[key].nom = nom;
+    bureaux[key].message = message;
 
-        const nom = inputNom.value.trim();
-        const message = inputMessage.value.trim();
-        if (!nom)
-        {
-            alert(`Veuillez renseigner un nom pour ${key}`);
-            return;
-        }
-        
-        nouveauBureaux[key] = { nom: nom, message: message };
-    }
-
-    socket.emit('save_bureaux', { bureaux: nouveauBureaux });
+    socket.emit('save_bureaux', { bureaux: bureaux });
+    fermerPopupModifBureau();
 }
 
 // Ajouter un nouveau rendez-vous
@@ -557,10 +550,6 @@ document.addEventListener('keydown', (event) =>
             if (popup && popup.id === 'popup-bandeau')
             {
                 envoyerMessageBandeau();
-            }
-            else if (popup && popup.id === 'popup-bureaux')
-            {
-                renommerBureaux();
             }
             else if (popup && popup.id === 'popup-rdv-1')
             {

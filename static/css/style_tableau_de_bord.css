@@ -68,6 +68,7 @@
     --font-size-small: 0.75rem;
     --font-size-medium: 0.85rem;
     --font-size-big: 1.3rem;
+    --font-size-title: 1.1rem;
     --radius: 10px;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
@@ -108,7 +109,7 @@ h2
 
 h3
 {
-    font-size: var(--font-size-medium);
+    font-size: var(--font-size-title);
     margin: 5px 0 10px 0;
 }
 
@@ -615,6 +616,19 @@ button:focus
 .popup-content .close-btn:hover
 {
     background-color: var(--c-btn-del-hover);
+}
+
+.popup-content .modif-bureau-btn
+{
+    background-color: var(--c-btn-1);
+    color: var(--c-btn-1-text);
+    margin-right: 10px;
+}
+
+.popup-content .modif-bureau-btn:hover
+{
+    background-color: var(--c-btn-1-hover);
+    transform: translateY(-1px);
 }
 
 .popup-content .remove-bureau-btn

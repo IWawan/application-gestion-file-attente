@@ -49,13 +49,32 @@
                 <!-- Bureaux dynamiques -->
             </div>
             <div class="popup-btn">
-                <button onclick="ajouterBureau()">Ajouter un bureau</button>
-                <button onclick="renommerBureaux()">Renommer</button>
+                
+                <button class="ok-btn" onclick="ajouterBureau()">Ajouter un bureau</button>
                 <br>
                 <button class="close-btn" onclick="fermerPopupBureaux()">Fermer</button>
             </div>
         </div>
     </div> 
+
+    <!-- Popup de modification d'un bureau -->
+    <div class="popup" id="popup-modif-bureau">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <h3>Modifier le bureau</h3>
+            <label for="input-modif-nom">Nom du bureau :</label>
+            <input type="text" id="input-modif-nom" placeholder="Nom du bureau" required>
+            
+            <label for="input-modif-message">Message :</label>
+            <input type="text" id="input-modif-message" placeholder="Message" required>
+            
+            <div class="popup-btn">
+                <button class="ok-btn" id="btn-save">Enregistrer</button>
+                <button class="close-btn" onclick="fermerPopupModifBureau()">Fermer</button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Popup d'ajout de rendez-vous 1-->
     <div class="popup" id="popup-rdv-1" >

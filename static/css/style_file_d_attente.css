@@ -5,7 +5,7 @@
   --c-secondary: #f1dede;
   --c-highlight: #c83b3b;
   --c-bg: #f9f9f9;
-  --c-text: #6e6e6e;
+  --c-text: #555555;
 
   /* Taille de police */
   --font-size-marquee: 2.5rem;
@@ -40,6 +40,8 @@ body
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 /* En-tête */
