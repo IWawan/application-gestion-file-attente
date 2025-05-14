@@ -22,6 +22,18 @@
     
     <!-- Menu latéral -->
     <nav id="side-menu" class="side-menu">
+
+        <div class="toggle-wrapper">
+            <span class="toggle-label off">Simple<br>liste</span>
+        
+            <label class="switch">
+              <input type="checkbox" id="double-list-toggle" onchange="switchDoubleListe(this.checked)">
+              <span class="slider"></span>
+            </label>
+        
+            <span class="toggle-label on">Double<br>liste</span>
+        </div>
+
         <button onclick="ouvrirPopupBandeau()">Bandeau</button>
         <button onclick="ouvrirPopupBureaux()">Bureaux</button>
         <button class="close-btn" onclick="window.location.href='http://{{ ip }}:{{ port }}'">Quitter</button>
@@ -105,7 +117,7 @@
 
     <div id="usagers-list-global-container" class="usagers-list-global-container">
         <div id="usagers-list-1-container" class="usagers-list-container">
-            <h2>Liste 1</h2>
+            <h2></h2>
             <div class="usagers-menu-btns">
                 <button onclick="document.getElementById('fileInput-1').click()">Importer</button>
                 <button onclick="chargerListeUsagers(1)">Afficher</button>
@@ -118,7 +130,7 @@
         </div>
         
         <div id="usagers-list-2-container" class="usagers-list-container">
-            <h2>Liste 2</h2>
+            <h2></h2>
             <div class="usagers-menu-btns">
                 <button onclick="document.getElementById('fileInput-2').click()">Importer</button>
                 <button onclick="chargerListeUsagers(2)">Afficher</button>

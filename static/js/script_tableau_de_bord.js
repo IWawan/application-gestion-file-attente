@@ -1,5 +1,7 @@
 var socket = io.connect('http://' + window.location.hostname + ':' + window.location.port);
 
+const toggleSwitch = document.getElementById('double-list-toggle');
+
 usagers_list_1 = [];
 usagers_list_2 = [];
 var displayed_usagers_1 = new Set();
@@ -464,7 +466,7 @@ function fermerPopupRDV()
 function envoyerMessageBandeau()
 {
     var message = document.getElementById("bandeau-input").value;
-    if (message.trim() !== "") { socket.emit("bandeau_message", { message: message }); }
+    if (message.trim() !== "") { socket.emit("marquee_message", { message: message }); }
 
     fermerPopupBandeau();
 } 
@@ -519,6 +521,17 @@ function ajouterRDV(nb_list)
     }
 }
 
+// Switch entre le mode simple liste et double liste
+function switchDoubleListe(checked)
+{
+    const liste = document.getElementById('usagers-list-2-container');
+    liste.style.display = checked ? 'block' : 'none';
+
+    toggleSwitch.checked = checked;
+    
+    socket.emit('set_double_liste_mode', { enabled: checked });
+}
+
 // Fermeture du popup au clic en dehors
 document.addEventListener('DOMContentLoaded', () =>
 {
@@ -565,6 +578,12 @@ document.addEventListener('keydown', (event) =>
 // ----------------------
 //  SOCKET.IO LISTENERS
 // ----------------------
+
+socket.on('set_initial_double_liste', function(data)
+{
+    toggleSwitch.checked = data.enabled;
+    document.getElementById('usagers-list-2-container').style.display = data.enabled ? 'block' : 'none';
+});
 
 // Mise à jour de la liste d'usagers 1
 socket.on('update_usagers_list_1', function(data)

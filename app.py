@@ -57,6 +57,7 @@ current_usager = ""
 current_bureau = ""
 
 bureaux = {}
+double_liste_mode = False
 
 # --- Routes HTTP ---
 
@@ -266,8 +267,8 @@ def on_select_bureau(data):
     _sync_current_bureau()
 
 # Affiche un message sur le bandeau
-@socketio.on('bandeau_message')
-def on_bandeau_message(data):
+@socketio.on('marquee_message')
+def on_marquee_message(data):
     msg = data.get('message')
     if msg:
         socketio.emit('update_marquee', {'marquee_message': msg})
@@ -338,8 +339,14 @@ def on_save_bureaux(data):
 
     _sync_bureaux()
 
+@socketio.on('set_double_liste_mode')
+def on_set_double_liste_mode(data):
+    global double_liste_mode
+    double_liste_mode = data.get('enabled', False)
+    save_double_liste_mode()      
+    _sync_double_liste_mode_state()
 
-# --- Persistance des bureaux ---
+# --- Persistance ---
 
 def load_bureaux():
     global bureaux
@@ -359,7 +366,25 @@ def load_bureaux():
     except FileNotFoundError:
         print("bureaux.txt introuvable, noms par défaut utilisés.")
 
+# Sauvegarde l'état simple liste / double liste
+def save_double_liste_mode():
+    os.makedirs('data', exist_ok=True)
+    with open('data/double_liste_mode_state.txt', 'w') as f:
+        f.write('1' if double_liste_mode else '0')
+
+# Charge l'état simple liste / double liste
+def load_double_liste_mode():
+    global double_liste_mode
+    try:
+        with open('data/double_liste_mode_state.txt', 'r') as f:
+            double_liste_mode = f.read().strip() == '1'
+    except FileNotFoundError:
+        double_liste_mode = False
+
 # --- Sync fonctions --
+
+def _sync_double_liste_mode_state():
+    socketio.emit('set_initial_double_liste', {'enabled': double_liste_mode})
 
 def _sync_usagers_list_1():
     socketio.emit('update_usagers_list_1', {'usagers': usagers_list_1})
@@ -404,9 +429,11 @@ def _sync_all():
     _sync_bureaux()
     _sync_current_bureau()
     _sync_display()
+    _sync_double_liste_mode_state()
 
 # --- Application Entry Point ---
 if __name__ == '__main__':
     load_bureaux()
+    load_double_liste_mode()
     print(f"Serveur lancé sur http://{IP}:{8080}")   
     socketio.run(app, debug=False, host=IP, port=8080)

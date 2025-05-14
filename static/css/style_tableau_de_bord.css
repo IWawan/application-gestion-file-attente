@@ -65,8 +65,8 @@
 
     /* UI basics */
     --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    --font-size-small: 0.75rem;
-    --font-size-medium: 0.85rem;
+    --font-size-small: 0.8rem;
+    --font-size-medium: 0.9rem;
     --font-size-big: 1.3rem;
     --font-size-title: 1.1rem;
     --radius: 10px;
@@ -307,6 +307,7 @@ button:focus
 .usagers-list-container
 {
     height: 100vh;
+    width: 100%;
 }
 
 .usagers-menu-btns
@@ -330,8 +331,8 @@ button:focus
     justify-self: center;
     margin: 0px;
     height: auto;
-    max-height: 75vh;
-    width: 38vw;
+    max-height: 82vh;
+    width: 95%;
     padding: 0 8px;   
     overflow-x: hidden; 
     overflow-y: auto; 
@@ -350,8 +351,8 @@ button:focus
 {
     width: 100%;
     padding: 7px;
-    margin-left: 2px;
-    margin-right: 2px;
+    margin-left: 4px;
+    margin-right: 4px;
 }
 
 .usager-container .usager-btn
@@ -545,6 +546,81 @@ button:focus
     background-color: var(--c-btn-del-hover);
 }
 
+/* === SWITCH === */
+
+.switch
+{
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input
+{
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider /* Le fond du switch (rail) */
+{
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background-color: var(--c-btn-2);
+  transition: .4s;
+  border-radius: 26px;
+}
+
+.slider:before /* La pastille du switch */
+{
+  position: absolute;
+  content: "";
+  height: 20px; width: 20px;
+  left: 3px; bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider /* Quand activé (coché) */
+{
+  background-color: var(--c-btn-1);
+}
+
+input:checked + .slider:before 
+{
+    transform: translateX(24px);
+}
+
+.switch:hover input:not(:checked) + .slider /* Hover quand off */
+{
+  background-color: var(--c-btn-2-hover);
+}
+
+.switch:hover input:checked + .slider /* Hover quand on */
+{
+  background-color: var(--c-btn-1-hover);
+}
+
+.toggle-wrapper
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem; /* espace entre labels et switch */
+  margin: 20px;
+}
+
+.toggle-label
+{
+  color: var(--c-btn-2-text);
+  font-size: var(--font-size-medium);
+  white-space: nowrap;
+}
+
 /* === POPUPS === */
 
 .popup
@@ -711,7 +787,6 @@ button:focus
 {
   background-color: var(--c-btn-2-hover);
 }
-
 
 /* === ANIMATION === */
 
