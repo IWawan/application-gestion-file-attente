@@ -95,7 +95,7 @@ body
     align-items: center;
     display: grid;
     grid-template-rows: auto 1fr auto;
-    grid-template-columns: 160px 1fr;
+    grid-template-columns: 120px 1fr;
     grid-template-areas:
         "bureaux usagers"
         "display display";
@@ -104,7 +104,8 @@ body
 
 h2
 {
-    font-size: var(--font-size-big)
+    font-size: var(--font-size-big);
+    margin: 5px;
 }
 
 h3
@@ -216,7 +217,6 @@ button:focus
     width: 100%;
 }
 
-
 .display-section h2
 {  
     white-space: normal; 
@@ -246,7 +246,7 @@ button:focus
     align-items: center;
     justify-content: flex-start;
     padding: 10px;
-    margin-left: 20px;
+    margin: 5px;
     gap: 10px;
 
     /* Taille adaptative */
@@ -309,6 +309,11 @@ button:focus
     height: 100vh;
 }
 
+.usagers-menu-btns
+{
+    margin: 8px 0;
+}
+
 #usagers-list-1-container
 {
     border-right: 1px solid var(--c-btn-2);
@@ -323,11 +328,11 @@ button:focus
     align-items: center;
     justify-content: flex-start;
     justify-self: center;
-    margin: 8px;
+    margin: 0px;
     height: auto;
-    max-height: 70vh;
+    max-height: 75vh;
     width: 38vw;
-    padding: 10px 8px;   
+    padding: 0 8px;   
     overflow-x: hidden; 
     overflow-y: auto; 
 }
@@ -345,8 +350,8 @@ button:focus
 {
     width: 100%;
     padding: 7px;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
 }
 
 .usager-container .usager-btn
@@ -716,126 +721,85 @@ button:focus
   to   { opacity: 1; }
 }
 
-/* === MOBILE FIRST (jusqu’à 600px) === */
-@media screen and (max-width: 600px) {
-    :root {
-        --font-size-small: 0.6rem;
-        --font-size-medium: 0.8rem;
-        --font-size-big: 1rem;
-        --font-size-title: 1.1rem;
-    }
-
-    /* Corps en une seule colonne */
-    body {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        justify-content: flex-start;
-        grid-template-areas: none;
-        grid-template-columns: none;
-        grid-template-rows: none;
-        overflow-y: auto;
-    }
-
-    /* Bouton menu hamburger en haut à droite */
-    #open-side-menu-btn {
-        top: 10px;
-        right: 10px;
-        width: 40px;
-        height: 40px;
-    }
-
-    /* Masquer la colonne bureaux, remplacer par menu */
-    .bureaux-btn-container {
-        display: none;
-    }
-
-    /* Liste usagers pleine largeur */
-    .usagers-list-global-container {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: auto;
-        border: none;
-        padding: 0;
-    }
-    .usagers-list-content {
-        width: 100%;
-        padding: 8px;
-    }
-
-    /* Section d’affichage flottante */
-    .display-section {
-        display: flex;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-        font-size: var(--font-size-medium);
-    }
-    .display-section button {
-        margin: 0 5px;
-        padding: 8px 12px;
-        font-size: var(--font-size-small);
-    }
-
-    /* Ajustements boutons et inputs */
-    button {
-        font-size: var(--font-size-medium);
-        padding: 8px 12px;
-    }
-    .select-btn, .delete-btn {
-        padding: 6px 10px;
-        font-size: var(--font-size-small);
-    }
-    .popup-content {
-        width: 90%;
-        max-width: 320px;
-    }
-    .popup-content input {
-        width: 100%;
-        font-size: var(--font-size-small);
-    }
-
-    /* Menu latéral plein écran */
-    .side-menu {
-        width: 0;
-        height: 100%;
-    }
-    .side-menu.open {
-        width: 100%;
-    }
-    .side-menu button {
-        width: 90%;
-        padding: 12px;
-    }
-
-    /* Scroll mieux sur mobile */
-    ::-webkit-scrollbar {
-        width: 5px;
-    }
-    ::-webkit-scrollbar-thumb {
-        border-radius: 5px;
-    }
-}
-
 /* === TABLETTE EN MODE PAYSAGE === */
 @media screen and (min-width: 601px) and (max-width: 1024px) and (orientation: landscape)
 {
     :root
     {
-        --font-size-small: 0.7rem;
-        --font-size-medium: 0.8rem;
-        --font-size-big: 1rem;
-        --font-size-title: 0.9rem;
+        --font-size-small: 0.5rem;
+        --font-size-medium: 0.6rem;
+        --font-size-big: 0.9rem;
+        --font-size-title: 0.8rem;
+    }
+
+    body
+    {
+        grid-template-columns: 100px 1fr;
     }
 
     .usagers-list-content
     {
-        max-height: 46vh;
+        max-height: 58vh;
+    }
+
+    .bureaux-btn-container
+    {
+        padding:    5px;
+    }
+}
+
+/* === TELEPHONE EN MODE PAYSAGE === */
+@media screen and (max-height: 400px) and (orientation: landscape)
+{
+    :root
+    {
+        --font-size-small: 0.5rem;
+        --font-size-medium: 0.6rem;
+        --font-size-big: 0.7rem;
+        --font-size-title: 0.8rem;
+    }
+
+    .usagers-list-global-container
+    {
+        width: 85vw;
+    }
+    
+    .usagers-menu-btns button
+    {
+        font-size: 0.5rem;
+    }
+
+    .usagers-list-content
+    {
+        width: 41vw;
+        max-height: 54vh;
+    }
+
+    .display-section
+    {
+        padding: 5px;
+    }
+
+    .display-section button
+    {
+        padding: 4px 8px; 
+        margin: 0 20px;               
+    }
+
+    #open-side-menu-btn
+    {
+        left: 20px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .side-menu
+    {
+        left: 0;
+    }
+
+    .side-menu.open
+    {
+        width: 120px;
     }
 }
