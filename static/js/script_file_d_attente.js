@@ -86,7 +86,7 @@ socket.on('update_display', function(data)
 // Mise à jour du bandeau
 socket.on('update_marquee', function(data)
 {
-    var marquee = document.getElementById('marquee');
+    var marquee = document.getElementById('marquee-text');
     marquee.textContent = data.marquee_message.toUpperCase();
 });
 
