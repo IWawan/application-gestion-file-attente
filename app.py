@@ -231,7 +231,6 @@ def on_save_bureaux(data):
 
     _sync_bureaux()
 
-
 @socketio.on('reset_all')
 def on_reset_all():
     usagers_list = []
