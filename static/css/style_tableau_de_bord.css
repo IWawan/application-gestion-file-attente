@@ -814,12 +814,12 @@ input:checked + .slider:before
 
     .usagers-list-content
     {
-        max-height: 58vh;
+        max-height: 62vh;
     }
 
     .bureaux-btn-container
     {
-        padding:    5px;
+        padding: 5px;
     }
 }
 
@@ -875,6 +875,6 @@ input:checked + .slider:before
 
     .side-menu.open
     {
-        width: 120px;
+        width: 180px;
     }
 }
