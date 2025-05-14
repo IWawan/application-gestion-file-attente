@@ -2,13 +2,9 @@
 {
     /* General */
     --c-general-bg: #F9FAFB;
-    --c-general-bg-2: #F3F4F6;
+    --c-general-bg-2: #ebeff7;
     --c-general-border: #ddd;
     --c-general-text: #111827;
-
-    /* Header */
-    --c-header-bg: #ebeff7;
-    --c-header-text: #111827;
 
     /* Bouton principal */
     --c-btn-1: #3B82F6;
@@ -26,11 +22,26 @@
     --c-btn-select-ready: #ffad1f;         
     --c-btn-select-ready-hover: #f09800; 
     --c-btn-select-text: #FFFFFF;
+
+    /* Bouton usager liste 1 */
+    --c-btn-usager-l-1: #b2cee4;         
+    --c-btn-usager-l-1-hover: #9bb9d1;
+    --c-btn-usager-l-1-text: #163079;
+
+    /* Bouton usager liste 2 */
+    --c-btn-usager-l-2: #dfc3f1;         
+    --c-btn-usager-l-2-hover: #cda9e6;
+    --c-btn-usager-l-2-text: #691679;
     
-    /* Bouton nouvel usager */
-    --c-btn-new-usager: #dfc3f1;         
-    --c-btn-new-usager-hover: #cda9e6;
-    --c-btn-new-usager-text: #691679;
+    /* Bouton nouvel usager liste 1 */
+    --c-btn-new-usager-l-1: #80c8ff;         
+    --c-btn-new-usager-l-1-hover: #6aade0;
+    --c-btn-new-usager-l-1-text: #163079;
+
+    /* Bouton nouvel usager liste 2 */
+    --c-btn-new-usager-l-2: #f07cff;         
+    --c-btn-new-usager-l-2-hover: #d573e2;
+    --c-btn-new-usager-l-2-text: #691679;
 
     /* Bouton ok */
     --c-btn-ok: #34d37b;         
@@ -48,14 +59,16 @@
     --c-input-border: #a5c7f0;  
 
     /* Side-menu */
-    --c-sm-bg: #dde5f5;
+    --c-sm-bg-1: #dde5f5;
+    --c-sm-bg-2: #d8e1f1;
     --c-sm-text: #111827;
 
     /* UI basics */
     --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    --font-size-small: 1rem;
-    --font-size-medium: 1.1rem;
-    --font-size-big: 1.2rem;
+    --font-size-small: 0.8rem;
+    --font-size-medium: 0.9rem;
+    --font-size-big: 1.3rem;
+    --font-size-title: 1.1rem;
     --radius: 10px;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
@@ -82,9 +95,8 @@ body
     align-items: center;
     display: grid;
     grid-template-rows: auto 1fr auto;
-    grid-template-columns: 150px 1fr;
+    grid-template-columns: 120px 1fr;
     grid-template-areas:
-        "main-menu main-menu"
         "bureaux usagers"
         "display display";
     min-height: 100vh;
@@ -92,12 +104,13 @@ body
 
 h2
 {
-    font-size: var(--font-size-big)
+    font-size: var(--font-size-big);
+    margin: 5px;
 }
 
 h3
 {
-    font-size: var(--font-size-medium);
+    font-size: var(--font-size-title);
     margin: 5px 0 10px 0;
 }
 
@@ -119,7 +132,7 @@ button
 button:hover
 {
     background-color: var(--c-btn-1-hover);
-    transform: translateY(-3px);
+    transform: translateY(-1px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -152,7 +165,12 @@ button:focus
     background-color: var(--c-btn-del-hover);
 }
 
-#fileInput
+#fileInput-1
+{
+    display: none;
+}
+
+#fileInput-2
 {
     display: none;
 }
@@ -176,60 +194,76 @@ button:focus
   background-color: var(--c-btn-1-hover);
 }
 
-/* === HEADER === */
+/* === DISPLAY SECTION === */
 
-.header
+.display-section
 {
-    background-color: var(--c-header-bg);
-    color: var(--c-header-text);
-    border-bottom: 2px solid var(--c-general-border);
-    border-radius: var(--radius) var(--radius) 0 0; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
+    background-color: var(--c-general-bg-2);
+    color: var(--c-general-text);
+    border: 1px solid var(--c-btn-2);
+    border-radius: var(--radius) var(--radius) 0 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: fixed;
-    top: 0;
-    bottom: 0; 
     left: 0;
     right: 0;
     padding: 10px;
     justify-content: center;
-    align-items: center;                         
+    align-items: center;
     z-index: 3;
+    grid-area: display;
+    display: none; /* Masqué par défaut */
+    top: auto;
+    bottom: 0; 
+    width: 100%;
 }
 
-/* === MAIN MENU === */
-
-.main-menu
-{
-    grid-area: main-menu;
-    display: flex;
-    bottom: auto;   
-    width: 100%;                   
+.display-section h2
+{  
+    white-space: normal; 
+    word-break: break-word;
+    margin: 0;
 }
 
-.main-menu button
+.display-section button
 {
-    font-size: var(--font-size-medium);
-    margin : 0 10px;
+    background-color: var(--c-btn-del);
+    color: var(--c-btn-del-text);
+    padding: 12px 18px; 
+    margin: 0 20px;               
+}
+
+.display-section button:hover
+{
+    background-color: var(--c-btn-del-hover);
 }
 
 /* === BUREAUX BUTTONS CONTAINER === */
 
 .bureaux-btn-container
 {
-    grid-area: bureaux;
-    position: static;   
-    padding: 10px;   
-    display: flex;            
-    flex-direction: column;   
-    align-items: center;        
-    justify-content: flex-start;  
-    gap: 10px;  
-    height: auto; 
-    top: auto;                 
-    left: auto;                   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    margin: 5px;
+    gap: 10px;
+
+    /* Taille adaptative */
+    width: auto;
+    max-width: 20vw;
+    height: auto;
     max-height: 80vh;
-    overflow-x: hidden;   
-    overflow-Y: auto;          
+
+    /* Scroll si trop de contenu */
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Centrage vertical à gauche */
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .bureaux-btn-container button
@@ -256,10 +290,38 @@ button:focus
 
 /* === USAGERS LIST CONTAINER === */
 
-.usagers-list-container
+.usagers-list-global-container
 {
     grid-area: usagers;
     background-color: var(--c-general-bg-2);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    width: 80vw;
+    border-left: 1px solid var(--c-btn-2);
+    border-right: 1px solid var(--c-btn-2);
+}
+
+.usagers-list-container
+{
+    height: 100vh;
+    width: 100%;
+}
+
+.usagers-menu-btns
+{
+    margin: 8px 0;
+}
+
+#usagers-list-1-container
+{
+    border-right: 1px solid var(--c-btn-2);
+}
+
+.usagers-list-content
+{
     color: var(--c-general-text);           
     transform: none;
     display: flex;
@@ -267,12 +329,11 @@ button:focus
     align-items: center;
     justify-content: flex-start;
     justify-self: center;
-    margin: 0 auto;
-    max-height: 80vh;
-    max-width: 80vw;
-    min-width: 50vw;
-    width: auto;
-    padding: 10px 8px;   
+    margin: 0px;
+    height: auto;
+    max-height: 82vh;
+    width: 95%;
+    padding: 0 8px;   
     overflow-x: hidden; 
     overflow-y: auto; 
 }
@@ -283,16 +344,15 @@ button:focus
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 10px;
+    padding: 3px 0;
 }
 
 .usager-container button
 {
     width: 100%;
-    height: 50px;
-    padding: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
+    padding: 7px;
+    margin-left: 4px;
+    margin-right: 4px;
 }
 
 .usager-container .usager-btn
@@ -300,16 +360,48 @@ button:focus
     font-size: var(--font-size-medium);
 }
 
-.usager-container .usager-btn.default
+#usagers-list-1-container .usager-btn.default
 {
-    background-color: var(--c-btn-2);
-    color: var(--c-btn-2-text);
-    
+    background-color: var(--c-btn-usager-l-1);
+    color: var(--c-btn-usager-l-1-text);
 }
 
-.usager-container .usager-btn.default:hover
+#usagers-list-1-container .usager-btn.default:hover
 {
-    background-color: var(--c-btn-2-hover);
+    background-color: var(--c-btn-usager-l-1-hover);
+}
+
+#usagers-list-2-container .usager-btn.default
+{
+    background-color: var(--c-btn-usager-l-2);
+    color: var(--c-btn-usager-l-2-text);
+}
+
+#usagers-list-2-container .usager-btn.default:hover
+{
+    background-color: var(--c-btn-usager-l-2-hover);
+}
+
+#usagers-list-1-container .usager-btn.new-usager
+{
+    background-color: var(--c-btn-new-usager-l-1);
+    color: var(--c-btn-new-usager-l-1-text);
+}
+
+#usagers-list-1-container .usager-btn.new-usager:hover
+{
+    background-color: var(--c-btn-new-usager-l-1-hover);
+}
+
+#usagers-list-2-container .usager-btn.new-usager
+{
+    background-color: var(--c-btn-new-usager-l-2);
+    color: var(--c-btn-new-usager-l-2-text);
+}
+
+#usagers-list-2-container .usager-btn.new-usager:hover
+{
+    background-color: var(--c-btn-new-usager-l-2-hover);
 }
 
 .usager-container .usager-btn.selected
@@ -334,23 +426,12 @@ button:focus
     background-color: var(--c-btn-ok-hover);
 }
 
-.usager-container .usager-btn.new-usager
-{
-    background-color: var(--c-btn-new-usager);
-    color: var(--c-btn-new-usager-text);
-}
-
-.usager-container .usager-btn.new-usager:hover
-{
-    background-color: var(--c-btn-new-usager-hover);
-}
-
 .usager-container .delete-btn,
 .usager-container .select-btn
 {
     width: auto;
-    min-width: 85px;
-    padding: 6px 12px;
+    padding: 8px;
+    max-height: 30px;
     border-radius: 20px;
 }
 
@@ -384,39 +465,10 @@ button:focus
 {
     background-color: var(--c-btn-del);
     color: var(--c-btn-del-text);
+    font-size: var(--font-size-medium);
 }
 
 .usager-container .delete-btn:hover
-{
-    background-color: var(--c-btn-del-hover);
-}
-
-/* === DISPLAY SECTION === */
-
-.display-section
-{ 
-    grid-area: display;
-    display: none; /* Masqué par défaut */          
-    top: auto;   
-    width: 100%;                                           
-}
-
-.display-section h2
-{  
-    white-space: normal; 
-    word-break: break-word;
-    margin: 0;
-}
-
-.display-section button
-{
-    background-color: var(--c-btn-del);
-    color: var(--c-btn-del-text);
-    padding: 12px 18px; 
-    margin: 0 20px;               
-}
-
-.display-section button:hover
 {
     background-color: var(--c-btn-del-hover);
 }
@@ -449,7 +501,7 @@ button:focus
 
 .side-menu
 {
-    background-color: var(--c-sm-bg);
+    background-color: var(--c-sm-bg-1);
     color: var(--c-sm-text);
     height: 100%;
     width: 0;
@@ -494,6 +546,81 @@ button:focus
     background-color: var(--c-btn-del-hover);
 }
 
+/* === SWITCH === */
+
+.switch
+{
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input
+{
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider /* Le fond du switch (rail) */
+{
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background-color: var(--c-btn-2);
+  transition: .4s;
+  border-radius: 26px;
+}
+
+.slider:before /* La pastille du switch */
+{
+  position: absolute;
+  content: "";
+  height: 20px; width: 20px;
+  left: 3px; bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider /* Quand activé (coché) */
+{
+  background-color: var(--c-btn-1);
+}
+
+input:checked + .slider:before 
+{
+    transform: translateX(24px);
+}
+
+.switch:hover input:not(:checked) + .slider /* Hover quand off */
+{
+  background-color: var(--c-btn-2-hover);
+}
+
+.switch:hover input:checked + .slider /* Hover quand on */
+{
+  background-color: var(--c-btn-1-hover);
+}
+
+.toggle-wrapper
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem; /* espace entre labels et switch */
+  margin: 20px;
+}
+
+.toggle-label
+{
+  color: var(--c-btn-2-text);
+  font-size: var(--font-size-medium);
+  white-space: nowrap;
+}
+
 /* === POPUPS === */
 
 .popup
@@ -524,13 +651,16 @@ button:focus
 
 .popup-content
 {
-    background-color: var(--c-sm-bg);
+    background-color: var(--c-sm-bg-1);
     color: var(--c-sm-text);
+    box-sizing: border-box;
     padding: 20px;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     width: auto;
-    max-width: 500px;
+    max-width: 80vw;
+    height: auto;
+    max-height: 80vh;
     text-align: center;
     z-index: 50;
 }
@@ -569,6 +699,19 @@ button:focus
     background-color: var(--c-btn-del-hover);
 }
 
+.popup-content .modif-bureau-btn
+{
+    background-color: var(--c-btn-1);
+    color: var(--c-btn-1-text);
+    margin-right: 10px;
+}
+
+.popup-content .modif-bureau-btn:hover
+{
+    background-color: var(--c-btn-1-hover);
+    transform: translateY(-1px);
+}
+
 .popup-content .remove-bureau-btn
 {
     background-color: var(--c-btn-del);
@@ -596,6 +739,12 @@ button:focus
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: var(--transition);
     outline: none;
+    width: 90px;
+}
+
+.popup-content #bandeau-input
+{
+    width: 250px;
 }
 
 .popup-content label
@@ -619,6 +768,26 @@ button:focus
     transform: translateY(-1px);
 }
 
+.popup-content #bureaux-modif-container
+{
+    background-color: var(--c-sm-bg-2);
+    border: 1px solid var(--c-btn-2);
+    border-radius: var(--radius) var(--radius) var(--radius) var(--radius); 
+    overflow-y: auto;
+    height: auto;
+    max-height: 50vh;
+}
+
+.popup-content #bureaux-modif-container::-webkit-scrollbar-thumb
+{
+  background-color: var(--c-btn-2);
+}
+
+.popup-content #bureaux-modif-container::-webkit-scrollbar-thumb:hover
+{
+  background-color: var(--c-btn-2-hover);
+}
+
 /* === ANIMATION === */
 
 @keyframes fadeIn
@@ -627,149 +796,85 @@ button:focus
   to   { opacity: 1; }
 }
 
-/* === MOBILE FIRST (jusqu’à 600px) === */
-@media screen and (max-width: 600px)
-{
-    :root
-    {
-        --font-size-small: 0.7rem;
-        --font-size-medium: 0.8rem;
-        --font-size-big: 0.9rem;
-    }
-
-    html, body
-    {
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-        overflow-y: hidden;
-    }
-
-    body 
-    {
-        background-color: var(--c-general-bg-2);
-        grid-template-rows: auto auto auto minmax(0, 1fr);
-        grid-template-columns: 1fr;
-        grid-template-areas:
-          "main-menu"
-          "bureaux"
-          "display"
-          "usagers";
-        height: 100vh;
-    }
-
-    .header
-    {
-        position: static;
-        width: 100%;
-        top: auto;
-        bottom: auto;
-        border-bottom: none;
-        box-shadow: none;
-    }
-
-    .main-menu
-    {
-        background-color: var(--c-general-bg-2);
-    }
-    
-    .bureaux-btn-container
-    {   
-        background-color: var(--c-general-bg-2);
-        flex-direction: row;      
-        width: 100%;        
-        max-width: 100vw; 
-        align-items: center;  
-        justify-content: flex-start;
-        overflow-x: auto;       
-        overflow-y: hidden;    
-    }    
-
-    .bureaux-btn-container button
-    {
-        height: auto;
-        width: auto;
-        padding: 7px;
-        font-size: var(--font-size-small);
-    }
-
-    .display-section
-    {
-        border-top: 1px solid var(--c-btn-2);
-        border-bottom: 1px solid var(--c-btn-2);
-        border-radius: var(--radius) var(--radius) 0 0; 
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-        justify-self: start;
-        align-self: start;  
-    }
-
-    .usagers-list-container
-    {      
-        background-color: var(--c-general-bg-2);
-        max-height: calc(100dvh - 260px);
-        max-width: none;
-        width: 95vw;
-        padding-bottom: 150px;
-    }
-
-    .usager-container
-    {
-        padding: 5px;
-    }
-
-    .usager-container button
-    {
-        height: auto;
-    }
-    
-    .usager-container .usager-btn
-    {
-        font-size: var(--font-size-small);
-    }
-
-    #open-side-menu-btn
-    {
-        top: 50px;
-    }
-
-    .side-menu button
-    {
-        margin: 60px auto;
-    }
-}
-
 /* === TABLETTE EN MODE PAYSAGE === */
 @media screen and (min-width: 601px) and (max-width: 1024px) and (orientation: landscape)
 {
     :root
     {
-        --font-size-small: 0.9rem;
-        --font-size-medium: 1rem;
-        --font-size-big: 1.2rem;
+        --font-size-small: 0.5rem;
+        --font-size-medium: 0.6rem;
+        --font-size-big: 0.9rem;
+        --font-size-title: 0.8rem;
     }
 
-    button
+    body
     {
-        padding: 8px 12px;
+        grid-template-columns: 100px 1fr;
     }
 
-    .usagers-list-container
-    {      
-        max-height: 75dvh;
-        width: 95vw;
-        padding-bottom: 20px;
+    .usagers-list-content
+    {
+        max-height: 58vh;
     }
 
+    .bureaux-btn-container
+    {
+        padding:    5px;
+    }
+}
 
-    .usager-container
+/* === TELEPHONE EN MODE PAYSAGE === */
+@media screen and (max-height: 400px) and (orientation: landscape)
+{
+    :root
+    {
+        --font-size-small: 0.5rem;
+        --font-size-medium: 0.6rem;
+        --font-size-big: 0.7rem;
+        --font-size-title: 0.8rem;
+    }
+
+    .usagers-list-global-container
+    {
+        width: 85vw;
+    }
+    
+    .usagers-menu-btns button
+    {
+        font-size: 0.5rem;
+    }
+
+    .usagers-list-content
+    {
+        width: 41vw;
+        max-height: 54vh;
+    }
+
+    .display-section
     {
         padding: 5px;
-    } 
+    }
 
-    .usager-container button
+    .display-section button
     {
-        width: 100%;
-        height: 35px;
-        paddIng: 10px;
+        padding: 4px 8px; 
+        margin: 0 20px;               
+    }
+
+    #open-side-menu-btn
+    {
+        left: 20px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .side-menu
+    {
+        left: 0;
+    }
+
+    .side-menu.open
+    {
+        width: 120px;
     }
 }

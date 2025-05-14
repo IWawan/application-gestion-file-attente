@@ -11,25 +11,35 @@
 </head>
 
 <body>
-    <div class="image">
-        <img id="image_sln" src="static/image/sln_logo.png" width="20%"/>
+  <header>
+    <img id="image_sln" src="static/image/sln_logo.png" width="25%" alt="logo-sln"/>
+  </header>
+
+  <main>
+    <div class="main-name" id="main-name"></div>
+    <div class="subtext" id="subtext"></div>
+
+    <div class="box next-usagers">
+      <h3>Prochains rendez-vous :</h3>
+      <ul>
+        <li id="next-usager-1"></li>
+        <li id="next-usager-2"></li>
+        <li id="next-usager-3"></li>
+        <li id="next-usager-4"></li>
+      </ul>
     </div>
 
-    <div id="display_section" class="display_section" style="display:block;">
-        <h1 id="usager_display"></h1>
-        <h2 id="bureau_display"></h2>
+    <div class="box meteo" id="meteo">
+      <h3>Météo :</h3>
+      <div id="meteo-content">
+        <iframe id="widget_autocomplete_preview" frameborder="0" src="https://meteofrance.com/widget/prevision/595690##C83B3B" title="Prévisions Sin-le-Noble par Météo-France"> </iframe>
+      </div>
     </div>
+  </main>
 
-    <!-- https://fr.tutiempo.net/gratuit.htm#google_vignette -->
-    <div class="meteo">
-        <iframe id="meteo_iframe"src="https://fr.tutiempo.net/s-widget/tt_NXx8MzgyNjI2fG58bnxufDQxNzQ4fDYwfDE2fDF8N3w1fDEwfDI1fG58bnxufHx8fHxFQ0VDRUN8MTEwfDN8OTB8OTB8MjA2fDMyfDEwNnwwfDcyNnwxNTl8NzF8NTN8MjF8MjF8NDF8OTJ8NDB8eWV8NXw%2C"
-            frameborder="0" allowTransparency="true" scrolling="no" name="flipe">
-        </iframe>
-    </div>
+  <div class="marquee" id="marquee">
+    <div class="marquee-text">Bienvenue dans notre espace d'accueil – Nous vous souhaitons une excellente journée !</div>
+  </div>
 
-    <div class="bandeau">
-        <marquee behavior="scroll" direction="left" scrollamount="12" id="bandeau">BIENVENUE !</marquee>
-    </div>
 </body>
-
 </html>

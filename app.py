@@ -20,7 +20,6 @@ app.config.update(
 )
 
 RESOURCES_FOLDER = 'resources'
-FILE_NAME = 'Agenda - RDV360.xlsx'
 app.config['ALLOWED_EXTENSIONS'] = {'xlsx'}
 app.config['UPLOAD_FOLDER'] = RESOURCES_FOLDER
 
@@ -48,12 +47,17 @@ def allowed_file(filename):
 IP = get_ip_address()
 PORT = 8080
 
-usagers_list = []
+usagers_list_1 = []
+usagers_list_2 = []
+displayed_usagers_1 = set()
+displayed_usagers_2 = set()
+selected_usagers_1 = set()
+selected_usagers_2 = set()
 current_usager = ""
 current_bureau = ""
-displayed_usagers = set()
-selected_usagers = set()
+
 bureaux = {}
+double_liste_mode = False
 
 # --- Routes HTTP ---
 
@@ -69,9 +73,9 @@ def index():
 def display():
     return render_template('file_d_attente.html')
 
-# Récupère le fichier xlsx "FILE_NAME" et le sauvegarde dans le dossier "RESOURCES_FOLDER"
-@app.route('/upload_xlsx', methods=['POST'])
-def upload_xlsx():
+# Récupère le fichier xlsx et le sauvegarde dans le dossier "RESOURCES_FOLDER" sous "usagers_list_1.xlsx"
+@app.route('/upload_xlsx_1', methods=['POST'])
+def upload_xlsx_1():
     if 'file' not in request.files:
         return jsonify({'error': 'Aucun fichier sélectionné'}), 400
 
@@ -81,28 +85,61 @@ def upload_xlsx():
         return jsonify({'error': 'Nom de fichier vide'}), 400
 
     if file and allowed_file(file.filename):
-        filename = FILE_NAME
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], "usagers_list_1.xlsx")
         file.save(file_path)
         return jsonify({'message': 'Fichier chargé avec succès'}), 200
     else:
         return jsonify({'error': 'Format de fichier non autorisé'}), 400
     
-# Extrait les données du fichier, et les envoie aux clients
-@app.route('/load_usagers')
-def load_usagers():
+# Récupère le fichier xlsx et le sauvegarde dans le dossier "RESOURCES_FOLDER" sous "usagers_list_2.xlsx"
+@app.route('/upload_xlsx_2', methods=['POST'])
+def upload_xlsx_2():
+    if 'file' not in request.files:
+        return jsonify({'error': 'Aucun fichier sélectionné'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'Nom de fichier vide'}), 400
+
+    if file and allowed_file(file.filename):
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], "usagers_list_2.xlsx")
+        file.save(file_path)
+        return jsonify({'message': 'Fichier chargé avec succès'}), 200
+    else:
+        return jsonify({'error': 'Format de fichier non autorisé'}), 400
+    
+# Extrait les données du fichier vers la liste 1, et les envoie aux clients
+@app.route('/load_usagers_list_1')
+def load_usagers_list_1():
     from extract_xlsx import extract_xlsx
 
-    global usagers_list
+    global usagers_list_1
 
-    file_path = RESOURCES_FOLDER + '/' + FILE_NAME
+    file_path = RESOURCES_FOLDER + '/' + "usagers_list_1.xlsx"
     extractor = extract_xlsx(file_path)
     extracted = extractor.to_array()
-    usagers_list.extend([usager for usager in extracted if usager not in usagers_list])
+    usagers_list_1.extend([usager for usager in extracted if usager not in usagers_list_1])
 
-    _sync_usagers_list()
+    _sync_usagers_list_1()
 
-    return jsonify({"usagers": usagers_list})
+    return jsonify({"usagers": usagers_list_1})
+
+# Extrait les données du fichier vers la liste 2, et les envoie aux clients
+@app.route('/load_usagers_list_2')
+def load_usagers_list_2():
+    from extract_xlsx import extract_xlsx
+
+    global usagers_list_2
+
+    file_path = RESOURCES_FOLDER + '/' + "usagers_list_2.xlsx"
+    extractor = extract_xlsx(file_path)
+    extracted = extractor.to_array()
+    usagers_list_2.extend([usager for usager in extracted if usager not in usagers_list_2])
+
+    _sync_usagers_list_2()
+
+    return jsonify({"usagers": usagers_list_2})
 
 # --- Socket.IO Events ---
 
@@ -111,59 +148,114 @@ def load_usagers():
 def on_connect():
     _sync_all()
 
-# Met à jour la liste des usagers
-@socketio.on('update_usagers')
-def on_update_usagers(data):
-    global usagers_list
-    usagers_list = data.get('usagers', [])
+# Met à jour la liste des usagers 1
+@socketio.on('update_usagers_list_1')
+def on_update_usagers_list_1(data):
+    global usagers_list_1
+    usagers_list_1 = data.get('usagers', [])
 
-    _sync_usagers_list()
+    _sync_usagers_list_1()
 
-# Efface un usager de la liste
-@socketio.on('remove_usager')
-def on_remove_usager(data):
+# Met à jour la liste des usagers 2
+@socketio.on('update_usagers_list_2')
+def on_update_usagers_list_2(data):
+    global usagers_list_2
+    usagers_list_2 = data.get('usagers', [])
+
+    _sync_usagers_list_2()
+
+# Efface un usager de la liste 2
+@socketio.on('remove_usager_1')
+def on_remove_usager_1(data):
     usager = data.get('usager')
-    if usager in usagers_list:
-        usagers_list.remove(usager)
+    if usager in usagers_list_1:
+        usagers_list_1.remove(usager)
 
-        _sync_usagers_list()
+        _sync_usagers_list_1()
 
-# Ajoute un usager à la liste
-@socketio.on('add_usager')
-def on_add_usager(data):
+# Efface un usager de la liste 2
+@socketio.on('remove_usager_2')
+def on_remove_usager_2(data):
+    usager = data.get('usager')
+    if usager in usagers_list_2:
+        usagers_list_2.remove(usager)
+
+        _sync_usagers_list_2()
+
+# Ajoute un usager à la liste 1
+@socketio.on('add_usager_1')
+def on_add_usager_1(data):
     usager = data.get('usager')
     if usager:
-        usagers_list.insert(0, usager)
+        usagers_list_1.insert(0, usager)
 
-        _sync_usagers_list()
+        _sync_usagers_list_1()
 
-# Sélectionne un usager de la liste
-@socketio.on('select_usager')
-def on_select_usager(data):
+# Ajoute un usager à la liste 2
+@socketio.on('add_usager_2')
+def on_add_usager_2(data):
     usager = data.get('usager')
     if usager:
-        if usager in selected_usagers:
-            selected_usagers.discard(usager)
-            if usager in displayed_usagers:
-                displayed_usagers.add(usager)
+        usagers_list_2.insert(0, usager)
+
+        _sync_usagers_list_2()
+
+# Sélectionne un usager de la liste 1
+@socketio.on('select_usager_1')
+def on_select_usager_1(data):
+    usager = data.get('usager')
+    if usager:
+        if usager in selected_usagers_1:
+            selected_usagers_1.discard(usager)
+            if usager in displayed_usagers_1:
+                displayed_usagers_1.add(usager)
         else:
-            selected_usagers.add(usager)
+            selected_usagers_1.add(usager)
 
-        _sync_usager_states()
+        _sync_usagers_states()
+    
+# Sélectionne un usager de la liste 2
+@socketio.on('select_usager_2')
+def on_select_usager_2(data):
+    usager = data.get('usager')
+    if usager:
+        if usager in selected_usagers_2:
+            selected_usagers_2.discard(usager)
+            if usager in displayed_usagers_2:
+                displayed_usagers_2.add(usager)
+        else:
+            selected_usagers_2.add(usager)
 
-# Sélectionne un usager et l'envoi à tous les écrans avec le bureau sélectionné
-@socketio.on('display_usager')
-def on_display_usager(data):
+        _sync_usagers_states()
+
+# Sélectionne un usager de la liste 1 et l'envoi à tous les écrans avec le bureau sélectionné
+@socketio.on('display_usager_1')
+def on_display_usager_1(data):
     global current_usager
     usager = data.get('usager')
 
     if usager :
-        displayed_usagers.add(usager)
-        selected_usagers.discard(usager)
+        displayed_usagers_1.add(usager)
+        selected_usagers_1.discard(usager)
         current_usager = usager
 
         _sync_current_bureau()
-        _sync_usager_states()
+        _sync_usagers_states()
+        _sync_display()
+
+# Sélectionne un usager de la liste 2 et l'envoi à tous les écrans avec le bureau sélectionné
+@socketio.on('display_usager_2')
+def on_display_usager_2(data):
+    global current_usager
+    usager = data.get('usager')
+
+    if usager :
+        displayed_usagers_2.add(usager)
+        selected_usagers_2.discard(usager)
+        current_usager = usager
+
+        _sync_current_bureau()
+        _sync_usagers_states()
         _sync_display()
 
 # Sélectionne un bureau
@@ -175,20 +267,29 @@ def on_select_bureau(data):
     _sync_current_bureau()
 
 # Affiche un message sur le bandeau
-@socketio.on('bandeau_message')
-def on_bandeau_message(data):
+@socketio.on('marquee_message')
+def on_marquee_message(data):
     msg = data.get('message')
     if msg:
-        socketio.emit('update_bandeau', {'bandeau_message': msg})
+        socketio.emit('update_marquee', {'marquee_message': msg})
         
-# Efface la liste des usagers
-@socketio.on('clear_usagers')
-def on_clear_usagers():
-    usagers_list.clear()
-    selected_usagers.clear()
-    displayed_usagers.clear()   
+# Efface la liste des usagers 1
+@socketio.on('clear_usagers_1')
+def on_clear_usagers_1():
+    usagers_list_1.clear()
+    selected_usagers_1.clear()
+    displayed_usagers_1.clear()   
 
-    _sync_usagers_list()
+    _sync_usagers_states()
+
+# Efface la liste des usagers 2
+@socketio.on('clear_usagers_2')
+def on_clear_usagers_2():
+    usagers_list_2.clear()
+    selected_usagers_2.clear()
+    displayed_usagers_2.clear()   
+
+    _sync_usagers_states()
 
 # Efface l'affichage de l'usager
 @socketio.on('clear_display')
@@ -205,29 +306,36 @@ def on_remove_bureau(data):
 
     key_to_remove = data.get('key')
     if key_to_remove in bureaux:
-        noms = list(bureaux.values())
+        bureau_items = list(bureaux.items())
         index = list(bureaux.keys()).index(key_to_remove)
-        noms.pop(index)
+        bureau_items.pop(index)
 
         # Recréer bureaux avec des clés ordonnées
-        bureaux = {f"bureau{i+1}": nom for i, nom in enumerate(noms)}
+        bureaux = {f"bureau{i+1}": val for i, (_, val) in enumerate(bureau_items)}
 
         os.makedirs('data', exist_ok=True)
-        with open("data/bureaux.txt", "w") as f:
-            f.write("\n".join(bureaux.values()))
+        with open("data/bureaux.txt", "w", encoding="utf-8") as f:
+            for val in bureaux.values():
+                f.write(f"{val['nom']}|{val['message']}\n")
 
         _sync_bureaux()
 
 @socketio.on('save_bureaux')
 def on_save_bureaux(data):
     global bureaux
+    bureaux_data = data.get('bureaux', {})  # format : {"bureau1": {"nom": "...", "message": "..."}, ...}
 
-    noms = list(data.get('bureaux', {}).values())
-    bureaux = {f"bureau{i+1}": nom for i, nom in enumerate(noms)}
+    bureaux = {}
+    for i, (key, val) in enumerate(bureaux_data.items()):
+        bureaux[f"bureau{i+1}"] = {
+            "nom": val.get("nom", f"Bureau {i+1}"),
+            "message": val.get("message", "")
+        }
 
     os.makedirs('data', exist_ok=True)
-    with open("data/bureaux.txt", "w") as f:
-        f.write("\n".join(bureaux.values()))
+    with open("data/bureaux.txt", "w", encoding="utf-8") as f:
+        for val in bureaux.values():
+            f.write(f"{val['nom']}|{val['message']}\n")
 
     _sync_bureaux()
 
@@ -248,26 +356,52 @@ def load_bureaux():
     bureaux = {}
 
     try:
-        with open("data/bureaux.txt", "r") as file:
+        with open("data/bureaux.txt", "r", encoding="utf-8") as file:
             lines = file.readlines()
             for i, line in enumerate(lines, start=1):
-                bureau_id = f"bureau{i}"
-                bureaux[bureau_id] = line.strip()
+                parts = line.strip().split("|", 1)
+                nom = parts[0]
+                message = parts[1] if len(parts) > 1 else ""
+                bureaux[f"bureau{i}"] = {"nom": nom, "message": message}
 
         socketio.emit('update_bureaux', bureaux)
 
     except FileNotFoundError:
         print("bureaux.txt introuvable, noms par défaut utilisés.")
 
+# Sauvegarde l'état simple liste / double liste
+def save_double_liste_mode():
+    os.makedirs('data', exist_ok=True)
+    with open('data/double_liste_mode_state.txt', 'w') as f:
+        f.write('1' if double_liste_mode else '0')
+
+# Charge l'état simple liste / double liste
+def load_double_liste_mode():
+    global double_liste_mode
+    try:
+        with open('data/double_liste_mode_state.txt', 'r') as f:
+            double_liste_mode = f.read().strip() == '1'
+    except FileNotFoundError:
+        double_liste_mode = False
+
 # --- Sync fonctions --
 
-def _sync_usagers_list():
-    socketio.emit('update_usagers', {'usagers': usagers_list})
+def _sync_double_liste_mode_state():
+    socketio.emit('set_initial_double_liste', {'enabled': double_liste_mode})
 
-def _sync_usager_states():
-    socketio.emit('update_displayed_usagers', {'displayed_usagers': list(displayed_usagers)})
-    socketio.emit('update_selected_usagers', {'selected_usagers': list(selected_usagers)})
-    _sync_usagers_list()
+def _sync_usagers_list_1():
+    socketio.emit('update_usagers_list_1', {'usagers': usagers_list_1})
+
+def _sync_usagers_list_2():
+    socketio.emit('update_usagers_list_2', {'usagers': usagers_list_2})
+
+def _sync_usagers_states():
+    socketio.emit('update_displayed_usagers_1', {'displayed_usagers': list(displayed_usagers_1)})
+    socketio.emit('update_displayed_usagers_2', {'displayed_usagers': list(displayed_usagers_2)})
+    socketio.emit('update_selected_usagers_1', {'selected_usagers': list(selected_usagers_1)})
+    socketio.emit('update_selected_usagers_2', {'selected_usagers': list(selected_usagers_2)})
+    _sync_usagers_list_1()
+    _sync_usagers_list_2()
 
 def _sync_bureaux():
     socketio.emit('update_bureaux', {'bureaux': bureaux})
@@ -276,21 +410,33 @@ def _sync_current_bureau():
     socketio.emit('update_current_bureau', {'current_bureau': current_bureau})
 
 def _sync_display():
+    msg = ""
+    for bureau_key, bureau_data in bureaux.items():
+        if bureau_data.get("nom") == current_bureau:
+            if bureau_data.get("message", current_bureau):
+                msg = bureau_data.get("message", current_bureau) # Message personalisé
+            else:
+                msg = "Est attendu au bureau " + current_bureau # Message pas défaut
+            break 
+
     socketio.emit('update_display',
     {
         'usager': current_usager,
-        'bureau': current_bureau
+        'msg': msg
     })
 
 def _sync_all():
-    _sync_usagers_list()
-    _sync_usager_states()
+    _sync_usagers_list_1()
+    _sync_usagers_list_2()
+    _sync_usagers_states()
     _sync_bureaux()
     _sync_current_bureau()
     _sync_display()
+    _sync_double_liste_mode_state()
 
 # --- Application Entry Point ---
 if __name__ == '__main__':
     load_bureaux()
+    load_double_liste_mode()
     print(f"Serveur lancé sur http://{IP}:{8080}")   
     socketio.run(app, debug=False, host=IP, port=8080)
