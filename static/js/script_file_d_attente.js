@@ -1,5 +1,5 @@
 var socket = io.connect('http://' + document.domain + ':' + location.port);
-var audio = new Audio('/static/audio/notification_sound.mp3');
+var audio = new Audio('/static/audios/notification_sound.mp3');
 var lastUsagerDisplayed = "";
 
 var nextUsagers = [];
