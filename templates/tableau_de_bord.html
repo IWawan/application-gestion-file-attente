@@ -26,6 +26,7 @@
     <!-- Menu latéral -->
     <nav id="side-menu" class="side-menu">
 
+        <!-- Switch double liste -->
         <div class="toggle-wrapper">
             <span class="toggle-label off">Simple<br>liste</span>
         
@@ -35,6 +36,18 @@
             </label>
         
             <span class="toggle-label on">Double<br>liste</span>
+        </div>
+
+        <!-- Switch mode nuit -->
+        <div class="toggle-wrapper" style="margin-top: 1em;">
+            <span class="toggle-label off">Clair</span>
+
+            <label class="switch">
+                <input type="checkbox" id="theme-toggle">
+                <span class="slider"></span>
+            </label>
+
+            <span class="toggle-label on">Sombre</span>
         </div>
 
         <button onclick="ouvrirPopupBandeau()">Bandeau</button>

@@ -1,6 +1,8 @@
 var socket = io.connect('http://' + window.location.hostname + ':' + window.location.port);
 
-const toggleSwitch = document.getElementById('double-list-toggle');
+const doubleListeToggle = document.getElementById('double-list-toggle');
+const themeToggle = document.getElementById('theme-toggle');
+const currentTheme = localStorage.getItem('theme');
 
 usagers_list_1 = [];
 usagers_list_2 = [];
@@ -527,7 +529,7 @@ function switchDoubleListe(checked)
     const liste = document.getElementById('usagers-list-2-container');
     liste.style.display = checked ? 'block' : 'none';
 
-    toggleSwitch.checked = checked;
+    doubleListeToggle.checked = checked;
     
     socket.emit('set_double_liste_mode', { enabled: checked });
 }
@@ -581,7 +583,7 @@ document.addEventListener('keydown', (event) =>
 
 socket.on('set_initial_double_liste', function(data)
 {
-    toggleSwitch.checked = data.enabled;
+    doubleListeToggle.checked = data.enabled;
     document.getElementById('usagers-list-2-container').style.display = data.enabled ? 'block' : 'none';
 });
 
@@ -643,7 +645,35 @@ socket.on('update_bureaux', function(data)
     mettreAJourBureaux();
 });
 
+// ----------------------
+//  Oritnetation de l'écran
+// ----------------------
+
 window.addEventListener("orientationchange", function()
 {
     location.reload(); // recharge la page pour réappliquer les media queries
+});
+
+// ----------------------
+//  Dark mode
+// ----------------------
+
+if (currentTheme === 'dark')
+{
+        document.body.classList.add('dark-theme');
+        themeToggle.checked = true;
+}
+
+themeToggle.addEventListener('change', function()
+{
+    if (themeToggle.checked)
+    {
+        document.body.classList.add('dark-theme');
+        localStorage.setItem('theme', 'dark');
+    }
+    else
+    {
+        document.body.classList.remove('dark-theme');
+        localStorage.setItem('theme', 'light');
+    }
 });

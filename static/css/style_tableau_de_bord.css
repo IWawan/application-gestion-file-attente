@@ -72,7 +72,7 @@
 
     /* Taille des éléments */
 
-    --maxheight-main: 82vh;
+    --maxheight-main: 85vh;
     --width-usagers-global-container: auto;
     --width-bureaux-btn-container: auto;
     --open-size-menu-btn: 50px;
@@ -82,7 +82,74 @@
     --radius: 10px;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
-    --paddidng-btn: 12px 16px;
+    --paddidng-btn: 7px 12px;
+}
+
+/* Mode nuit */
+body.dark-theme
+{
+    /* General */
+    --c-general-bg: #121212;
+    --c-general-bg-2: #1e1e1e;
+    --c-general-border: #333;
+    --c-general-text: #f5f5f5;
+
+    /* Bouton principal */
+    --c-btn-1: #2563EB;
+    --c-btn-1-hover: #1d4ed8;
+    --c-btn-1-text: #ffffff;
+
+    /* Bouton secondaire */
+    --c-btn-2: #3a4d63;
+    --c-btn-2-hover: #2c3d53;
+    --c-btn-2-text: #cfd8e3;
+
+    /* Bouton sélectionner */
+    --c-btn-select: #f59e0b;
+    --c-btn-select-hover: #d97706;
+    --c-btn-select-ready: #d97706;
+    --c-btn-select-ready-hover: #b45309;
+    --c-btn-select-text: #ffffff;
+
+    /* Bouton usager liste 1 */
+    --c-btn-usager-l-1: #3a4d63;
+    --c-btn-usager-l-1-hover: #2c3d53;
+    --c-btn-usager-l-1-text: #cfd8e3;
+
+    /* Bouton usager liste 2 */
+    --c-btn-usager-l-2: #5b3866;
+    --c-btn-usager-l-2-hover: #482b55;
+    --c-btn-usager-l-2-text: #e9d6f2;
+    
+    /* Bouton nouvel usager liste 1 */
+    --c-btn-new-usager-l-1: #3399ff;
+    --c-btn-new-usager-l-1-hover: #1976d2;
+    --c-btn-new-usager-l-1-text: #ffffff;
+
+    /* Bouton nouvel usager liste 2 */
+    --c-btn-new-usager-l-2: #b347cc;
+    --c-btn-new-usager-l-2-hover: #9932cc;
+    --c-btn-new-usager-l-2-text: #ffffff;
+
+    /* Bouton ok */
+    --c-btn-ok: #10b95c;
+    --c-btn-ok-hover: #0f9b4c;
+    --c-btn-ok-text: #ffffff;
+
+    /* Bouton supprimer */
+    --c-btn-del: #dc2626;
+    --c-btn-del-hover: #b91c1c;
+    --c-btn-del-text: #ffffff;
+
+    /* Input */
+    --c-input-bg: #2c2c2c;
+    --c-input-text: #f5f5f5;
+    --c-input-border: #555;
+
+    /* Side-menu */
+    --c-sm-bg-1: #1f2937;
+    --c-sm-bg-2: #111827;
+    --c-sm-text: #f5f5f5;
 }
 
 /* === GENERAL === */
@@ -451,7 +518,7 @@ button:focus
     border-radius: var(--radius) var(--radius) 0 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: fixed;
-    left: 0;
+    left: -1%;
     right: 0;
     padding: 10px;
     justify-content: center;
@@ -560,49 +627,51 @@ button:focus
 
 .switch
 {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 26px;
+    position: relative;
+    display: inline-block;
+    width: 35px;
+    height: 18px;
 }
 
 .switch input
 {
-  opacity: 0;
-  width: 0;
-  height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 .slider /* Le fond du switch (rail) */
 {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0;
-  right: 0; bottom: 0;
-  background-color: var(--c-btn-2);
-  transition: .4s;
-  border-radius: 26px;
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+    background-color: var(--c-btn-2);
+    transition: .4s;
+    border-radius: 18px;
 }
 
-.slider:before /* La pastille du switch */
+.slider:before
 {
-  position: absolute;
-  content: "";
-  height: 20px; width: 20px;
-  left: 3px; bottom: 3px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
 }
 
 input:checked + .slider /* Quand activé (coché) */
 {
-  background-color: var(--c-btn-1);
+    background-color: var(--c-btn-1);
 }
 
 input:checked + .slider:before 
 {
-    transform: translateX(24px);
+    transform: translateX(17px);
 }
 
 .switch:hover input:not(:checked) + .slider /* Hover quand off */
@@ -850,7 +919,6 @@ input:checked + .slider:before
         --font-size-title: 1rem;
 
         --maxheight-main: 65vh;
-        --paddidng-btn: 6px 11px;
 
         --open-size-menu-btn: 45px
     }
