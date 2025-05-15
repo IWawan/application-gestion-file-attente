@@ -339,6 +339,13 @@ def on_save_bureaux(data):
 
     _sync_bureaux()
 
+@socketio.on('set_double_liste_mode')
+def on_set_double_liste_mode(data):
+    global double_liste_mode
+    double_liste_mode = data.get('enabled', False)
+    save_double_liste_mode()      
+    _sync_double_liste_mode_state()
+
 @socketio.on('reset_all')
 def on_reset_all():
     usagers_list = []

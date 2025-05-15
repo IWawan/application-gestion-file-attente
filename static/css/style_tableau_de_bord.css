@@ -907,11 +907,6 @@ input:checked + .slider:before
         font-size: 0.5rem;
     }
 
-    .usagers-list-content
-    {
-        width: 41vw;
-    }
-
     .display-container
     {
         padding: 5px;
