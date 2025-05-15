@@ -72,7 +72,8 @@
 
     /* Taille des éléments */
 
-    --maxheight-main: 85vh;
+    --maxheight-usagers-content: 85vh;
+    --maxheight-bureaux-container: 75vh;
     --width-usagers-global-container: auto;
     --width-bureaux-btn-container: auto;
     --open-size-menu-btn: 50px;
@@ -284,14 +285,14 @@ button:focus
     align-items: center;
     justify-content: flex-start;
     padding: 10px;
-    margin: 6px;
     gap: 10px;
+    margin-top: -15vh;
 
     /* Taille adaptative */
     width: auto;
     max-width: var(--width-bureaux-btn-container);
     height: auto;
-    max-height: var(--maxheight-main);
+    max-height: var(--maxheight-bureaux-container);
 
     /* Scroll si trop de contenu */
     overflow-y: auto;
@@ -364,7 +365,7 @@ button:focus
     justify-self: center;
     margin: 0px;
     height: auto;
-    max-height: var(--maxheight-main);
+    max-height: var(--maxheight-usagers-content);
     width: 95%;
     padding: 0 8px;   
     overflow-x: hidden; 
@@ -918,7 +919,8 @@ input:checked + .slider:before
         --font-size-big: 1rem;
         --font-size-title: 1rem;
 
-        --maxheight-main: 65vh;
+        --maxheight-usagers-content: 65vh;
+        --maxheight-bureaux-container: 55vh;
 
         --open-size-menu-btn: 45px
     }
@@ -961,7 +963,8 @@ input:checked + .slider:before
         --font-size-big: 0.7rem;
         --font-size-title: 0.8rem;
 
-        --maxheight-main: 61vh;
+        --maxheight-usagers-content: 61vh;
+        --maxheight-bureaux-container: 51vh;
         --open-size-menu-btn: 30px;
     }
 
