@@ -63,15 +63,26 @@
     --c-sm-bg-2: #d8e1f1;
     --c-sm-text: #111827;
 
-    /* UI basics */
+    /* Font */
     --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     --font-size-small: 0.8rem;
     --font-size-medium: 0.9rem;
     --font-size-big: 1.3rem;
     --font-size-title: 1.1rem;
+
+    /* Taille des éléments */
+
+    --maxheight-main: 82vh;
+    --width-usagers-global-container: auto;
+    --width-bureaux-btn-container: auto;
+    --open-size-menu-btn: 50px;
+
+    /* UI basics */
+    
     --radius: 10px;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
+    --paddidng-btn: 12px 16px;
 }
 
 /* === GENERAL === */
@@ -94,12 +105,13 @@ body
     flex-direction: column;
     align-items: center;
     display: grid;
-    grid-template-rows: auto 1fr auto;
-    grid-template-columns: 120px 1fr;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto 1fr;
     grid-template-areas:
         "bureaux usagers"
         "display display";
     min-height: 100vh;
+    gap: 0;
 }
 
 h2
@@ -122,7 +134,7 @@ button
     color: var(--c-btn-1-text);
     font-size: var(--font-size-medium);
     border: none;
-    padding: 10px 16px;
+    padding: var(--paddidng-btn);
     border-radius: var(--radius);
     cursor: pointer;
     box-shadow: var(--shadow);;
@@ -194,76 +206,29 @@ button:focus
   background-color: var(--c-btn-1-hover);
 }
 
-/* === DISPLAY SECTION === */
-
-.display-section
-{
-    background-color: var(--c-general-bg-2);
-    color: var(--c-general-text);
-    border: 1px solid var(--c-btn-2);
-    border-radius: var(--radius) var(--radius) 0 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    left: 0;
-    right: 0;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    z-index: 3;
-    grid-area: display;
-    display: none; /* Masqué par défaut */
-    top: auto;
-    bottom: 0; 
-    width: 100%;
-}
-
-.display-section h2
-{  
-    white-space: normal; 
-    word-break: break-word;
-    margin: 0;
-}
-
-.display-section button
-{
-    background-color: var(--c-btn-del);
-    color: var(--c-btn-del-text);
-    padding: 12px 18px; 
-    margin: 0 20px;               
-}
-
-.display-section button:hover
-{
-    background-color: var(--c-btn-del-hover);
-}
-
 /* === BUREAUX BUTTONS CONTAINER === */
 
 .bureaux-btn-container
 {
+    grid-area: bureaux;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     padding: 10px;
-    margin: 5px;
+    margin: 6px;
     gap: 10px;
 
     /* Taille adaptative */
     width: auto;
-    max-width: 20vw;
+    max-width: var(--width-bureaux-btn-container);
     height: auto;
-    max-height: 80vh;
+    max-height: var(--maxheight-main);
 
     /* Scroll si trop de contenu */
     overflow-y: auto;
     overflow-x: hidden;
-
-    /* Centrage vertical à gauche */
-    position: fixed;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
 }
 
 .bureaux-btn-container button
@@ -293,13 +258,14 @@ button:focus
 .usagers-list-global-container
 {
     grid-area: usagers;
+
     background-color: var(--c-general-bg-2);
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
     height: 100vh;
-    width: 80vw;
+    width: var(--width-usagers-global-container);
     border-left: 1px solid var(--c-btn-2);
     border-right: 1px solid var(--c-btn-2);
 }
@@ -331,7 +297,7 @@ button:focus
     justify-self: center;
     margin: 0px;
     height: auto;
-    max-height: 82vh;
+    max-height: var(--maxheight-main);
     width: 95%;
     padding: 0 8px;   
     overflow-x: hidden; 
@@ -473,6 +439,50 @@ button:focus
     background-color: var(--c-btn-del-hover);
 }
 
+/* === DISPLAY CONTAINER === */
+
+.display-container
+{
+    grid-area: display;
+
+    background-color: var(--c-general-bg-2);
+    color: var(--c-general-text);
+    border: 1px solid var(--c-btn-2);
+    border-radius: var(--radius) var(--radius) 0 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+    display: none; /* Masqué par défaut */
+    top: auto;
+    bottom: 0; 
+    width: 100%;
+}
+
+.display-container h2
+{  
+    white-space: normal; 
+    word-break: break-word;
+    margin: 0;
+}
+
+.display-container button
+{
+    background-color: var(--c-btn-del);
+    color: var(--c-btn-del-text);
+    padding: var(--paddidng-btn);
+    margin: 0 20px;               
+}
+
+.display-container button:hover
+{
+    background-color: var(--c-btn-del-hover);
+}
+
 /* === OPEN SIDE MENU BUTTON === */
 
 #open-side-menu-btn
@@ -481,9 +491,9 @@ button:focus
     color: var(--c-btn-2-text);
     position: absolute;
     top: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
+    left: 20px;
+    width: var(--open-size-menu-btn);
+    height: var(--open-size-menu-btn);
     border-radius: 50%;
     box-shadow: var(--shadow);
     display: flex;
@@ -507,7 +517,7 @@ button:focus
     width: 0;
     position: fixed;
     top: 0;
-    right: 0;
+    left: 0;
     overflow-x: hidden;
     transition: var(--transition);
     z-index: 5;
@@ -526,7 +536,7 @@ button:focus
     color: var(--c-btn-2-text);
     width: 80%;
     margin: 20px auto;
-    padding: 10px;
+    padding: var(--paddidng-btn);
     display: block;
 }
 
@@ -788,6 +798,39 @@ input:checked + .slider:before
   background-color: var(--c-btn-2-hover);
 }
 
+#orientation-warning
+{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background:var(--c-general-bg-2);
+    color: var(--c-general-text);
+    z-index: 9999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: var(--font-size-big);
+    padding: 2em;
+    overflow: hidden;
+}
+
+/* Portrait uniquement */
+@media screen and (orientation: portrait)
+{
+    #orientation-warning
+    {
+        display: flex;
+    }
+
+    body > *:not(#orientation-warning)
+    {
+        display: none !important;
+    }
+}
+
 /* === ANIMATION === */
 
 @keyframes fadeIn
@@ -801,10 +844,15 @@ input:checked + .slider:before
 {
     :root
     {
-        --font-size-small: 0.5rem;
-        --font-size-medium: 0.6rem;
-        --font-size-big: 0.9rem;
-        --font-size-title: 0.8rem;
+        --font-size-small: 0.7rem;
+        --font-size-medium: 0.75rem;
+        --font-size-big: 1rem;
+        --font-size-title: 1rem;
+
+        --maxheight-main: 65vh;
+        --paddidng-btn: 6px 11px;
+
+        --open-size-menu-btn: 45px
     }
 
     body
@@ -812,14 +860,26 @@ input:checked + .slider:before
         grid-template-columns: 100px 1fr;
     }
 
-    .usagers-list-content
-    {
-        max-height: 62vh;
-    }
-
     .bureaux-btn-container
     {
         padding: 5px;
+    }
+
+    .popup-content .remove-bureau-btn
+    {
+        width: 20px;
+        height: 20px;
+    }
+
+    #open-side-menu-btn
+    {
+        width: var(--open-size-menu-btn);
+        height: var(--open-size-menu-btn);
+    }
+
+    .side-menu.open
+    {
+        width: 210px;
     }
 }
 
@@ -832,6 +892,9 @@ input:checked + .slider:before
         --font-size-medium: 0.6rem;
         --font-size-big: 0.7rem;
         --font-size-title: 0.8rem;
+
+        --maxheight-main: 61vh;
+        --open-size-menu-btn: 30px;
     }
 
     .usagers-list-global-container
@@ -847,15 +910,14 @@ input:checked + .slider:before
     .usagers-list-content
     {
         width: 41vw;
-        max-height: 54vh;
     }
 
-    .display-section
+    .display-container
     {
         padding: 5px;
     }
 
-    .display-section button
+    .display-container button
     {
         padding: 4px 8px; 
         margin: 0 20px;               
@@ -863,14 +925,8 @@ input:checked + .slider:before
 
     #open-side-menu-btn
     {
-        left: 20px;
-        width: 40px;
-        height: 40px;
-    }
-
-    .side-menu
-    {
-        left: 0;
+        width: var(--open-size-menu-btn);
+        height: var(--open-size-menu-btn);
     }
 
     .side-menu.open

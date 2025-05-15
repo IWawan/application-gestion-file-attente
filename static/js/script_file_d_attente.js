@@ -102,16 +102,3 @@ socket.on('update_displayed_usagers_1', function(data)
 {
     displayed_usagers = new Set(data.displayed_usagers); 
 });
-
-// ----------------------
-//  MÉTÉO (OpenWeatherMap)
-// ----------------------
-
-async function getMeteo()
-{
-    return;
-}
-
-// Appel de la fonction pour afficher la météo
-getMeteo();
-setInterval(getMeteo, 10 * 60 * 1000); // Actualisation toutes les 10 minutes

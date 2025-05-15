@@ -148,7 +148,7 @@ function effacerListeUsagers(nb_list)
 function effacerAffichage()
 {
     socket.emit('clear_display');
-    document.getElementById('display-section').style.display = 'none';
+    document.getElementById('display-container').style.display = 'none';
 }
 
 // Reinitialise les variables
@@ -367,7 +367,7 @@ function mettreAJourAffichage(usager)
     usagerDisplay.textContent = usager.substring(usager.indexOf("|") + 1).toUpperCase();
 
     // Affiche le bouton "clear-btn" si un usager est affiché
-    if (usager != "") { document.getElementById('display-section').style.display = 'flex'; }
+    if (usager != "") { document.getElementById('display-container').style.display = 'flex'; }
 }
 
 // ---------------
@@ -641,4 +641,9 @@ socket.on('update_bureaux', function(data)
     bureaux = data.bureaux;
     
     mettreAJourBureaux();
+});
+
+window.addEventListener("orientationchange", function()
+{
+    location.reload(); // recharge la page pour réappliquer les media queries
 });
