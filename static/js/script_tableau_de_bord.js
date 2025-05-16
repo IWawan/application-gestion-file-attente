@@ -1,4 +1,4 @@
-var socket = io.connect('http://' + window.location.hostname + ':' + window.location.port);
+var socket = io.connect('https://' + window.location.hostname + ':' + window.location.port);
 
 const doubleListeToggle = document.getElementById('double-list-toggle');
 const themeToggle = document.getElementById('theme-toggle');

@@ -4,10 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2c3e50">
     <title>Tableau de bord</title>
     <link rel="stylesheet" href="/static/css/style_tableau_de_bord.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="manifest" href="/manifest.json">
+    
+    <script>
+    if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .then(function(registration) {
+        console.log('SW registered with scope: ', registration.scope);
+        })
+        .catch(function(error) {
+        console.log('SW registration failed: ', error);
+        });
+    });
+    }
+    </script>
 </head>
 
 <body>
@@ -52,7 +68,7 @@
 
         <button onclick="ouvrirPopupBandeau()">Bandeau</button>
         <button onclick="ouvrirPopupBureaux()">Bureaux</button>
-        <button class="close-btn" onclick="window.location.href='http://{{ ip }}:{{ port }}'">Quitter</button>
+        <button class="close-btn" onclick="window.location.href='https://{{ ip }}:{{ port }}'">Quitter</button>
     </nav>
 
     <!-- Popup de modification du bandeau -->
@@ -108,7 +124,7 @@
         <div class="popup-overlay"></div>
         <div class="popup-content">
             <h3>Ajout d'un rendez-vous</h3>
-            <label for="new-usager-input">Nom :</label>
+            <label for="new-usager-input-1">Nom :</label>
             <input type="text" id="new-usager-input-1" placeholder="Nom" required>
             <button class="new-usager-add-btn" onclick="ajouterRDV(1)">&check;</button>
             <div class="popup-btn">
@@ -122,7 +138,7 @@
         <div class="popup-overlay"></div>
         <div class="popup-content">
             <h3>Ajout d'un rendez-vous</h3>
-            <label for="new-usager-input">Nom :</label>
+            <label for="new-usager-input-2">Nom :</label>
             <input type="text" id="new-usager-input-2" placeholder="Nom" required>
             <button class="new-usager-add-btn" onclick="ajouterRDV(2)">&check;</button>
             <div class="popup-btn">

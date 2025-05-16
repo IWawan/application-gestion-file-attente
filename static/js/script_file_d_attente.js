@@ -1,4 +1,4 @@
-var socket = io.connect('http://' + document.domain + ':' + location.port);
+var socket = io.connect('https://' + document.domain + ':' + location.port);
 var audio = new Audio('/static/audios/notification_sound.mp3');
 var lastUsagerDisplayed = "";
 

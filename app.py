@@ -1,5 +1,5 @@
 import sys
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_file
 from flask_session import Session
 from flask_socketio import SocketIO
 import socket
@@ -72,6 +72,16 @@ def index():
 @app.route('/file-d-attente')
 def display():
     return render_template('file_d_attente.html')
+
+@app.route('/sw.js')
+def serve_sw():
+    print("swsw")
+    return send_file('sw.js', mimetype='application/javascript')
+
+@app.route('/manifest.json')
+def serve_manifest():
+    print("MANIIFEST")
+    return send_file('manifest.json', mimetype='application/manifest+json')
 
 # Récupère le fichier xlsx et le sauvegarde dans le dossier "RESOURCES_FOLDER" sous "usagers_list_1.xlsx"
 @app.route('/upload_xlsx_1', methods=['POST'])
@@ -445,5 +455,5 @@ def _sync_all():
 if __name__ == '__main__':
     load_bureaux()
     load_double_liste_mode()
-    print(f"Serveur lancé sur http://{IP}:{8080}")   
-    socketio.run(app, debug=False, host=IP, port=8080)
+    print(f"Serveur lancé sur https://{IP}:{8080}")   
+    socketio.run(app, debug=False, host=IP, port=8080, ssl_context=('cert.pem', 'key.pem'))
