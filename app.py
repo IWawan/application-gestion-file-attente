@@ -58,6 +58,7 @@ current_bureau = ""
 
 bureaux = {}
 double_liste_mode = False
+MARQUEE_MSG_DEFAULT = "Bienvenue dans notre espace d'accueil – Nous vous souhaitons une excellente journée !"
 
 # --- Routes HTTP ---
 
@@ -269,9 +270,12 @@ def on_select_bureau(data):
 # Affiche un message sur le bandeau
 @socketio.on('marquee_message')
 def on_marquee_message(data):
+    global marquee_msg
     msg = data.get('message')
     if msg:
-        socketio.emit('update_marquee', {'marquee_message': msg})
+        marquee_msg = msg
+        save_marquee_msg()      
+        _sync_marquee_msg()
         
 # Efface la liste des usagers 1
 @socketio.on('clear_usagers_1')
@@ -356,8 +360,9 @@ def on_reset_all():
 
     _sync_all()
 
-# --- Persistance des bureaux ---
+# --- Persistance ---
 
+# Charge les données des bureaux
 def load_bureaux():
     global bureaux
     bureaux = {}
@@ -391,10 +396,31 @@ def load_double_liste_mode():
     except FileNotFoundError:
         double_liste_mode = False
 
+# Sauvegarde le message du bandeau
+def save_marquee_msg():
+    os.makedirs('data', exist_ok=True)
+    with open('data/marquee_msg.txt', 'w') as f:
+        f.write(marquee_msg)
+
+# Charge le message du bandeau
+def load_marquee_msg():
+    global marquee_msg
+    try:
+        with open('data/marquee_msg.txt', 'r') as f:
+            marquee_msg = f.read()
+    except FileNotFoundError:
+        marquee_msg = MARQUEE_MSG_DEFAULT
+
+    if marquee_msg == "":
+        marquee_msg = MARQUEE_MSG_DEFAULT
+
 # --- Sync fonctions --
 
 def _sync_double_liste_mode_state():
     socketio.emit('set_initial_double_liste', {'enabled': double_liste_mode})
+
+def _sync_marquee_msg():
+    socketio.emit('update_marquee', {'marquee_message': marquee_msg})
 
 def _sync_usagers_list_1():
     socketio.emit('update_usagers_list_1', {'usagers': usagers_list_1})
@@ -439,11 +465,13 @@ def _sync_all():
     _sync_bureaux()
     _sync_current_bureau()
     _sync_display()
+    _sync_marquee_msg()
     _sync_double_liste_mode_state()
 
 # --- Application Entry Point ---
 if __name__ == '__main__':
     load_bureaux()
     load_double_liste_mode()
+    load_marquee_msg()
     print(f"Serveur lancé sur http://{IP}:{8080}")   
     socketio.run(app, debug=False, host=IP, port=8080)
