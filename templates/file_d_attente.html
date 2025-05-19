@@ -15,12 +15,16 @@
     <img id="image_sln" src="static/images/sln_logo.png" width="25%" alt="logo-sln"/>
   </header>
 
-  <main>
+  <div class="usager-container">
     <div class="main-name" id="main-name"></div>
     <div class="subtext" id="subtext"></div>
+  </div>
+
+  <div class="box-container">
 
     <div class="box next-usagers">
       <h3>Prochains rendez-vous :</h3>
+
       <ul>
         <li id="next-usager-1"></li>
         <li id="next-usager-2"></li>
@@ -32,10 +36,11 @@
     <div class="box meteo" id="meteo">
       <h3>Météo :</h3>
       <div id="meteo-content">
-        <iframe id="widget_autocomplete_preview" frameborder="0" src="https://meteofrance.com/widget/prevision/595690##C83B3B" title="Prévisions Sin-le-Noble par Météo-France"> </iframe>
+        <iframe src="https://api.wo-cloud.com/content/widget/?geoObjectKey=14403272&language=fr&region=FR&timeFormat=HH:mm&windUnit=kmh&systemOfMeasurement=metric&temperatureUnit=celsius" name="CW2" scrolling="no" frameborder="0" style="border: 1px solid #003959;border-radius: 4px"></iframe>
       </div>
     </div>
-  </main>
+    
+  </div>
 
   <div class="marquee" id="marquee">
     <div class="marquee-text" id="marquee-text">Bienvenue dans notre espace d'accueil – Nous vous souhaitons une excellente journée !</div>

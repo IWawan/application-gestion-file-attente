@@ -9,37 +9,41 @@
 
   /* Taille de police */
   --font-size-marquee: 2.5rem;
-  --font-size-name: 3rem;
-  --font-size-subtext: 1.8rem;
+  --font-size-name: 3.2rem;
+  --font-size-subtext: 2rem;
   --font-size-box-title: 1.5rem;
-  --font-size-box: 1.2rem;
+  --font-size-box: 1.3rem;
 
-  /* Box */
-  --height-box: 200px;
-  --width-box: 400px;
-  --padding-box: 1rem;
+  /* Taille des containers */
+  --margin-vertical-container: 3vh;
+
+  --padding-vertical-container: 1vh;
+
+  --height-header: 15vh;
+  --height-usager-container: 25vh;
+  --height-box: 48vh;
+  --height-marquee: 7vh;
+
+  /* Prochains usagers */
+  --margin-vertical-next-usager: 1.5rem;
 
   /* Météo */
-  --height-meteo-widget: 150px;
-  --width-meteo-widget: 400px;
+  --height-meteo-widget: 37vh;
 
   /* Image */
   --maxheight-img: 100px;
   --maxwidth-img: 250px;
-
-  /* Bandeau */
-  --height-marquee: 4rem;
 }
 
 body
 {
   margin: 0;
+  padding:0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--c-bg);
   color: var(--c-text);
   display: flex;
   flex-direction: column;
-  align-items: center;
   overflow-x: hidden;
   overflow-y: hidden;
 }
@@ -49,8 +53,9 @@ body
 header
 {
   width: 100%;
+  height: var(--height-header);
+  padding: var(--padding-vertical-container) 0;
   background-color: white;
-  padding: 1rem;
   display: flex;
   justify-content: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -58,89 +63,92 @@ header
 
 header img
 {
-  max-height: var(--maxheight-img);
-  max-width: var(--maxwidth-img)
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-/* -- Container principal -- */
+/* -- Usager container -- */
 
-main
+.usager-container
 {
+  width: 100%;
+  height: var(--height-usager-container);
   text-align: center;
-  margin: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
 }
 
-/* Nom de l'usager */
-.main-name
+.main-name /* Nom de l'usager */
 {
   font-size: var(--font-size-name);
   font-weight: bold;
   color: var(--c-main);
-  min-height: 4rem;
 }
 
-/* Message d'assignation au bureau */
-.subtext
+.subtext /* Message d'assignation au bureau */
 {
   font-size: var(--font-size-subtext);
-  margin-bottom: 2rem;
   font-weight: bold;
 }
 
 /* Box */
 
+.box-container
+{
+  width: 100%;
+  height: var(--height-box);
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+}
+
 .box
 {
+  width: 40vw;
+  height: auto;
   font-size: var(--font-size-box);
   background-color: var(--c-secondary);
-  padding: var(--padding-box);
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  width: var(--width-box);
-  height: var(--height-box);
-  margin: 0;
-  position: absolute;
-  top: 45%;
+
+  display: flex;
+  flex-direction: column;       /* pour empiler les enfants verticalement */
+  text-align: center;           /* centre le texte à l'intérieur */
 }
 
 .box h3
 {
-  margin-top: 0;
+  margin: 0;
+  padding: 2%;
   font-size: var(--font-size-box-title);
   color: var(--c-main);
 }
 
-/* Météo */
-
-.meteo
+.box iframe /* Météo */
 {
-  right: 20%;
-  transform: translateX(50%);
-}
-
-iframe {
-  width: var(--width-meteo-widget);
+  width: 80%;
   height: var(--height-meteo-widget);
+  display: block;
+  margin: 0 auto;
 }
 
 /* Liste des prochains usagers */
-
-.next-usagers
-{
-  left: 20%;
-  transform: translateX(-50%);
-}
-
 .next-usagers ul
 {
   list-style: none;
   padding: 0;
   margin: 0;
+
 }
 
 .next-usagers li
 {
-  margin: 0.5rem 0;
+  margin: var(--margin-vertical-next-usager) 0;
   font-weight: bold;
 }
 
@@ -149,14 +157,12 @@ iframe {
 .marquee
 {
   width: 100%;
+  height: var(--height-marquee);
+  margin-top: var(--margin-vertical-container);
   overflow: hidden;
   background-color: var(--c-main);
   color: white;
   font-size: var(--font-size-marquee);
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  height: var(--height-marquee);
   display: flex;
   align-items: center;
 }
@@ -179,5 +185,45 @@ iframe {
   100%
   {
     transform: translateX(-100%);
+  }
+}
+
+/* Petits écrans : smartphones */
+@media screen and (max-width: 800px)
+{
+  :root
+  {
+    --font-size-marquee: 1.6rem;
+    --font-size-name: 2.2rem;
+    --font-size-subtext: 1.2rem;
+    --font-size-box-title: 1.2rem;
+    --font-size-box: 1rem;
+    --margin-vertical-next-usager: 0.4rem;
+  }
+}
+
+/* Petits écrans : smartphones */
+@media screen and (min-width: 800px) and (max-width: 1100px)
+{
+  :root {
+    --font-size-marquee: 1.6rem;
+    --font-size-name: 2.2rem;
+    --font-size-subtext: 1.2rem;
+    --font-size-box-title: 1.2rem;
+    --font-size-box: 1rem;
+    --margin-vertical-next-usager: 0.8rem;
+  }
+}
+
+/* Très grands écrans : desktop large / TV */
+@media screen and (min-width: 1800px)
+{
+  :root {
+    --font-size-marquee: 3.5rem;
+    --font-size-name: 5.5rem;
+    --font-size-subtext: 3.5rem;
+    --font-size-box-title: 3rem;
+    --font-size-box: 2.5rem;
+    --margin-vertical-next-usager: 2rem;
   }
 }
