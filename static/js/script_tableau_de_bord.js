@@ -150,7 +150,6 @@ function effacerListeUsagers(nb_list)
 function effacerAffichage()
 {
     socket.emit('clear_display');
-    document.getElementById('display-container').style.display = 'none';
 }
 
 // Reinitialise les variables
@@ -369,7 +368,7 @@ function mettreAJourAffichage(usager)
     usagerDisplay.textContent = usager.substring(usager.indexOf("|") + 1).toUpperCase();
 
     // Affiche le bouton "clear-btn" si un usager est affiché
-    if (usager != "") { document.getElementById('display-container').style.display = 'flex'; }
+    document.getElementById('display-container').style.display = usager == ""? 'none' : 'flex';
 }
 
 // ---------------

@@ -77,8 +77,8 @@
     --height-usagers-list-container: 93vh;
     --padding-usagers-list-header: 10px;
     --height-top-container: 10vh;
-    --padding-bot-top-container: 3vh; 
-    --height-usagers-list-content: 79vh;
+    --padding-bot-top-container: 15px; 
+    --height-usagers-list-content: 75vh;
     --padding-usager-container: 3px 0;
     
     --width-main-container: 100vw;
@@ -220,6 +220,8 @@ h3
     height: var(--height-top-container);
     width: auto;
 
+    padding: var(--padding-bot-top-container) 0;
+
     display: flex;
     justify-content: center; /* centre horizontalement */
     align-items: center;     /* centre verticalement */
@@ -241,7 +243,6 @@ h3
     align-items: flex-start;
     width: var(--width-usagers-global-container);
     border: 1px solid var(--c-btn-2);
-    border-radius: 0 0 0 var(--radius);
 }
 
 /* === BUREAUX BUTTONS CONTAINER === */
@@ -950,20 +951,36 @@ input:checked + .slider:before
 {
   :root
   {
+    /* Font size */
     --font-size-small: 0.6rem;
     --font-size-medium: 0.65rem;
     --font-size-big: 0.9rem;
     --font-size-title: 1rem;
 
+    /* Taille des containers */
+    --height-main-container: 75vh;
+    --height-display-container: 7vh;
+    --height-usagers-list-container: 75vh;
+    --height-top-container: 6vh;
+    
+    --padding-usagers-list-header: 10px;
+    --height-usagers-list-content: 60vh;
+
+    /* Bouton d'ouverture du menu lattéral */
     --open-side-menu-btn: 30px;
     --pos-top-side-menu-btn: 1vh;
     --pos-left-side-menu-btn: 1vw;
+
+    /* Boutons */
     --padding-gen-btn: 3px 8px;
     --padding-usager-container-btn: 4px;
     --padding-select-btn: 4px;
-    --padding-usager-container: 2px 0;
-    --height-usagers-list-content: 77vh;
   }
+
+  .usagers-list-header
+    {
+        gap: 5px;
+    }
 
   /* === SWITCH === */
 
