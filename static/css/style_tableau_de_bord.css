@@ -75,9 +75,10 @@
     --height-display-container: 7vh;
 
     --height-usagers-list-container: 93vh;
+    --padding-usagers-list-header: 10px;
     --height-top-container: 10vh;
     --padding-bot-top-container: 3vh; 
-    --height-usagers-list-content: 80vh;
+    --height-usagers-list-content: 79vh;
     --padding-usager-container: 3px 0;
     
     --width-main-container: 100vw;
@@ -218,7 +219,6 @@ h3
 {
     height: var(--height-top-container);
     width: auto;
-    padding-bottom: 1vh;
 
     display: flex;
     justify-content: center; /* centre horizontalement */
@@ -240,8 +240,8 @@ h3
     justify-content: center;
     align-items: flex-start;
     width: var(--width-usagers-global-container);
-    border-left: 1px solid var(--c-btn-2);
-    border-right: 1px solid var(--c-btn-2);
+    border: 1px solid var(--c-btn-2);
+    border-radius: 0 0 0 var(--radius);
 }
 
 /* === BUREAUX BUTTONS CONTAINER === */
@@ -295,6 +295,26 @@ h3
 #usagers-list-1-container
 {
     border-right: 1px solid var(--c-btn-2);
+}
+
+.usagers-list-header
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: var(--padding-usagers-list-header);
+}
+
+.list-title
+{
+    text-align: center;
+}
+
+.list-btns
+{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
 
 .usagers-list-content
@@ -625,7 +645,7 @@ button:focus
 
 ::-webkit-scrollbar
 {
-  width: 7px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-thumb
@@ -930,15 +950,37 @@ input:checked + .slider:before
 {
   :root
   {
-    --font-size-small: 0.8rem;
-    --font-size-medium: 0.5rem;
+    --font-size-small: 0.6rem;
+    --font-size-medium: 0.65rem;
     --font-size-big: 0.9rem;
-    --font-size-title: 0.5rem;
+    --font-size-title: 1rem;
 
     --open-side-menu-btn: 30px;
     --pos-top-side-menu-btn: 1vh;
     --pos-left-side-menu-btn: 1vw;
     --padding-gen-btn: 3px 8px;
-    --padding-usager-container: 0 0;
+    --padding-usager-container-btn: 4px;
+    --padding-select-btn: 4px;
+    --padding-usager-container: 2px 0;
+    --height-usagers-list-content: 77vh;
   }
+
+  /* === SWITCH === */
+
+    .switch
+    {
+        width: 24px;
+        height: 12px;
+    }
+
+    .slider:before
+    {
+        height: 8px; 
+        width: 8px; 
+    }
+
+    input:checked + .slider:before
+    {
+        transform: translateX(12px);
+    }
 }
