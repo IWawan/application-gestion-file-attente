@@ -350,16 +350,6 @@ def on_set_double_liste_mode(data):
     save_double_liste_mode()      
     _sync_double_liste_mode_state()
 
-@socketio.on('reset_all')
-def on_reset_all():
-    usagers_list = []
-    current_usager = ""
-    current_bureau = ""
-    displayed_usagers = set()
-    selected_usagers = set()
-
-    _sync_all()
-
 # --- Persistance ---
 
 # Charge les données des bureaux
@@ -449,7 +439,7 @@ def _sync_display():
             if bureau_data.get("message", current_bureau):
                 msg = bureau_data.get("message", current_bureau) # Message personalisé
             else:
-                msg = "Est attendu au bureau " + current_bureau # Message pas défaut
+                msg = "Est attendu au " + current_bureau # Message pas défaut
             break 
 
     socketio.emit('update_display',
