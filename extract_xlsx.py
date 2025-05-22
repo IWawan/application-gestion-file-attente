@@ -1,3 +1,4 @@
+from datetime import datetime
 import openpyxl
 from typing import List
 
@@ -15,7 +16,7 @@ class extract_xlsx:
             nb_ligne = sheet.max_row
 
             # Parcourir les lignes du fichier, en partant de la ligne 2
-            for i in range(3, nb_ligne + 1):
+            for i in range(2, nb_ligne + 1):
                 heure_cell = sheet.cell(row=i, column=1)
                 name_cell = sheet.cell(row=i, column=2)
 
@@ -24,7 +25,8 @@ class extract_xlsx:
                     # Extraire l'heure
                     heure = heure_cell.value
                     if heure:
-                        heure = str(heure).split(" ")[-1]
+                        dt = datetime.strptime(heure, "%Y-%m-%d %H:%M:%S")
+                        heure = dt.strftime("%H:%M")
                     else:
                         heure = ""
 
