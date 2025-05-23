@@ -86,6 +86,7 @@ def upload_xlsx_1():
         return jsonify({'error': 'Nom de fichier vide'}), 400
 
     if file and allowed_file(file.filename):
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], "usagers_list_1.xlsx")
         file.save(file_path)
         return jsonify({'message': 'Fichier chargé avec succès'}), 200
@@ -104,6 +105,7 @@ def upload_xlsx_2():
         return jsonify({'error': 'Nom de fichier vide'}), 400
 
     if file and allowed_file(file.filename):
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], "usagers_list_2.xlsx")
         file.save(file_path)
         return jsonify({'message': 'Fichier chargé avec succès'}), 200
