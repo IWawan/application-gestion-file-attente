@@ -464,4 +464,4 @@ if __name__ == '__main__':
     load_double_liste_mode()
     load_marquee_msg()
     print(f"Serveur lancé sur http://{IP}:{8080}")   
-    socketio.run(app, allow_unsafe_werkzeug=True, debug=False, host=IP, port=8080)
+    socketio.run(app, debug=False, host=IP, port=8080)
